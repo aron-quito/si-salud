@@ -1,0 +1,120 @@
+erDiagram
+    USUARIO {
+        int id PK
+        string email
+        string password
+        string rol "Paciente, Medico, Cajero, Admin"
+    }
+    PACIENTE {
+        int id PK
+        int usuario_id FK
+        string dni
+        date fecha_nacimiento
+        string telefono
+    }
+    MEDICO {
+        int id PK
+        int usuario_id FK
+        string cmp
+        string nombres
+        string apellidos
+        string jerarquia
+    }
+    SEDE {
+        int id PK
+        string nombre
+        string direccion
+        boolean activa
+    }
+    CONSULTORIO {
+        int id PK
+        int sede_id FK
+        string numero_nombre
+        boolean activo
+    }
+    ESPECIALIDAD {
+        int id PK
+        string nombre
+        string descripcion
+        boolean activa
+    }
+    MEDICO_ESPECIALIDAD {
+        int medico_id FK
+        int especialidad_id FK
+    }
+    TIPO_CONSULTA {
+        int id PK
+        string nombre
+        int duracion_base_minutos
+        boolean activo
+    }
+    ASEGURADORA {
+        int id PK
+        string nombre
+        string tipo
+        boolean activa
+    }
+    BLOQUE_HORARIO {
+        int id PK
+        int medico_id FK
+        int consultorio_id FK
+        date fecha
+        time hora_inicio
+        time hora_fin
+        string estado "Libre, Ocupado, Bloqueado"
+    }
+    SOLICITUD_TRIAJE {
+        int id PK
+        int paciente_id FK
+        int especialidad_id FK
+        text sintomas
+        string preferencia_horario
+        int score_urgencia
+        string modalidad "Presencial, Meet, Llamada"
+        string estado "Pendiente, Agendado, Cancelado"
+    }
+    LISTA_ESPERA {
+        int id PK
+        int paciente_id FK
+        int especialidad_id FK
+        datetime fecha_ingreso
+        int prioridad
+        string estado "En Espera, Atendido"
+    }
+    CITA {
+        int id PK
+        int paciente_id FK
+        int medico_id FK
+        int bloque_horario_id FK
+        int tipo_consulta_id FK
+        int solicitud_id FK
+        int aseguradora_id FK
+        string estado "Programada, Pagada, Atendida, Cancelada"
+    }
+    HISTORIAL_REPROGRAMACION {
+        int id PK
+        int cita_id FK
+        string motivo_cambio
+        datetime fecha_transaccion
+        string estado
+    }
+
+    %% Relaciones
+    USUARIO ||--o| PACIENTE : "es un"
+    USUARIO ||--o| MEDICO : "es un"
+    SEDE ||--|{ CONSULTORIO : "alberga"
+    MEDICO ||--|{ MEDICO_ESPECIALIDAD : "tiene"
+    ESPECIALIDAD ||--|{ MEDICO_ESPECIALIDAD : "asignada a"
+    MEDICO ||--|{ BLOQUE_HORARIO : "dispone de"
+    CONSULTORIO ||--|{ BLOQUE_HORARIO : "se utiliza en"
+    PACIENTE ||--|{ SOLICITUD_TRIAJE : "genera (Bolsa)"
+    ESPECIALIDAD ||--|{ SOLICITUD_TRIAJE : "requiere"
+    SOLICITUD_TRIAJE ||--o| CITA : "deriva en"
+    BLOQUE_HORARIO ||--o| CITA : "es ocupado por"
+    PACIENTE ||--|{ CITA : "asiste a"
+    MEDICO ||--|{ CITA : "atiende"
+    TIPO_CONSULTA ||--|{ CITA : "clasifica"
+    ASEGURADORA ||--o{ CITA : "cubre"
+    CITA ||--|{ HISTORIAL_REPROGRAMACION : "registra"
+    PACIENTE ||--|{ LISTA_ESPERA : "ingresa a"
+    ESPECIALIDAD ||--|{ LISTA_ESPERA : "escola por"

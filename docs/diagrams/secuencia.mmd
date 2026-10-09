@@ -1,0 +1,23 @@
+sequenceDiagram
+    actor P as Paciente
+    participant F as Frontend
+    participant T as Servicio Triaje
+    participant IA as Algoritmo IA
+    participant B as Bolsa (Bag)
+    participant S as Motor Agendamiento
+    participant N as Servicio Notificaciones
+
+    P->>F: Llena formulario de síntomas
+    F->>T: POST /solicitud
+    T->>IA: Analiza texto (Síntomas)
+    IA-->>T: Devuelve [Score Urgencia, Resumen]
+    T->>B: Guarda Solicitud en Bolsa
+    T-->>F: Confirmación de recepción
+    
+    Note over B,S: 12:00 AM (Medianoche)
+    S->>B: Obtiene solicitudes pendientes
+    S->>S: Ordena por Score Urgencia
+    S->>S: Aplica Smart Slotting / Bloques Elásticos
+    S->>B: Cambia estado a 'Agendado'
+    S->>N: Trigger de citas asignadas
+    N-->>P: Correo: "Cita Asignada"

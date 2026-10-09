@@ -1,0 +1,34 @@
+flowchart TD
+    subgraph Frontend [Cliente / Frontend]
+        UI_P[Portal Paciente]
+        UI_M[Panel Médico]
+    end
+
+    subgraph Backend [API & Microservicios]
+        AG[API Gateway]
+        MS_Triaje[Servicio Triaje]
+        MS_Agenda[Servicio Agendamiento / Smart Slotting]
+        MS_Notif[Servicio Notificaciones]
+    end
+
+    subgraph IA [Inteligencia Artificial]
+        Alg[Algoritmo Urgencia]
+    end
+
+    subgraph Datos [Base de Datos y Colas]
+        DB[(Base de Datos)]
+        Bag[[Bolsa de Solicitudes]]
+    end
+
+    UI_P <--> AG
+    UI_M <--> AG
+    
+    AG <--> MS_Triaje
+    AG <--> MS_Agenda
+    AG <--> MS_Notif
+    
+    MS_Triaje <--> Alg
+    MS_Triaje --> Bag
+    
+    MS_Agenda <--> Bag
+    MS_Agenda <--> DB
