@@ -396,7 +396,25 @@ sequenceDiagram
 
 ---
 
-## 5. Arquitectura y Stack Tecnológico Propuesto
+## 5. Lógica Core: El Motor Inteligente de Agendamiento (Slotting)
+
+El sistema basa su capacidad de orquestación en tres pilares lógicos interconectados, garantizando la optimización de los espacios médicos sin solapamientos:
+
+### 5.1 Time-Slotting Estricto (Bloques Fijos)
+En lugar de calcular tiempos libres sobre la marcha, la tabla `BLOQUE_HORARIO` se pre-puebla de manera estática con celdas de tiempo fijas (ej. 15 minutos).
+*   **Por qué:** Asegura una transaccionalidad ACID perfecta. Asignar un turno consiste simplemente en cambiar el estado de un bloque físico de `"Libre"` a `"Ocupado"`, evitando por completo el solapamiento de horarios bajo concurrencia extrema.
+
+### 5.2 Bloques Elásticos (Triaje Dinámico)
+La IA del triaje evalúa no solo la urgencia de la solicitud, sino también su **complejidad**.
+*   **Cómo:** Si una solicitud es rutinaria, se le asigna 1 bloque (15 min). Si la IA deduce síntomas complejos o primera visita, exige 2 o 3 bloques de reserva. El sistema "estira" la cita para ajustarse al paciente real sin retrasar al médico.
+
+### 5.3 Smart Slotting & Lista de Espera (Bolsa Batch)
+*   **A medianoche:** El cron job lee la "Bolsa" (solicitudes en `Pendiente`), las ordena por prioridad, e intenta hacer "Tetris" buscando bloques `"Libres"` **consecutivos** que calcen con los Bloques Elásticos requeridos.
+*   **Lista de Espera Inmediata:** Si un paciente cancela durante el día, sus bloques pasan de `"Ocupado"` a `"Libre"`. El *Smart Slotting* se dispara reactivamente buscando en la tabla `LISTA_ESPERA` quién necesita exactamente esos bloques y les notifica instantáneamente.
+
+---
+
+## 6. Arquitectura y Stack Tecnológico Propuesto
 
 Para satisfacer los requerimientos de SEO (Directorio Médico), procesamiento concurrente asíncrono (Bolsa de Medianoche) y usabilidad en tiempo real, se propone el siguiente stack técnico moderno:
 
