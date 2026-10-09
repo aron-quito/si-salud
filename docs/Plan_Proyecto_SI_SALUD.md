@@ -42,15 +42,31 @@ A continuación, los requerimientos distribuidos por módulos principales, integ
 
 ### 2.1 Diagrama de Casos de Uso
 Los diagramas de casos de uso han sido diseñados exhaustivamente por módulo utilizando **PlantUML (.puml)**. 
-Puedes encontrarlos estructurados y listos para su edición en la carpeta dedicada `docs/diagrams/casos_de_uso/`:
-* `modulo_1_autenticacion.puml`
-* `modulo_2_pacientes.puml`
-* `modulo_3_staff_medico.puml`
-* `modulo_4_administracion.puml`
-* `modulo_5_logica_negocio.puml`
-* `modulo_6_horarios.puml`
-* `modulo_7_gestion_citas.puml`
-* `modulo_8_lista_espera.puml`
+Puedes encontrarlos estructurados y listos para su edición en la carpeta dedicada `docs/diagrams/casos_de_uso/`.
+
+#### Módulo 1: Autenticación
+![Módulo 1](diagrams/casos_de_uso/renders/modulo_1_autenticacion.png)
+
+#### Módulo 2: Pacientes
+![Módulo 2](diagrams/casos_de_uso/renders/modulo_2_pacientes.png)
+
+#### Módulo 3: Staff Médico
+![Módulo 3](diagrams/casos_de_uso/renders/modulo_3_staff_medico.png)
+
+#### Módulo 4: Administración
+![Módulo 4](diagrams/casos_de_uso/renders/modulo_4_administracion.png)
+
+#### Módulo 5: Lógica de Negocio
+![Módulo 5](diagrams/casos_de_uso/renders/modulo_5_logica_negocio.png)
+
+#### Módulo 6: Horarios
+![Módulo 6](diagrams/casos_de_uso/renders/modulo_6_horarios.png)
+
+#### Módulo 7: Gestión de Citas
+![Módulo 7](diagrams/casos_de_uso/renders/modulo_7_gestion_citas.png)
+
+#### Módulo 8: Lista de Espera
+![Módulo 8](diagrams/casos_de_uso/renders/modulo_8_lista_espera.png)
 
 ### 2.2 Diagrama de Arquitectura / Componentes
 ![Arquitectura](diagrams/arquitectura/arquitectura.png)
