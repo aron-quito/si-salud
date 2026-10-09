@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>SISALUD - Gestión Asistencial y Agenda Hospitalaria</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "inverse-on-surface": "#eaf1ff",
+          "surface-container-low": "#eff4ff",
+          "on-primary": "#ffffff",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#9cf2e8",
+          "primary": "#005c55",
+          "tertiary-fixed": "#cce5ff",
+          "tertiary-container": "#006fa8",
+          "secondary-fixed": "#dce1ff",
+          "on-secondary-fixed": "#00164e",
+          "error": "#ba1a1a",
+          "tertiary-fixed-dim": "#93ccff",
+          "on-secondary-container": "#1d3989",
+          "outline": "#6e7977",
+          "on-tertiary": "#ffffff",
+          "surface-tint": "#006a63",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-fixed-variant": "#00504a",
+          "on-primary-container": "#a3faef",
+          "on-secondary": "#ffffff",
+          "surface-container-high": "#dce9ff",
+          "tertiary": "#005683",
+          "secondary": "#4059aa",
+          "on-surface-variant": "#3e4947",
+          "on-error-container": "#93000a",
+          "surface-container-highest": "#d3e4fe",
+          "secondary-container": "#8fa7fe",
+          "on-tertiary-container": "#dbecff",
+          "primary-fixed-dim": "#80d5cb",
+          "surface": "#f8f9ff",
+          "on-tertiary-fixed": "#001d31",
+          "surface-container": "#e5eeff",
+          "on-tertiary-fixed-variant": "#004b73",
+          "surface-dim": "#cbdbf5",
+          "background": "#f8f9ff",
+          "on-secondary-fixed-variant": "#264191",
+          "inverse-surface": "#213145",
+          "inverse-primary": "#80d5cb",
+          "primary-container": "#0f766e",
+          "on-primary-fixed": "#00201d",
+          "on-error": "#ffffff",
+          "outline-variant": "#bdc9c6",
+          "on-surface": "#0b1c30",
+          "secondary-fixed-dim": "#b6c4ff",
+          "on-background": "#0b1c30",
+          "surface-variant": "#d3e4fe",
+          "surface-bright": "#f8f9ff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "margin-mobile": "1rem",
+          "space-xs": "0.25rem",
+          "space-md": "1rem",
+          "space-2xl": "3rem",
+          "space-sm": "0.5rem",
+          "gutter-mobile": "1rem",
+          "gutter": "1.5rem",
+          "margin": "2rem",
+          "space-xl": "2rem",
+          "space-lg": "1.5rem"
+        },
+        "fontFamily": {
+          "headline-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "display-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "title-md": [
+            "Plus Jakarta Sans"
+          ],
+          "label-lg": [
+            "Inter"
+          ],
+          "code-sm": [
+            "Inter"
+          ],
+          "label-sm": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "body-md": [
+            "Inter"
+          ],
+          "body-sm": [
+            "Inter"
+          ],
+          "headline-md": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-xl-mobile": [
+            "Plus Jakarta Sans"
+          ],
+          "body-lg": [
+            "Inter"
+          ],
+          "label-md": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "headline-lg": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-lg": [
+            "48px",
+            {
+              "lineHeight": "56px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "title-md": [
+            "16px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-lg": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "code-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "500"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.03em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-xl": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-md": [
+            "22px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl-mobile": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "18px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "400"
+            }
+          ],
+          "label-md": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between py-space-md"><div class="flex flex-col gap-space-md"><div class="px-space-md flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0f766e
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UpFCk4xhFFku3scKcfAWun4GILW9yOGWacXJAiLvcnTncsH4Tk_I6x29vd6ldpI8tqUfypNhSLexnO_Mu-XrMl41u3eCwiyV9OOkTUvKtEGtxdKVcSFpfe5mm38D0R5Z6NcO_nXgmkzjeNYb-TOGp9dEc-B1mTo8IMAZcHxdM7X5KO6m8bjC3ZITWI7FD3S5LpOaxT1J9hI4eV6Fw3b7Hds5sH2BM_vtIcjYrMN6Lxe0bc4_5Y_oPc1t29"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary font-bold leading-tight">SISALUD</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Módulo Clínico</span></div></div><div class="px-space-md py-space-xs bg-surface-container-low mx-space-sm rounded-lg"><div class="font-label-sm text-label-sm text-on-surface-variant">Sede Activa</div><div class="font-title-md text-title-md text-on-surface truncate">Hosp. Nac. Central</div></div><nav class="flex flex-col gap-1 px-space-sm" data-active-classes="bg-primary-container text-on-primary font-label-lg text-label-lg rounded-lg"><a class="flex items-center gap-space-sm px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="agenda-medica" href="#"><span class="material-symbols-outlined text-[20px]">calendar_clock</span><span>Agenda Médica</span></a><a class="flex items-center gap-space-sm px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="triaje-inteligente" href="#"><span class="material-symbols-outlined text-[20px]">vital_signs</span><span>Triaje Inteligente</span></a><a class="flex items-center gap-space-sm px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="portal-de-citas" href="#"><span class="material-symbols-outlined text-[20px]">event_available</span><span>Portal de Citas</span></a><a class="flex items-center gap-space-sm px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="mis-citas" href="#"><span class="material-symbols-outlined text-[20px]">patient_list</span><span>Mis Citas</span></a><a class="flex items-center gap-space-sm px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="mesa-de-ayuda" href="#"><span class="material-symbols-outlined text-[20px]">contact_support</span><span>Mesa de Ayuda</span></a></nav></div><div class="px-space-md pt-space-md border-t border-outline-variant/30 flex flex-col gap-space-xs"><div class="flex items-center gap-space-sm text-error font-label-sm text-label-sm"><span class="material-symbols-outlined text-[18px]">e911_emergency</span><span>Línea SAMU 106</span></div><div class="flex items-center gap-space-sm text-on-surface-variant font-label-sm text-label-sm"><span class="material-symbols-outlined text-[18px]">support_agent</span><span>Orientación 113</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><div class="flex items-center gap-2 px-3 py-1 rounded bg-surface-container-low"><span class="material-symbols-outlined text-[16px] text-primary">account_circle</span><span class="font-label-sm text-label-sm text-on-surface">Perfil Activo: Personal Médico / Especialista</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-surface-container-low px-2.5 py-1 rounded"><span class="material-symbols-outlined text-[16px] text-tertiary">apartment</span><span class="font-label-sm text-label-sm text-on-surface font-semibold">Red Asistencial Lima Centro</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 bg-surface px-space-lg py-space-lg"><div class="flex flex-col w-full gap-space-lg">
+<!-- Header Institucional del Especialista -->
+<section class="w-full bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative w-16 h-16 rounded-xl overflow-hidden shadow-sm flex-shrink-0 bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="Portrait of Dr Fernando Salcedo Paredes, an experienced Hispanic male cardiologist in medical scrubs with white coat and stethoscope, hospital interior clinical background with cool cyan and slate tones, institutional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsffsBBWUWZef4MdmoBxFimORYPFI6AiqmbJ1hAmdyAFs5nUIKPbfvjZv3XFckUBgoY6L-4ezgiDKzqdYqtXedVeH-q1uiHhP6CZoptJ0PJbGhb_2j3tsFLxrRNjasXn1RYoQMRsA5thx520GsvHUX8qmamytl_XIdJUOVdU24JTNK1D6kWYkjZmQSucyKrQ3MuptOytqRas2NCDmMh6ZgsFIiaRx0zuMmx1x0xv9PN4NBC4yAd-Lwyw"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-primary rounded-full border-2 border-surface-container-lowest" title="En consulta activa"></div>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-md text-headline-md text-on-surface truncate">Dr. Fernando Salcedo Paredes</span>
+<span class="font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded-full font-bold">CMP: 48921 • RNE: 24109</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Especialista en Cardiología y Medicina Interna • Unidad de Falla Cardíaca</p>
+<div class="flex items-center gap-space-sm mt-1 text-on-surface-variant">
+<span class="inline-flex items-center gap-1 font-code-sm text-code-sm text-primary font-semibold">
+<span class="material-symbols-outlined text-[16px]">local_hospital</span> Sede Hosp. Central • Consultorio 304 - Ala B
+          </span>
+<span class="text-outline-variant">•</span>
+<span class="inline-flex items-center gap-1 font-code-sm text-code-sm text-tertiary">
+<span class="material-symbols-outlined text-[16px]">group</span> 6 Pacientes Agendados Hoy
+          </span>
+</div>
+</div>
+</div>
+<!-- Indicadores Rápidos de Carga Asistencial -->
+<div class="flex items-center gap-space-md flex-shrink-0 self-start md:self-auto">
+<div class="bg-surface-container-low px-space-md py-space-sm rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Cupos Atendidos</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">1 / 6</span>
+</div>
+<div class="bg-error-container/40 px-space-md py-space-sm rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-error uppercase tracking-wider font-bold">Urgencias Triaje 2</span>
+<span class="font-headline-sm text-headline-sm text-error font-bold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error animate-ping"></span> 1 Asignada
+        </span>
+</div>
+<button class="h-12 px-space-md bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-lg font-label-lg text-label-lg flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+<span>Sincronizar HIS</span>
+</button>
+</div>
+</section>
+<!-- Barra de Control del Calendario y Filtros de Triaje -->
+<section class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<!-- Navegación de Fecha -->
+<div class="flex items-center gap-space-sm flex-wrap">
+<div class="inline-flex items-center bg-surface-container-low rounded-lg p-1">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-xs hover:bg-surface-bright transition-colors font-bold" id="btn-today">
+          Hoy
+        </button>
+<button class="p-1.5 hover:bg-surface-container rounded text-on-surface-variant" title="Día anterior">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container rounded text-on-surface-variant" title="Día siguiente">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs pl-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">calendar_today</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">Viernes, 24 de Octubre de 2025</h2>
+<span class="font-label-sm text-label-sm bg-surface-container text-on-surface-variant px-2 py-0.5 rounded ml-2">Semana Epidemiológica 43</span>
+</div>
+</div>
+<!-- Controles de Vista & Filtro de Gravedad -->
+<div class="flex items-center gap-space-md flex-wrap">
+<!-- Selector de Vista: Día vs Semana -->
+<div class="inline-flex items-center bg-surface-container-low p-1 rounded-lg">
+<button class="px-4 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold shadow-sm transition-all flex items-center gap-1.5" id="view-day-btn">
+<span class="material-symbols-outlined text-[16px]">view_day</span>
+<span>Vista Día</span>
+</button>
+<button class="px-4 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all flex items-center gap-1.5" id="view-week-btn">
+<span class="material-symbols-outlined text-[16px]">view_week</span>
+<span>Vista Semana</span>
+</button>
+</div>
+<!-- Filtros Semánticos de Gravedad de Triaje -->
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase mr-1">Filtro Triaje:</span>
+<button class="px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-error-container text-on-error-container hover:opacity-90 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error"></span> T1-T2 Urgencias
+        </button>
+<button class="px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-secondary-fixed text-on-secondary-fixed hover:opacity-90 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> T3 Moderado
+        </button>
+<button class="px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-primary-fixed text-on-primary-fixed-variant hover:opacity-90 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span> T4-T5 Rutina
+        </button>
+</div>
+</div>
+</section>
+<!-- Layout Principal en Dos Columnas: Grilla Horaria (60%) y Expediente Clínico (40%) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg w-full items-start">
+<!-- COLUMNA IZQUIERDA (60%): Agenda Médica estilo Google Calendar -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col">
+<!-- Sub-cabecera de la Grilla -->
+<div class="flex items-center justify-between pb-space-md border-b-0">
+<div>
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Bloques Programados de Atención</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Franjas de 30 min • Citas presenciales con validación biométrica</p>
+</div>
+<div class="flex items-center gap-space-sm text-label-sm font-label-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-surface-container"></span> Disponible</span>
+<span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-primary-fixed-dim"></span> Finalizada</span>
+</div>
+</div>
+<!-- Timeline Horario Continuo 08:00 a 17:00 -->
+<div class="relative w-full mt-space-md flex flex-col gap-2">
+<!-- 08:00 Slot Vacío / Apertura de Consultorio -->
+<div class="grid grid-cols-12 gap-3 min-h-[52px] items-stretch">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-on-surface-variant font-bold">08:00</span>
+</div>
+<div class="col-span-10 bg-surface-container-low rounded-lg p-2.5 flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[18px]">lock_open</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">Apertura técnica y calibración de electrocardiograma</span>
+</div>
+<span class="font-code-sm text-code-sm text-outline">30 min</span>
+</div>
+</div>
+<!-- 08:30 - 09:00: Cita Atendida (Check verde) -->
+<div class="grid grid-cols-12 gap-3 min-h-[64px] items-stretch">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-on-surface-variant font-bold">08:30</span>
+</div>
+<div class="col-span-10 bg-primary-fixed/40 rounded-lg p-3 flex items-center justify-between relative overflow-hidden shadow-xs">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<div class="flex items-center gap-space-sm pl-1">
+<div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-bold">Carlos Montero V.</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Control Post-Angioplastia • HC: 902844</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm bg-surface-container-lowest text-primary px-2.5 py-1 rounded-full font-bold shadow-xs">
+                Atendida (08:52)
+              </span>
+<button class="p-1 text-on-surface-variant hover:text-on-surface" title="Ver resumen de receta">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 09:15 - 09:45: Paciente María Morales - Prioridad 4 (Verde suave) -->
+<div class="grid grid-cols-12 gap-3 min-h-[64px] items-stretch">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-on-surface-variant font-bold">09:15</span>
+</div>
+<div class="col-span-10 bg-primary-fixed-dim/20 hover:bg-primary-fixed-dim/35 cursor-pointer rounded-lg p-3 flex items-center justify-between relative overflow-hidden transition-all shadow-xs">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary-container"></div>
+<div class="flex items-center gap-space-sm pl-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed-variant font-bold">Triage 4</span>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-bold">María Morales Dávila</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Chequeo preventivo anual • HC: 412093</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Sala de Espera 1</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+</div>
+</div>
+<!-- 10:00 Slot de 30 min / Receso breve -->
+<div class="grid grid-cols-12 gap-3 min-h-[44px] items-stretch">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-on-surface-variant font-bold">10:00</span>
+</div>
+<div class="col-span-10 bg-surface-container-low/60 rounded-lg px-3 py-2 flex items-center justify-between text-on-surface-variant">
+<span class="font-body-sm text-body-sm italic">Interconsulta telefónica / Revisión de Laboratorio</span>
+<span class="font-code-sm text-code-sm">10:00 - 10:30</span>
+</div>
+</div>
+<!-- 10:30 - 11:15: Paciente SELECCIONADO: Juan Pérez Rodríguez - Prioridad 3 (Naranja ámbar, destacado) -->
+<div class="grid grid-cols-12 gap-3 min-h-[76px] items-stretch">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-secondary font-bold">10:30</span>
+<span class="block font-label-sm text-label-sm text-secondary font-semibold">EN CURSO</span>
+</div>
+<div class="col-span-10 bg-secondary-fixed/50 rounded-lg p-3.5 flex items-center justify-between relative shadow-md shadow-secondary/10">
+<!-- Indicador activo prominente -->
+<div class="absolute left-0 top-0 bottom-0 w-2.5 bg-secondary rounded-l-lg"></div>
+<div class="flex items-center gap-space-sm pl-2">
+<div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold text-headline-sm">
+                JP
+              </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Juan Pérez Rodríguez</span>
+<span class="bg-secondary text-on-secondary font-label-sm text-label-sm px-2.5 py-0.5 rounded-full font-bold">
+                    Triage 3 • Moderado
+                  </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Palpitaciones y mareos leves tras esfuerzo • 58 años • DNI: 09843211</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-label-sm text-label-sm text-on-secondary-fixed font-bold bg-surface-container-lowest px-2 py-1 rounded shadow-xs">
+                Expediente Abierto
+              </span>
+<span class="font-code-sm text-code-sm text-secondary font-semibold">10:30 - 11:15 (45 min)</span>
+</div>
+</div>
+</div>
+<!-- 11:30 - 12:00: Paciente Asignado por Urgencia - Prioridad 2 (Rojo emergencia, asignación automática 24h) -->
+<div class="grid grid-cols-12 gap-3 min-h-[72px] items-stretch">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-error font-bold">11:30</span>
+<span class="block font-label-sm text-label-sm text-error uppercase font-bold">Urgencia</span>
+</div>
+<div class="col-span-10 bg-error-container/60 hover:bg-error-container/80 cursor-pointer rounded-lg p-3 flex items-center justify-between relative overflow-hidden transition-all shadow-xs">
+<div class="absolute left-0 top-0 bottom-0 w-2 bg-error"></div>
+<div class="flex items-center gap-space-sm pl-2">
+<div class="w-8 h-8 rounded-full bg-error text-on-error flex items-center justify-center flex-shrink-0 animate-pulse">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">Alberto Zegarra Ruiz</span>
+<span class="bg-error text-on-error font-label-sm text-label-sm px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-surface-container-lowest"></span> Triage 2: Urgencia Alta
+                  </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-error-container font-medium">Asignación Automática Algorítmica 24h • Dolor precordial opresivo sin irradiación</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-code-sm text-code-sm bg-surface-container-lowest text-error px-2 py-1 rounded font-bold">
+                T. Espera: 12 min
+              </span>
+</div>
+</div>
+</div>
+<!-- 12:30 - 13:30: Bloqueo de Almuerzo / Pase de visita hospitalaria -->
+<div class="grid grid-cols-12 gap-3 min-h-[58px] items-stretch">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-on-surface-variant font-bold">12:30</span>
+</div>
+<div class="col-span-10 bg-surface-container rounded-lg p-3 flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-tertiary">ward</span>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Pase de Visita Sala UCIC &amp; Receso Clínico</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Piso 4 - Hospitalización Coronaria</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm bg-surface-container-high px-2 py-1 rounded font-semibold text-on-surface">
+              Bloqueado (60 min)
+            </span>
+</div>
+</div>
+<!-- 14:00 - 14:30: Espacio disponible / Slot libre -->
+<div class="grid grid-cols-12 gap-3 min-h-[54px] items-stretch">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-on-surface-variant font-bold">14:00</span>
+</div>
+<div class="col-span-10 bg-surface-container-low hover:bg-surface-container-high/60 cursor-pointer rounded-lg p-3 flex items-center justify-between transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">add_circle</span>
+<span class="font-title-md text-title-md text-primary font-bold">Cupo Libre / Disponible</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Habilitado para sobrecupo de Triage o cita diferida</span>
+</div>
+<button class="px-3 py-1 bg-surface-container-lowest hover:bg-primary hover:text-on-primary text-primary font-label-sm text-label-sm font-bold rounded shadow-xs transition-colors">
+              + Asignar Paciente
+            </button>
+</div>
+</div>
+<!-- 14:30 - 17:00: Resumen de slots de la tarde -->
+<div class="grid grid-cols-12 gap-3 min-h-[48px] items-stretch opacity-90">
+<div class="col-span-2 text-right pr-2 py-1">
+<span class="font-code-sm text-code-sm text-on-surface-variant font-bold">14:30+</span>
+</div>
+<div class="col-span-10 bg-surface-container-low rounded-lg px-space-md py-2 flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
+<span>3 Citas vespertinas programadas (14:30, 15:15, 16:00)</span>
+<button class="font-label-sm text-label-sm text-primary font-bold hover:underline flex items-center gap-1">
+              Desplegar bloque tarde <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- COLUMNA DERECHA (40%): Panel de Detalle Clínico del Paciente Seleccionado -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- Ficha de Identificación del Paciente Activo -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-surface-container shadow-xs flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up photo of patient Juan Perez Rodriguez, 58 year old Hispanic male sitting in medical triage area wearing casual blue collared shirt, dignified calm expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM3hjmFjeiWgcF21tio6NpvNsm-QHzcB3kL5TgtVtmhaug1Tx3ASL_XZPXc6qDxKMX0QonLcsH_2C_ZaL6-_hS3Nm5TJ3aVqBAFj4G-X0ZoKoq4ShHhCIeVh1RREhmWSKnii5dhk05FIYmbLNgnCk5w4bexFxov3HN-OaylJIoijJz3JIqSsXW7bdH8_xcEYw0I3d5KM4K5e_GLp4KQCbj3PEVFbRyVP6nY1VB7XIP5F9OlhKoLsIMVA"/>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Juan Pérez Rodríguez</h3>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span>58 años</span> • <span>DNI 09843211</span> • <span>HC #49281-Cardio</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[24px]">folder_shared</span>
+</div>
+<!-- Badge Prominente de Gravedad de Triaje -->
+<div class="bg-secondary-fixed/50 p-space-md rounded-xl flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-sm font-bold flex-shrink-0">
+            3
+          </div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-secondary-fixed font-bold leading-tight">
+              Nivel de Gravedad 3 / 5 — Prioridad Moderada
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+              Asignado por Algoritmo de Triaje SISALUD v2.4 (Tiempo objetivo de atención: &lt; 45 min)
+            </span>
+</div>
+</div>
+<!-- Desglose de Respuestas del Cuestionario de Triaje -->
+<div class="flex flex-col gap-space-sm">
+<span class="font-label-md text-label-md text-on-surface font-bold uppercase tracking-wider flex items-center gap-1.5 text-primary">
+<span class="material-symbols-outlined text-[18px]">quiz</span>
+            Cuestionario de Triaje Inteligente
+          </span>
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-sm">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">Motivo de Consulta Principal:</span>
+<p class="font-body-md text-body-md text-on-surface font-medium mt-0.5">
+                "Palpitaciones rápidas en el pecho y mareos leves tras subir escaleras en el trabajo."
+              </p>
+</div>
+<!-- Escala de Dolor Visual -->
+<div class="flex flex-col gap-1 pt-1">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">Dolor Torácico Reportado:</span>
+<span class="font-code-sm text-code-sm font-bold text-secondary">Escala EVA: 3 / 5 (Moderado)</span>
+</div>
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden flex">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 60%"></div>
+</div>
+</div>
+<!-- Signos de Alarma y Constantes de Entrada -->
+<div class="grid grid-cols-3 gap-2 pt-2">
+<div class="bg-surface-container-lowest p-2 rounded-lg text-center flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fiebre</span>
+<span class="font-label-md text-label-md text-primary font-bold flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">check</span> NO (36.4°C)
+                </span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded-lg text-center flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Disnea Aguda</span>
+<span class="font-label-md text-label-md text-primary font-bold flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">check</span> NO
+                </span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded-lg text-center flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">PA Domiciliaria</span>
+<span class="font-label-md text-label-md text-secondary font-bold mt-0.5">
+                  135 / 85
+                </span>
+</div>
+</div>
+<!-- Antecedentes Breves -->
+<div class="pt-2 flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">Antecedentes Clínicos Relevantes:</span>
+<div class="flex flex-wrap gap-1.5">
+<span class="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2 py-0.5 rounded">
+                  Hipertensión arterial (Losartán 50mg/día)
+                </span>
+<span class="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2 py-0.5 rounded">
+                  Sedentario
+                </span>
+<span class="bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm px-2 py-0.5 rounded font-semibold">
+                  Sin alergias medicamentosas
+                </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Módulo de Consulta (Mock REQ-026): Evolución, Recetas y Órdenes -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">clinical_notes</span>
+<span class="font-title-md text-title-md text-on-surface font-bold">Acto Médico &amp; Registro Clínico</span>
+</div>
+<span class="font-code-sm text-code-sm bg-surface-container-low text-on-surface-variant px-2 py-0.5 rounded">REQ-026</span>
+</div>
+<!-- Notas de Evolución Médica -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface font-bold flex items-center justify-between">
+<span>Notas de Evolución Médica:</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant font-normal">Autoguardado cada 60s</span>
+</label>
+<textarea class="w-full bg-surface-container-low rounded-lg p-3 font-body-sm text-body-sm text-on-surface focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:outline-none transition-all placeholder:text-outline resize-none" placeholder="Paciente alerta y orientado. Se auscultan ruidos cardíacos rítmicos sin soplos agregados. Presión arterial actual en consulta: 130/80 mmHg. Frecuencia cardíaca: 78 lpm..." rows="3"></textarea>
+</div>
+<!-- Emisión de Receta y Orden de Exámenes -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-on-surface font-bold">Plan Terapéutico y Órdenes Auxiliares:</label>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-2">
+<!-- Item 1: Receta rápida -->
+<div class="flex items-center justify-between bg-surface-container-lowest p-2 rounded shadow-2xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">medication</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Bisoprolol 2.5mg - 1 comp cada 24h x 30 días</span>
+</div>
+<button class="text-error hover:bg-error-container/30 p-1 rounded" title="Eliminar ítem">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<!-- Item 2: Orden de laboratorio/imagen -->
+<div class="flex items-center justify-between bg-surface-container-lowest p-2 rounded shadow-2xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">ecg_heart</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Holter de Ritmo 24 horas + Perfil Lipídico</span>
+</div>
+<button class="text-error hover:bg-error-container/30 p-1 rounded" title="Eliminar ítem">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<!-- Botones para agregar prescripción rápida -->
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 py-1.5 px-2 bg-surface-container-highest hover:bg-surface-container-high rounded text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span> + Agregar Medicamento
+              </button>
+<button class="flex-1 py-1.5 px-2 bg-surface-container-highest hover:bg-surface-container-high rounded text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">science</span> + Orden Examen
+              </button>
+</div>
+</div>
+</div>
+<!-- Botones de Acción de Finalización -->
+<div class="flex flex-col sm:flex-row items-center gap-space-sm pt-space-xs">
+<button class="w-full sm:w-1/3 h-12 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-lg font-label-lg text-label-lg font-semibold flex items-center justify-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+<span>Pausar</span>
+</button>
+<button class="w-full sm:w-2/3 h-12 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-sm transition-all" id="btn-finish-consultation">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+<span>Guardar y Finalizar Consulta</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Conmutador interactivo simple para vistas Día/Semana
+  const dayBtn = document.getElementById('view-day-btn');
+  const weekBtn = document.getElementById('view-week-btn');
+
+  if (dayBtn && weekBtn) {
+    dayBtn.addEventListener('click', () => {
+      dayBtn.className = "px-4 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold shadow-sm transition-all flex items-center gap-1.5";
+      weekBtn.className = "px-4 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all flex items-center gap-1.5";
+    });
+
+    weekBtn.addEventListener('click', () => {
+      weekBtn.className = "px-4 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold shadow-sm transition-all flex items-center gap-1.5";
+      dayBtn.className = "px-4 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all flex items-center gap-1.5";
+    });
+  }
+
+  // Microinteracción para finalización de consulta
+  const finishBtn = document.getElementById('btn-finish-consultation');
+  if (finishBtn) {
+    finishBtn.addEventListener('click', () => {
+      finishBtn.innerHTML = `<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span> Guardando en HIS...`;
+      setTimeout(() => {
+        finishBtn.innerHTML = `<span class="material-symbols-outlined text-[20px]">task_alt</span> ¡Consulta Finalizada!`;
+        finishBtn.classList.remove('bg-primary');
+        finishBtn.classList.add('bg-primary-container');
+      }, 700);
+    });
+  }
+</script></main></div></body></html>

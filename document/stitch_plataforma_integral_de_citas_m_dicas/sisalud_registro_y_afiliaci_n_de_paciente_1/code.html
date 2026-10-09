@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-bright":"#f8f9ff","tertiary-fixed-dim":"#93ccff","on-surface":"#0b1c30","surface-dim":"#cbdbf5","surface-container-highest":"#d3e4fe","outline":"#6e7977","inverse-primary":"#80d5cb","on-primary-container":"#a3faef","on-secondary-container":"#1d3989","error":"#ba1a1a","on-secondary-fixed":"#00164e","error-container":"#ffdad6","on-secondary":"#ffffff","outline-variant":"#bdc9c6","primary":"#005c55","primary-fixed-dim":"#80d5cb","surface-container-lowest":"#ffffff","tertiary":"#005683","secondary-fixed-dim":"#b6c4ff","tertiary-fixed":"#cce5ff","secondary-container":"#8fa7fe","on-primary-fixed-variant":"#00504a","on-error-container":"#93000a","on-secondary-fixed-variant":"#264191","on-background":"#0b1c30","surface-container-low":"#eff4ff","on-tertiary-fixed-variant":"#004b73","surface":"#f8f9ff","on-tertiary-fixed":"#001d31","tertiary-container":"#006fa8","on-primary":"#ffffff","on-primary-fixed":"#00201d","primary-fixed":"#9cf2e8","on-error":"#ffffff","surface-variant":"#d3e4fe","on-surface-variant":"#3e4947","inverse-surface":"#213145","surface-container-high":"#dce9ff","secondary-fixed":"#dce1ff","on-tertiary-container":"#dbecff","surface-container":"#e5eeff","surface-tint":"#006a63","inverse-on-surface":"#eaf1ff","background":"#f8f9ff","on-tertiary":"#ffffff","secondary":"#4059aa","primary-container":"#0f766e"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-xs":"0.25rem","space-lg":"1.5rem","space-2xl":"3rem","space-xl":"2rem","gutter-mobile":"1rem","space-md":"1rem","space-sm":"0.5rem",margin:"2rem",gutter:"1.5rem","margin-mobile":"1rem"},fontFamily:{"title-md":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"code-sm":["Inter"],"label-md":["Inter"],"headline-lg":["Plus Jakarta Sans"],"display-lg":["Plus Jakarta Sans"],"body-lg":["Inter"],"body-md":["Inter"],"headline-sm":["Plus Jakarta Sans"],"label-lg":["Inter"],"label-sm":["Inter"]},fontSize:{"title-md":["16px",{lineHeight:"22px",fontWeight:"600"}],"headline-md":["22px",{lineHeight:"28px",fontWeight:"600"}],"headline-xl-mobile":["28px",{lineHeight:"36px",letterSpacing:"-0.01em",fontWeight:"700"}],"body-sm":["13px",{lineHeight:"18px",fontWeight:"400"}],"headline-xl":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"700"}],"code-sm":["12px",{lineHeight:"16px",fontWeight:"500"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg":["28px",{lineHeight:"36px",letterSpacing:"-0.01em",fontWeight:"600"}],"display-lg":["48px",{lineHeight:"56px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-lg":["18px",{lineHeight:"28px",fontWeight:"400"}],"body-md":["15px",{lineHeight:"22px",fontWeight:"400"}],"headline-sm":["18px",{lineHeight:"24px",fontWeight:"600"}],"label-lg":["14px",{lineHeight:"20px",letterSpacing:"0.01em",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.03em",fontWeight:"700"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased selection:bg-primary/10 selection:text-primary"><header class="sticky top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container"><div class="max-w-7xl mx-auto px-6 lg:px-12 h-16 flex items-center justify-between"><a class="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg" href="#"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[20px]">local_hospital</span></div><div class="flex flex-col"><span class="font-headline-sm text-[19px] tracking-tight text-on-surface font-bold leading-tight">SISALUD</span><span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest leading-none">Salud Pública</span></div></a><nav class="hidden lg:flex items-center gap-1"><a aria-current="page" class="px-3.5 py-1.5 font-label-md text-label-md rounded-lg bg-surface-container-low text-primary font-semibold transition-colors" data-path="inicio" href="#">Inicio</a><a class="px-3.5 py-1.5 font-label-md text-label-md rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="citas-medicas" href="#">Citas Médicas</a><a class="px-3.5 py-1.5 font-label-md text-label-md rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="red-hospitalaria" href="#">Red Hospitalaria</a><a class="px-3.5 py-1.5 font-label-md text-label-md rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="farmacia-institucional" href="#">Farmacia Digital</a><a class="px-3.5 py-1.5 font-label-md text-label-md rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="triage-en-linea" href="#">Triage</a><a class="px-3.5 py-1.5 font-label-md text-label-md rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="tramites-y-certificados" href="#">Trámites</a></nav><div class="flex items-center gap-3"><a class="text-on-surface-variant hover:text-on-surface font-label-md text-label-md px-3 py-1.5 rounded-lg hover:bg-surface-container-low transition-colors hidden sm:inline-block" data-path="portal-profesional" href="#">Acceso Personal</a><button aria-label="Cuenta de usuario" class="w-9 h-9 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">person</span></button></div></div></header><main class="w-full bg-background"><div class="max-w-7xl mx-auto w-full px-6 lg:px-12 py-10">
+<!-- Title Minimal Header -->
+<div class="mb-8 max-w-2xl">
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wider">Afiliación Ciudadana</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mt-1">Expediente Único Digital</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5">Completa el registro para vincular tu Historia Clínica Digital a la red de atención pública.</p>
+</div>
+<!-- Minimal Clean Stepper -->
+<nav aria-label="Progreso de Afiliación" class="mb-8 pb-4 border-b border-surface-container">
+<ol class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-8">
+<li class="flex items-center gap-3" id="step-tab-1">
+<span class="w-7 h-7 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center font-bold" id="step-badge-1">1</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface" id="step-title-1">Identidad Nacional</span>
+</li>
+<li class="hidden sm:block w-8 h-px bg-surface-container-highest"></li>
+<li class="flex items-center gap-3 opacity-50 transition-opacity" id="step-tab-2">
+<span class="w-7 h-7 rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-label-md flex items-center justify-center font-semibold" id="step-badge-2">2</span>
+<span class="font-label-md text-label-md text-on-surface-variant" id="step-title-2">Contacto y Residencia</span>
+</li>
+<li class="hidden sm:block w-8 h-px bg-surface-container-highest"></li>
+<li class="flex items-center gap-3 opacity-50 transition-opacity" id="step-tab-3">
+<span class="w-7 h-7 rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-label-md flex items-center justify-center font-semibold" id="step-badge-3">3</span>
+<span class="font-label-md text-label-md text-on-surface-variant" id="step-title-3">Cobertura y Clave</span>
+</li>
+</ol>
+</nav>
+<!-- Main Grid: Clean Form + Minimal Context -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+<!-- Form Column -->
+<div class="lg:col-span-8">
+<form class="bg-surface-container-lowest p-7 sm:p-9 rounded-2xl border border-surface-container shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col gap-6" id="affiliate-form" onsubmit="return false;">
+<!-- STEP 1 CONTENT: Validación de Identidad -->
+<div class="flex flex-col gap-6" id="step-panel-1">
+<div>
+<h2 class="font-title-md text-[18px] text-on-surface font-bold">Validación con RENIEC</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Ingresa los datos de tu documento para autenticar tu identidad de forma segura.</p>
+</div>
+<!-- RENIEC Query Box -->
+<div class="bg-surface-container-low/60 border border-surface-container rounded-xl p-5 flex flex-col gap-4">
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-end">
+<div class="sm:col-span-4 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="doc-type">Documento</label>
+<select class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="doc-type">
+<option selected="" value="dni">DNI (8 dígitos)</option>
+<option value="dnie">DNI Electrónico</option>
+<option value="ce">Carnet de Extranjería</option>
+</select>
+</div>
+<div class="sm:col-span-5 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="dni-input">Número</label>
+<div class="relative">
+<input class="w-full h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface tracking-wider outline-none focus:border-primary transition-colors" id="dni-input" maxlength="8" placeholder="74829103" type="text" value="74829103"/>
+</div>
+</div>
+<div class="sm:col-span-3">
+<button class="w-full h-11 bg-primary hover:bg-primary/90 text-on-primary font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 transition-all active:scale-[0.99]" id="btn-validate-reniec" onclick="simulateReniecValidation()" type="button">
+<span class="material-symbols-outlined text-[18px]" id="reniec-icon">sync</span>
+<span id="reniec-btn-text">Consultar</span>
+</button>
+</div>
+</div>
+<!-- Subtle Validation Notice -->
+<div class="pt-2 flex items-center justify-between text-primary font-body-sm text-body-sm" id="reniec-status-box">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Validado: <strong>Juan Carlos Pérez Ramos</strong></span>
+</div>
+<span class="font-label-sm text-[11px] uppercase tracking-wide bg-primary/10 text-primary px-2 py-0.5 rounded font-bold">Activo</span>
+</div>
+</div>
+<!-- Date Fields -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="dni-emission-date">Fecha de Emisión del DNI</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="dni-emission-date" type="date" value="2021-06-15"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="birth-date">Fecha de Nacimiento</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="birth-date" type="date" value="1994-08-22"/>
+</div>
+</div>
+<!-- Name Fields -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="first-name">Nombres</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="first-name" type="text" value="Juan Carlos"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="paternal-surname">Primer Apellido</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="paternal-surname" type="text" value="Pérez"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="maternal-surname">Segundo Apellido</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="maternal-surname" type="text" value="Ramos"/>
+</div>
+</div>
+<!-- Gender and Blood -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<span class="font-label-md text-label-md text-on-surface">Sexo Registral</span>
+<div class="grid grid-cols-2 gap-2 h-11">
+<label class="flex items-center gap-2 px-3 border border-outline-variant/40 rounded-lg bg-surface-container-lowest cursor-pointer hover:border-primary transition-colors">
+<input checked="" class="w-4 h-4 accent-primary" name="sexo" type="radio" value="masculino"/>
+<span class="font-body-sm text-body-sm text-on-surface">Masculino</span>
+</label>
+<label class="flex items-center gap-2 px-3 border border-outline-variant/40 rounded-lg bg-surface-container-lowest cursor-pointer hover:border-primary transition-colors">
+<input class="w-4 h-4 accent-primary" name="sexo" type="radio" value="femenino"/>
+<span class="font-body-sm text-body-sm text-on-surface">Femenino</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="blood-group">Grupo Sanguíneo</label>
+<select class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="blood-group">
+<option selected="" value="o_pos">O Positivo (O+)</option>
+<option value="o_neg">O Negativo (O-)</option>
+<option value="a_pos">A Positivo (A+)</option>
+<option value="a_neg">A Negativo (A-)</option>
+<option value="b_pos">B Positivo (B+)</option>
+<option value="ab_pos">AB Positivo (AB+)</option>
+</select>
+</div>
+</div>
+<!-- Action Button Step 1 -->
+<div class="pt-4 flex justify-end">
+<button class="h-11 px-6 bg-primary hover:bg-primary/90 text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 transition-all active:scale-[0.99]" onclick="goToStep(2)" type="button">
+<span>Siguiente: Contacto</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- STEP 2 CONTENT: Contacto y Residencia -->
+<div class="hidden flex flex-col gap-6" id="step-panel-2">
+<div>
+<h2 class="font-title-md text-[18px] text-on-surface font-bold">Contacto y Residencia</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Permite asociar el centro de salud de cabecera más cercano a tu domicilio.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="cell-phone">Teléfono Celular</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="cell-phone" placeholder="984 112 349" type="tel" value="984 112 349"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="phone-alt">Teléfono Fijo / Alternativo</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="phone-alt" placeholder="Opcional" type="tel"/>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="user-email">Correo Electrónico</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="user-email" type="email" value="juan.perez.r@gmail.com"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="user-email-confirm">Confirmar Correo</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="user-email-confirm" type="email" value="juan.perez.r@gmail.com"/>
+</div>
+</div>
+<!-- Location -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="reg-dept">Región</label>
+<select class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="reg-dept">
+<option selected="">Lima Metropolitana</option>
+<option>Arequipa</option>
+<option>Cusco</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="reg-prov">Provincia</label>
+<select class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="reg-prov">
+<option selected="">Lima</option>
+<option>Callao</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="reg-dist">Distrito</label>
+<select class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="reg-dist">
+<option selected="">Jesús María</option>
+<option>San Borja</option>
+<option>Miraflores</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="home-address">Dirección</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="home-address" type="text" value="Av. San Felipe 742, Dpto. 402"/>
+</div>
+<div class="p-3 bg-surface-container-low/60 rounded-lg flex items-center justify-between text-body-sm">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-primary">near_me</span>
+<span>Centro de salud sugerido: <strong>C.S. San Felipe (Nivel I-3)</strong></span>
+</div>
+</div>
+<!-- Step 2 Navigation -->
+<div class="pt-4 flex items-center justify-between">
+<button class="h-11 px-5 border border-outline-variant/40 hover:bg-surface-container-low text-on-surface font-label-md text-label-md rounded-lg flex items-center gap-1.5 transition-colors" onclick="goToStep(1)" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Atrás</span>
+</button>
+<button class="h-11 px-6 bg-primary hover:bg-primary/90 text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 transition-all active:scale-[0.99]" onclick="goToStep(3)" type="button">
+<span>Siguiente: Cobertura</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- STEP 3 CONTENT: Cobertura y Clave -->
+<div class="hidden flex flex-col gap-6" id="step-panel-3">
+<div>
+<h2 class="font-title-md text-[18px] text-on-surface font-bold">Cobertura y Credenciales</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Elige tu régimen y genera la clave de acceso a tu portal de salud.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<label class="flex flex-col p-4 rounded-xl border border-primary bg-primary/[0.03] cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<input checked="" class="w-4 h-4 accent-primary" name="seguro_tipo" type="radio" value="sis_gratuito"/>
+<span class="text-[11px] font-bold text-primary uppercase tracking-wide">Público</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">SIS Para Todos</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant mt-0.5">Cobertura pública estatal gratuita.</span>
+</label>
+<label class="flex flex-col p-4 rounded-xl border border-outline-variant/40 bg-surface-container-lowest cursor-pointer hover:border-outline-variant">
+<div class="flex items-center justify-between mb-1.5">
+<input class="w-4 h-4 accent-primary" name="seguro_tipo" type="radio" value="essalud"/>
+<span class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wide">Laboral</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">EsSalud</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant mt-0.5">Asegurados en planilla regular.</span>
+</label>
+<label class="flex flex-col p-4 rounded-xl border border-outline-variant/40 bg-surface-container-lowest cursor-pointer hover:border-outline-variant">
+<div class="flex items-center justify-between mb-1.5">
+<input class="w-4 h-4 accent-primary" name="seguro_tipo" type="radio" value="particular"/>
+<span class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wide">Privado</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Particular / EPS</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant mt-0.5">Atención libre con tarifa de costo.</span>
+</label>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="pass-main">Crear Contraseña</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="pass-main" placeholder="Mínimo 8 caracteres" type="password"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="pass-confirm">Confirmar Contraseña</label>
+<input class="h-11 bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 font-body-sm text-body-sm text-on-surface outline-none focus:border-primary transition-colors" id="pass-confirm" placeholder="Repite tu contraseña" type="password"/>
+</div>
+</div>
+<div class="flex flex-col gap-2.5 pt-1">
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded mt-0.5 accent-primary shrink-0" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Acepto los Términos de Servicio y la Política de Privacidad de Datos de SISALUD.</span>
+</label>
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded mt-0.5 accent-primary shrink-0" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Declaro bajo juramento que los datos ingresados son verídicos.</span>
+</label>
+</div>
+<div class="pt-4 flex items-center justify-between">
+<button class="h-11 px-5 border border-outline-variant/40 hover:bg-surface-container-low text-on-surface font-label-md text-label-md rounded-lg flex items-center gap-1.5 transition-colors" onclick="goToStep(2)" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Atrás</span>
+</button>
+<button class="h-11 px-6 bg-primary hover:bg-primary/90 text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 transition-all active:scale-[0.99]" id="btn-finish-registration" onclick="finishAffiliation()" type="button">
+<span>Completar Registro</span>
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+</div>
+</div>
+<!-- SUCCESS STATE -->
+<div class="hidden flex flex-col items-center text-center py-6 gap-4" id="registration-success-panel">
+<div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[28px]">verified</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">¡Registro completado!</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Tu Historia Clínica Digital se encuentra activa en el sistema.</p>
+</div>
+<div class="w-full max-w-sm bg-surface-container-low/50 border border-surface-container rounded-xl p-4 flex flex-col gap-2.5 text-left text-body-sm">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Historia Clínica:</span>
+<strong class="font-code-sm text-code-sm text-primary">HC-74829103-LIMA</strong>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Paciente:</span>
+<span class="text-on-surface font-medium">Juan Carlos Pérez</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Centro Asignado:</span>
+<span class="text-on-surface">C.S. San Felipe</span>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-2">
+<a class="h-10 px-5 bg-primary hover:bg-primary/90 text-on-primary font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 transition-colors" data-path="citas-medicas" href="#">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Agendar Cita</span>
+</a>
+</div>
+</div>
+</form>
+<!-- Sign-in Link -->
+<div class="mt-4 flex items-center justify-between text-body-sm px-2 text-on-surface-variant">
+<span>¿Ya tienes un expediente en SISALUD?</span>
+<a class="font-label-md text-label-md text-primary hover:underline" data-path="portal-profesional" href="#">Iniciar sesión</a>
+</div>
+</div>
+<!-- Sidebar Context Column (Clean & Subtle) -->
+<aside class="lg:col-span-4 flex flex-col gap-6">
+<!-- Benefits Card -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-surface-container shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col gap-4">
+<h3 class="font-label-lg text-label-lg text-on-surface font-bold">Beneficios del Expediente Digital</h3>
+<ul class="flex flex-col gap-3.5 text-body-sm">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">health_and_safety</span>
+<div>
+<p class="text-on-surface font-semibold">Historia unificada</p>
+<p class="text-on-surface-variant text-[12px]">Tus atenciones y recetas disponibles en cualquier centro de salud público.</p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">medication</span>
+<div>
+<p class="text-on-surface font-semibold">Receta electrónica</p>
+<p class="text-on-surface-variant text-[12px]">Retiro directo de medicamentos con documento de identidad.</p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">calendar_month</span>
+<div>
+<p class="text-on-surface font-semibold">Citas y recordatorios</p>
+<p class="text-on-surface-variant text-[12px]">Gestión en línea sin filas y avisos oportunos por mensaje.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Support Info -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-surface-container text-body-sm flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface font-bold">¿Dudas con tu registro?</span>
+<p class="text-on-surface-variant text-[12px]">Llama gratuitamente a la línea de información sanitaria oficial.</p>
+<div class="pt-1 flex items-center justify-between text-on-surface">
+<span class="text-[13px] text-on-surface-variant">Línea SISALUD:</span>
+<strong class="font-code-sm text-code-sm text-primary font-bold">113</strong>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<!-- Form Interaction Script -->
+<script>
+  function goToStep(stepNumber) {
+    document.getElementById('step-panel-1').classList.add('hidden');
+    document.getElementById('step-panel-2').classList.add('hidden');
+    document.getElementById('step-panel-3').classList.add('hidden');
+    
+    const target = document.getElementById('step-panel-' + stepNumber);
+    if(target) target.classList.remove('hidden');
+
+    for (let i = 1; i <= 3; i++) {
+      const tab = document.getElementById('step-tab-' + i);
+      const badge = document.getElementById('step-badge-' + i);
+      const title = document.getElementById('step-title-' + i);
+      
+      if (i === stepNumber) {
+        tab.classList.remove('opacity-50');
+        badge.className = 'w-7 h-7 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center font-bold';
+        badge.innerText = i;
+        title.className = 'font-label-md text-label-md font-semibold text-on-surface';
+      } else if (i < stepNumber) {
+        tab.classList.remove('opacity-50');
+        badge.className = 'w-7 h-7 rounded-full bg-primary/15 text-primary font-label-md text-label-md flex items-center justify-center font-bold';
+        badge.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span>';
+        title.className = 'font-label-md text-label-md text-on-surface';
+      } else {
+        tab.classList.add('opacity-50');
+        badge.className = 'w-7 h-7 rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-label-md flex items-center justify-center font-semibold';
+        badge.innerText = i;
+        title.className = 'font-label-md text-label-md text-on-surface-variant';
+      }
+    }
+  }
+
+  function simulateReniecValidation() {
+    const icon = document.getElementById('reniec-icon');
+    const text = document.getElementById('reniec-btn-text');
+    icon.classList.add('animate-spin');
+    text.innerText = 'Buscando...';
+    setTimeout(() => {
+      icon.classList.remove('animate-spin');
+      icon.innerText = 'check';
+      text.innerText = 'Validado';
+    }, 600);
+  }
+
+  function finishAffiliation() {
+    const btn = document.getElementById('btn-finish-registration');
+    btn.innerHTML = '<span>Procesando...</span>';
+    setTimeout(() => {
+      document.getElementById('step-panel-3').classList.add('hidden');
+      document.getElementById('registration-success-panel').classList.remove('hidden');
+      for (let i = 1; i <= 3; i++) {
+        const badge = document.getElementById('step-badge-' + i);
+        badge.className = 'w-7 h-7 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center font-bold';
+        badge.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span>';
+      }
+    }, 800);
+  }
+</script>
+</main><footer class="w-full bg-surface-container-lowest border-t border-surface-container mt-16"><div class="max-w-7xl mx-auto px-6 lg:px-12 py-10"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-surface-container/60"><div class="flex flex-col gap-2"><span class="font-headline-sm text-[18px] text-on-surface font-bold">SISALUD</span><p class="font-body-sm text-body-sm text-on-surface-variant">Sistema Integrado de Salud Pública. Cobertura universal e interoperabilidad clínica digital.</p></div><div class="flex flex-col gap-2"><span class="font-label-md text-label-md text-on-surface font-semibold">Servicios</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="citas-medicas" href="#">Citas Médicas</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="triage-en-linea" href="#">Triage</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="farmacia-institucional" href="#">Farmacia Digital</a></div><div class="flex flex-col gap-2"><span class="font-label-md text-label-md text-on-surface font-semibold">Red Asistencial</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="red-hospitalaria" href="#">Hospitales y Centros</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Guardias de Urgencia</a></div><div class="flex flex-col gap-2"><span class="font-label-md text-label-md text-on-surface font-semibold">Contacto</span><span class="font-body-sm text-body-sm text-on-surface-variant">Línea gratuita nacional: 113</span><span class="font-body-sm text-body-sm text-on-surface-variant">Emergencias SAMU: 106</span></div></div><div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-body-sm text-[13px] text-on-surface-variant"><p>© 2025 SISALUD. Todos los derechos reservados.</p><div class="flex items-center gap-6"><a class="hover:text-on-surface transition-colors" href="#">Accesibilidad</a><a class="hover:text-on-surface transition-colors" href="#">Privacidad de Datos</a><a class="hover:text-on-surface transition-colors" href="#">Términos</a></div></div></div></footer></body></html>

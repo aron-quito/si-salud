@@ -8,31 +8,26 @@
 
 A continuación, los requerimientos distribuidos por módulos principales, integrando las nuevas características de SI-SALUD.
 
-### Módulo 1: Autenticación y Portal del Paciente (ACC / PAC)
-* **RF-01 (Registro y Perfil):** El sistema debe permitir el registro de pacientes con validación de identidad (DNI, datos completos, contacto) y gestionar la sesión mediante roles (Paciente, Médico, Admin).
-* **RF-02 (Dashboard del Paciente):** El sistema debe mostrar al paciente sus citas agendadas, notificaciones pendientes y permitir la gestión de su perfil.
-* **RF-03 (Recuperación de cuenta):** Flujo para restablecer la contraseña vía correo electrónico.
+### Módulo 1 y 2: Autenticación y Pacientes (PAC)
+* **RF-01 (Registro y 2FA):** El sistema debe permitir el registro de pacientes, inicio de sesión con doble factor de autenticación (2FA) y recuperación de cuenta.
+* **RF-02 (Dashboard y Perfil):** El paciente podrá gestionar su perfil, ver historial de citas y descargar documentos.
 
-### Módulo 2: Triaje Algorítmico y Recepción de Solicitudes (TRI)
-* **RF-04 (Formulario Inicial):** El sistema debe proveer un formulario dinámico donde el paciente describe sus síntomas y preferencias de horario para solicitar una cita.
-* **RF-05 (Interpretación con IA):** El algoritmo debe interpretar las respuestas del formulario, generar un resumen de las complicaciones del paciente y calcular un nivel de urgencia.
-* **RF-06 (Bolsa de Solicitudes):** Las solicitudes validadas deben almacenarse en una "bolsa" (bag) en estado de espera para su posterior procesamiento.
+### Módulo 3 y 4: Directorio Médico y Catálogos (ADM)
+* **RF-03 (Directorio y Búsqueda):** Visualización del staff médico con filtros (especialidad, nombre). El médico puede ver su agenda diaria y emitir recetas.
+* **RF-04 (Gestión de Sedes y Excepciones):** El administrador debe realizar CRUD de sedes y consultorios, además de forzar consultas emergentes o aprobar excepciones.
 
-### Módulo 3: Motor Inteligente de Agendamiento (MIA)
-* **RF-07 (Procesamiento Batch de Medianoche):** El sistema debe ejecutar un proceso automático (cron job) todos los días a las 12:00 AM para organizar las solicitudes de la bolsa y asignarles un horario óptimo basado en la urgencia y preferencias.
-* **RF-08 (Time-Slotting y Smart Slotting):** El sistema debe usar un estándar de Time-Slotting y aplicar Smart Slotting para buscar y asignar horarios consecutivos cuando sea necesario.
-* **RF-09 (Bloques Elásticos):** El sistema debe calcular y asignar bloques de tiempo flexibles (duración variable) dependiendo de la complejidad deducida en el triaje.
-* **RF-10 (Modalidades de Atención):** El motor debe permitir agendar citas en tres modalidades: Presencial, Videoconferencia (Meet) o Llamada Telefónica.
+### Módulo 5: Motor de Lógica de Negocio (TRI)
+* **RF-05 (Triaje IA y Validaciones):** Detección de formularios de urgencia, validación de edad y compatibilidad de especialidad mediante algoritmos.
+* **RF-06 (Bolsa de Solicitudes):** Las solicitudes validadas deben almacenarse en una "bolsa" (bag) en estado de espera para su procesamiento.
 
-### Módulo 4: Gestión de Citas y Asistencia (CIT)
-* **RF-11 (Asignación Automática):** El sistema debe publicar la cita confirmada en el perfil del paciente una vez procesada.
-* **RF-12 (Check-in de Confirmación):** El sistema debe enviar una notificación (SMS o Correo) 2 días antes de la cita exigiendo al paciente que confirme su asistencia (Check-in).
-* **RF-13 (Cancelación Justificada):** El paciente puede cancelar su cita, de preferencia con 2 días de anticipación, proporcionando una breve justificación obligatoria.
-* **RF-14 (Lista de Espera Inteligente):** Si un horario ocupado se libera (por cancelación), el sistema debe notificar por correo a los pacientes en lista de espera que requieran ese slot.
+### Módulo 6: Horarios y Disponibilidad (MIA)
+* **RF-07 (Time-Slotting y Prevención de Solapamiento):** Creación de slots de tiempo en bloques fijos para prevenir cruces de horarios. Modificación de disponibilidad por el admin.
+* **RF-08 (Asignación Batch y Bloques Elásticos):** Proceso cron de medianoche para asignar bloques de tiempo flexibles dependiendo de la complejidad deducida.
 
-### Módulo 5: Panel Médico y Directorio (MED)
-* **RF-15 (Directorio Médico):** Visualización del staff médico con filtros (especialidad, nombre) e información detallada de cada profesional.
-* **RF-16 (Agenda del Médico):** El médico debe poder visualizar su agenda (diaria/semanal), conocer la modalidad de cada cita y acceder al resumen de triaje generado por el algoritmo.
+### Módulo 7 y 8: Gestión de Citas y Lista de Espera (CIT)
+* **RF-09 (Asistencia y Ticket Temporal):** El área de recepción podrá registrar la asistencia física del paciente y generar un ticket de atención.
+* **RF-10 (Límites de Reprogramación):** El sistema debe permitir cancelar o reprogramar citas, aplicando un bloqueo por límite de cambios si se abusa del sistema.
+* **RF-11 (Lista de Espera Reactiva):** Ordenar la cola de pacientes por prioridad y asignar turnos liberados de forma reactiva a quienes estén esperando.
 
 ### Requerimientos No Funcionales (RNF)
 * **RNF-01 (Usabilidad):** Diseño completamente responsive, cumpliendo heurísticas de usabilidad.
@@ -47,31 +42,57 @@ A continuación, los requerimientos distribuidos por módulos principales, integ
 
 ### 2.1 Diagrama de Casos de Uso
 ```mermaid
-flowchart LR
+flowchart TD
     %% Actores
     P([Paciente])
     M([Médico])
     A([Administrador])
-    S([Sistema / IA])
+    R([Recepción/Cajero])
+    S([Sistema / Motor IA])
 
-    %% Casos de Uso
-    P --> UC1(Completar Formulario de Triaje)
-    P --> UC2(Confirmar/Cancelar Cita)
-    P --> UC3(Gestionar Perfil)
-    
-    S --> UC4(Interpretar Triaje y Calcular Urgencia)
-    S --> UC5(Procesar Bolsa Batch)
-    S --> UC6(Asignar Smart Slots)
-    S --> UC7(Enviar Notificaciones)
-    
-    M --> UC8(Visualizar Agenda)
-    M --> UC9(Ver Resumen Triaje)
-    
-    A --> UC10(Gestionar Directorio)
-    A --> UC11(Monitorear Sistema)
-    
-    UC1 -. include .-> UC4
-    UC5 -. include .-> UC6
+    subgraph M1_M2 [1-2: Autenticación y Perfil]
+        UC_Auth(Iniciar Sesión y 2FA)
+        UC_Hist(Descargar Historial)
+    end
+
+    subgraph M3_M4 [3-4: Staff, Catálogos y Admin]
+        UC_Dir(Buscar Médico)
+        UC_Crud(CRUD Sedes/Consultorios)
+        UC_Forzar(Forzar Asignaciones y Excepciones)
+    end
+
+    subgraph M5_M6 [5-6: Lógica de Negocio y Horarios]
+        UC_Triaje(Validar Triaje y Urgencia)
+        UC_Slot(Generar Bloques y Prevenir Solapamiento)
+    end
+
+    subgraph M7_M8 [7-8: Citas y Lista de Espera]
+        UC_Repro(Reprogramar Cita)
+        UC_Bloq(Bloquear por Límite de Cambios)
+        UC_Asist(Registrar Asistencia en Recepción)
+        UC_Esp(Ordenar Cola y Asignar desde Lista)
+    end
+
+    P --> UC_Auth
+    P --> UC_Hist
+    P --> UC_Dir
+    P --> UC_Repro
+
+    M --> UC_Dir
+
+    A --> UC_Crud
+    A --> UC_Forzar
+
+    R --> UC_Asist
+
+    S --> UC_Triaje
+    S --> UC_Slot
+    S --> UC_Bloq
+    S --> UC_Esp
+
+    UC_Repro -. include .-> UC_Bloq
+    UC_Triaje -. triggers .-> UC_Slot
+    UC_Esp -. updates .-> UC_Slot
 ```
 
 ### 2.2 Diagrama de Arquitectura / Componentes
@@ -263,6 +284,39 @@ sequenceDiagram
     N-->>P: Correo: "Cita Asignada"
 ```
 
+### 2.5 Diagrama de Secuencia (Flujo Reactivo: Cancelación y Lista de Espera)
+```mermaid
+sequenceDiagram
+    autonumber
+    actor P as Paciente (Cancela)
+    participant F as Frontend
+    participant S as Motor Agendamiento
+    participant DB as Base de Datos
+    participant LE as Lista de Espera (Pacientes)
+    participant N as Notificaciones
+
+    P->>F: Solicita Cancelación con Justificación
+    F->>S: POST /citas/cancelar
+    S->>DB: Update CITA (Estado: Cancelado)
+    S->>DB: Update BLOQUE_HORARIO (Estado: Libre)
+    
+    Note over S,LE: Smart Slotting Reactivo
+    S->>DB: Query: ¿Hay pacientes en lista de espera para esta especialidad?
+    DB-->>S: Retorna pacientes de Alta Urgencia
+    S->>N: Trigger de liberación de horario
+    N-->>LE: Correo: "Horario disponible, tómalo rápido"
+    
+    LE->>F: Paciente en espera reclama el slot
+    F->>S: POST /citas/reclamar
+    S->>DB: Bloqueo Optimista (Intenta tomar slot)
+    alt Slot disponible
+        S->>DB: Update BLOQUE_HORARIO (Estado: Ocupado)
+        S-->>LE: Cita Confirmada Exitosamente
+    else Slot ya fue tomado por otro
+        S-->>LE: Error: Slot ya ocupado
+    end
+```
+
 ---
 
 ## 3. Historias de Usuario
@@ -340,6 +394,24 @@ sequenceDiagram
     *   Generador de bloques de horario fijos (slots) por médico y consultorio.
     *   Relación de médicos con múltiples especialidades (N:M).
 
+### HU-09: Recepción y Registro de Asistencia
+**Como** personal de recepción,
+**Quiero** registrar la llegada física del paciente a la sede,
+**Para que** el sistema genere un ticket temporal de atención y notifique al médico que el paciente lo espera.
+*   **Criterios de Aceptación:**
+    *   Buscador rápido de pacientes por DNI o código de cita.
+    *   Botón de "Registrar Asistencia" que actualiza el estado de la cita a "En Espera en Consultorio".
+    *   Generación (mock) de Ticket de turno impreso/digital.
+
+### HU-10: Reglas de Reprogramación y Bloqueos
+**Como** sistema,
+**Quiero** limitar la cantidad de veces que un paciente reprograma o cancela citas tardíamente,
+**Para que** pueda bloquear temporalmente la reserva de citas si se detecta abuso.
+*   **Criterios de Aceptación:**
+    *   Lógica para contar repeticiones de cancelaciones en el `Historial_Reprogramacion`.
+    *   Bloqueo automático de agendamiento si supera el límite definido (ej. 3 veces).
+    *   Opción para que el Administrador apruebe excepciones y levante el castigo.
+
 ---
 
 ## 4. Estimación y Desglose en Tareas Técnicas
@@ -393,6 +465,14 @@ sequenceDiagram
     2.  [Backend] Endpoints de mantenimiento (crear, leer, actualizar, desactivar).
     3.  [BD] Motor para generar `Bloques_Horarios` fijos semanalmente asociados a un `Medico` y un `Consultorio`.
     4.  [Backend] Integrar la validación de seguros y consultorios en el motor de agendamiento Batch de medianoche.
+
+### Requerimiento: HU-09 y HU-10 (Asistencia en Sede y Bloqueos)
+*   **Estimación:** 8 Puntos de Historia / ~24 Horas
+*   **Tareas:**
+    1.  [Frontend] Módulo de Recepción (Dashboard para buscar citas del día y generar tickets).
+    2.  [Backend] Endpoint de Check-in físico `POST /api/recepcion/asistencia`.
+    3.  [Backend] Middleware/Servicio para auditar límite de reprogramaciones/cancelaciones por paciente cruzando con `Historial_Reprogramacion`.
+    4.  [Frontend] Vista Admin para "Levantar Castigos / Aprobar Excepciones".
 
 ---
 

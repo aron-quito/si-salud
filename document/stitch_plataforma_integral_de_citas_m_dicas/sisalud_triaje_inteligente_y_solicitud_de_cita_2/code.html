@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>SISALUD - Red de Salud Pública</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "inverse-on-surface": "#eaf1ff",
+          "surface-container-low": "#eff4ff",
+          "on-primary": "#ffffff",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#9cf2e8",
+          "primary": "#005c55",
+          "tertiary-fixed": "#cce5ff",
+          "tertiary-container": "#006fa8",
+          "secondary-fixed": "#dce1ff",
+          "on-secondary-fixed": "#00164e",
+          "error": "#ba1a1a",
+          "tertiary-fixed-dim": "#93ccff",
+          "on-secondary-container": "#1d3989",
+          "outline": "#6e7977",
+          "on-tertiary": "#ffffff",
+          "surface-tint": "#006a63",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-fixed-variant": "#00504a",
+          "on-primary-container": "#a3faef",
+          "on-secondary": "#ffffff",
+          "surface-container-high": "#dce9ff",
+          "tertiary": "#005683",
+          "secondary": "#4059aa",
+          "on-surface-variant": "#3e4947",
+          "on-error-container": "#93000a",
+          "surface-container-highest": "#d3e4fe",
+          "secondary-container": "#8fa7fe",
+          "on-tertiary-container": "#dbecff",
+          "primary-fixed-dim": "#80d5cb",
+          "surface": "#f8f9ff",
+          "on-tertiary-fixed": "#001d31",
+          "surface-container": "#e5eeff",
+          "on-tertiary-fixed-variant": "#004b73",
+          "surface-dim": "#cbdbf5",
+          "background": "#f8f9ff",
+          "on-secondary-fixed-variant": "#264191",
+          "inverse-surface": "#213145",
+          "inverse-primary": "#80d5cb",
+          "primary-container": "#0f766e",
+          "on-primary-fixed": "#00201d",
+          "on-error": "#ffffff",
+          "outline-variant": "#bdc9c6",
+          "on-surface": "#0b1c30",
+          "secondary-fixed-dim": "#b6c4ff",
+          "on-background": "#0b1c30",
+          "surface-variant": "#d3e4fe",
+          "surface-bright": "#f8f9ff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "margin-mobile": "1rem",
+          "space-xs": "0.25rem",
+          "space-md": "1rem",
+          "space-2xl": "3rem",
+          "space-sm": "0.5rem",
+          "gutter-mobile": "1rem",
+          "gutter": "1.5rem",
+          "margin": "2rem",
+          "space-xl": "2rem",
+          "space-lg": "1.5rem"
+        },
+        "fontFamily": {
+          "headline-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "display-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "title-md": [
+            "Plus Jakarta Sans"
+          ],
+          "label-lg": [
+            "Inter"
+          ],
+          "code-sm": [
+            "Inter"
+          ],
+          "label-sm": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "body-md": [
+            "Inter"
+          ],
+          "body-sm": [
+            "Inter"
+          ],
+          "headline-md": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-xl-mobile": [
+            "Plus Jakarta Sans"
+          ],
+          "body-lg": [
+            "Inter"
+          ],
+          "label-md": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "headline-lg": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-lg": [
+            "48px",
+            {
+              "lineHeight": "56px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "title-md": [
+            "16px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-lg": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "code-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "500"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.03em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-xl": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-md": [
+            "22px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl-mobile": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "18px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "400"
+            }
+          ],
+          "label-md": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="bg-inverse-surface text-inverse-on-surface py-space-xs"><div class="max-w-7xl mx-auto px-gutter flex items-center justify-between font-label-sm text-label-sm"><div class="flex items-center gap-space-lg"><span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-primary-fixed">local_hospital</span><span>Atención Médica Pública Oficial</span></span><span class="hidden sm:flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-error-container">emergency</span><span>Emergencias SAMU: <strong class="font-semibold text-surface-container-lowest">106</strong></span></span><span class="hidden md:flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-primary-fixed">call</span><span>Orientación Telefónica Salud: <strong class="font-semibold text-surface-container-lowest">113</strong></span></span></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-1 bg-surface-container-lowest/10 px-2 py-0.5 rounded"><span class="material-symbols-outlined text-[14px]">domain</span><select aria-label="Seleccionar Sede Hospitalaria" class="bg-transparent text-inverse-on-surface font-label-sm text-label-sm focus:outline-none cursor-pointer"><option class="text-on-surface bg-surface-container-lowest" value="central">Hospital Nacional Central</option><option class="text-on-surface bg-surface-container-lowest" value="norte">Hospital Regional Norte</option><option class="text-on-surface bg-surface-container-lowest" value="sur">Centro Clínico Especializado Sur</option><option class="text-on-surface bg-surface-container-lowest" value="oriente">Red Periférica de Salud Oriente</option></select></div><div class="flex items-center gap-1 bg-surface-container-lowest/10 px-2 py-0.5 rounded"><span class="material-symbols-outlined text-[14px]">badge</span><select aria-label="Seleccionar Perfil de Usuario" class="bg-transparent text-inverse-on-surface font-label-sm text-label-sm focus:outline-none cursor-pointer"><option class="text-on-surface bg-surface-container-lowest" value="ciudadano">Perfil: Ciudadano</option><option class="text-on-surface bg-surface-container-lowest" value="medico">Perfil: Personal Médico</option><option class="text-on-surface bg-surface-container-lowest" value="triage">Perfil: Triaje Hospitalario</option></select></div></div></div></div><div class="bg-surface-container-lowest/95 backdrop-blur-xl"><div class="h-20 max-w-7xl mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><img alt="Brand logo. - Primary color: #0f766e
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UpFCk4xhFFku3scKcfAWun4GILW9yOGWacXJAiLvcnTncsH4Tk_I6x29vd6ldpI8tqUfypNhSLexnO_Mu-XrMl41u3eCwiyV9OOkTUvKtEGtxdKVcSFpfe5mm38D0R5Z6NcO_nXgmkzjeNYb-TOGp9dEc-B1mTo8IMAZcHxdM7X5KO6m8bjC3ZITWI7FD3S5LpOaxT1J9hI4eV6Fw3b7Hds5sH2BM_vtIcjYrMN6Lxe0bc4_5Y_oPc1t29"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold leading-tight">SISALUD</span><span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline-block leading-tight">Red Asistencial de Salud Pública</span></div></div><nav class="hidden xl:flex items-center gap-1.5" data-active-classes="bg-primary-container text-on-primary font-label-lg text-label-lg rounded-lg"><a class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface px-3 py-2 rounded-lg transition-colors" data-path="portal-de-citas" href="#">Portal de Citas</a><a aria-current="page" class="px-3 py-2 transition-colors bg-primary-container text-on-primary font-label-lg text-label-lg rounded-lg" data-path="triaje-inteligente" href="#">Triaje Inteligente</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface px-3 py-2 rounded-lg transition-colors" data-path="mis-citas" href="#">Mis Citas</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface px-3 py-2 rounded-lg transition-colors" data-path="agenda-medica" href="#">Agenda Médica</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface px-3 py-2 rounded-lg transition-colors" data-path="mesa-de-ayuda" href="#">Mesa de Ayuda</a></nav><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><button aria-label="Abrir menú de navegación" class="xl:hidden p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined">menu</span></button></div></div></div></header><main class="w-full pt-28 bg-surface"><div class="flex flex-col w-full">
+<!-- Interactive Header with Medical Workflow Stepper -->
+<section class="max-w-7xl mx-auto w-full px-gutter py-space-lg">
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md mb-space-lg">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+              Algoritmo Asistencial Activo
+            </span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">EXP: #2025-MED-84920</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Agendamiento con Triaje Clínico Predictivo</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Evaluación estandarizada bajo norma técnica nacional para asignación prioritaria de turnos ambulatorios.</p>
+</div>
+<div class="flex items-center gap-space-sm bg-surface-container-low px-4 py-2.5 rounded-lg">
+<span class="material-symbols-outlined text-primary text-[22px]">health_and_safety</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Protocolo Clínico Activo</span>
+<span class="font-label-lg text-label-lg text-on-surface">Clasificación Manchester Modificada</span>
+</div>
+</div>
+</div>
+<!-- 3-Step Stepper Bar -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Step 1: Completed -->
+<div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-low">
+<div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold">Paso 1</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Completado</span>
+</div>
+<p class="font-title-md text-title-md text-on-surface truncate">Motivo y Especialidad</p>
+</div>
+</div>
+<!-- Step 2: Active -->
+<div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-primary-container text-on-primary shadow-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container-lowest text-primary flex items-center justify-center font-headline-sm text-headline-sm font-bold">
+            2
+          </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-primary-fixed uppercase font-bold">Paso 2 Actual</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary-fixed animate-ping"></span>
+</div>
+<p class="font-title-md text-title-md text-on-primary truncate">Evaluación y Triaje de Gravedad</p>
+</div>
+</div>
+<!-- Step 3: Pending -->
+<div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-low opacity-75">
+<div class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-headline-sm text-headline-sm font-bold">
+            3
+          </div>
+<div class="min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Paso 3 Final</span>
+<p class="font-title-md text-title-md text-on-surface-variant truncate">Asignación y Confirmación</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Grid: Triage Form + Algorithm Diagnostic & Confirmation Ticket -->
+<section class="max-w-7xl mx-auto w-full px-gutter pb-space-2xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Column: Triage Questionnaire (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- Symptom Selector Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">stethoscope</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">1. Motivo de Consulta Predominante</h3>
+</div>
+<span class="font-label-sm text-label-sm text-primary bg-primary-fixed/30 px-2 py-0.5 rounded">Obligatorio</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">Seleccione la categoría que describe con mayor exactitud la afección que experimenta en este momento.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm" id="symptom-group">
+<button class="symptom-btn text-left p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-all flex items-start gap-space-sm group active:scale-[0.99]" type="button">
+<span class="w-8 h-8 rounded-md bg-surface-container-lowest flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">file_png</span>
+</span>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Dolor agudo</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Espasmos, dolor abdominal o torácico punzante</span>
+</div>
+</button>
+<!-- Pre-selected for Case A -->
+<button class="symptom-btn text-left p-space-sm rounded-lg bg-primary-container text-on-primary shadow-sm transition-all flex items-start gap-space-sm group active:scale-[0.99] selected-symptom" type="button">
+<span class="w-8 h-8 rounded-md bg-surface-container-lowest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">air</span>
+</span>
+<div>
+<span class="font-title-md text-title-md text-on-primary block font-semibold">Síntoma respiratorio</span>
+<span class="font-body-sm text-body-sm text-on-primary-container">Tos persistente, expectoración o congestión</span>
+</div>
+</button>
+<button class="symptom-btn text-left p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-all flex items-start gap-space-sm group active:scale-[0.99]" type="button">
+<span class="w-8 h-8 rounded-md bg-surface-container-lowest flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">clinical_notes</span>
+</span>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Control crónico</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hipertensión, diabetes o renovación de recetas</span>
+</div>
+</button>
+<button class="symptom-btn text-left p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-all flex items-start gap-space-sm group active:scale-[0.99]" type="button">
+<span class="w-8 h-8 rounded-md bg-surface-container-lowest flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">cloud_download</span>
+</span>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Traumatismo leve</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Contusión o esguince sin deformidad ósea</span>
+</div>
+</button>
+<button class="symptom-btn sm:col-span-2 text-left p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-all flex items-start gap-space-sm group active:scale-[0.99]" type="button">
+<span class="w-8 h-8 rounded-md bg-surface-container-lowest flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">sick</span>
+</span>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Malestar general</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Astenia, cefalea tensional, mialgias o decaimiento general sin disnea</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Pain Scale 1 to 5 Module -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[22px]">speed</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">2. Escala Visual Análoga de Dolor (EVA)</h3>
+</div>
+<span class="font-headline-md text-headline-md font-bold text-primary" id="pain-level-display">Nivel 2/5</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-lg">Gradúe la intensidad subjetiva del malestar experimentado en las últimas 12 horas.</p>
+<div class="grid grid-cols-5 gap-2 sm:gap-space-sm" id="pain-buttons">
+<!-- Level 1 -->
+<button class="pain-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container flex flex-col items-center text-center transition-all" data-score="1" type="button">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">1</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold mt-1">Muy leve</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant hidden sm:inline-block">Rutina / Control</span>
+</button>
+<!-- Level 2 - Selected -->
+<button class="pain-btn p-3 rounded-lg bg-secondary text-on-secondary flex flex-col items-center text-center transition-all ring-2 ring-secondary shadow-sm" data-score="2" type="button">
+<span class="font-headline-md text-headline-md font-bold text-on-secondary">2</span>
+<span class="font-label-sm text-label-sm text-secondary-fixed font-semibold mt-1">Moderado</span>
+<span class="font-code-sm text-code-sm text-surface-container-high hidden sm:inline-block">Tolerable</span>
+</button>
+<!-- Level 3 -->
+<button class="pain-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container flex flex-col items-center text-center transition-all" data-score="3" type="button">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">3</span>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold mt-1">Notable</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant hidden sm:inline-block">Incomodidad</span>
+</button>
+<!-- Level 4 -->
+<button class="pain-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container flex flex-col items-center text-center transition-all" data-score="4" type="button">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">4</span>
+<span class="font-label-sm text-label-sm text-error font-semibold mt-1">Intenso</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant hidden sm:inline-block">Incapacitante</span>
+</button>
+<!-- Level 5 -->
+<button class="pain-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container flex flex-col items-center text-center transition-all" data-score="5" type="button">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">5</span>
+<span class="font-label-sm text-label-sm text-error font-semibold mt-1">Crítico</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant hidden sm:inline-block">Urgencias</span>
+</button>
+</div>
+<!-- Dynamic description panel -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low flex items-center gap-space-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[20px]">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant" id="pain-descriptor">
+<strong class="text-on-surface">Molestia moderada:</strong> El síntoma no impide el movimiento voluntario ni las funciones respiratorias básicas. Apto para turno diferido programado.
+            </p>
+</div>
+</div>
+<!-- Alarm Signs Switch Panel -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[22px]">warning</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">3. Verificación de Signos de Alarma Hospitalaria</h3>
+</div>
+<span class="font-label-sm text-label-sm text-error font-bold uppercase tracking-wider bg-error-container/50 text-on-error-container px-2 py-0.5 rounded">Riesgo Vital</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">La presencia de cualquiera de estos signos redirigirá inmediatamente a la sala de choque/emergencias del hospital.</p>
+<div class="space-y-space-sm" id="alarm-switches">
+<!-- Switch 1 -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-start gap-space-sm pr-4">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mt-0.5">device_thermostat</span>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Fiebre persistente &gt; 38.5°C por más de 48h</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sin respuesta adecuada a antipiréticos orales comunes</span>
+</div>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer alarm-checkbox" type="checkbox" value="fever"/>
+<div class="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-error"></div>
+</div>
+</label>
+<!-- Switch 2 -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-start gap-space-sm pr-4">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mt-0.5">pulmonology</span>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Dificultad respiratoria al hablar o caminar</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sensación de asfixia o estridor torácico agudo</span>
+</div>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer alarm-checkbox" type="checkbox" value="dyspnea"/>
+<div class="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-error"></div>
+</div>
+</label>
+<!-- Switch 3 -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-start gap-space-sm pr-4">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mt-0.5">sensor_occupied</span>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Pérdida de conocimiento o mareo severo</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Síncope reciente, confusión mental repentina o hipotensión</span>
+</div>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer alarm-checkbox" type="checkbox" value="syncope"/>
+<div class="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-error"></div>
+</div>
+</label>
+<!-- Switch 4 -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-start gap-space-sm pr-4">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mt-0.5">bloodtype</span>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">Sangrado activo profuso o hemorragia</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hemorragia digestiva, epistaxis incontrolable o herida profunda</span>
+</div>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer alarm-checkbox" type="checkbox" value="bleeding"/>
+<div class="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-error"></div>
+</div>
+</label>
+</div>
+</div>
+<!-- Smart Schedule Selector based on Safe Triage Outcome -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">calendar_clock</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">4. Horarios Sugeridos por Algoritmo de Turnos</h3>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-fixed/50 px-2 py-0.5 rounded font-semibold">3 Opciones Disponibles</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">Dado que no se detectaron criterios de emergencia crítica inmediata, el sistema hospitalario le habilita la agenda prioritaria regular:</p>
+<div class="space-y-space-sm" id="slot-container">
+<!-- Option A (Recommended Default) -->
+<label class="slot-option relative flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-surface-container-low border-l-4 border-l-primary cursor-pointer transition-all hover:shadow-md">
+<div class="flex items-start gap-space-sm mb-3 sm:mb-0">
+<input checked="" class="mt-1 accent-primary w-4 h-4" name="medical_slot" type="radio" value="slot_a"/>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm bg-primary text-on-primary px-2 py-0.5 rounded font-bold uppercase">Opción A • Recomendada</span>
+<span class="font-code-sm text-code-sm text-primary font-bold">Mañana 09:30 AM</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold">Dr. Carlos Mendoza Solís</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Consultorio 204 • Pabellón B (Medicina General / Neumología)</p>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 text-right">
+<span class="font-label-sm text-label-sm text-primary bg-primary-fixed/40 px-2 py-1 rounded">Cupo Confirmable</span>
+</div>
+</label>
+<!-- Option B -->
+<label class="slot-option relative flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-surface-container-low border-l-4 border-l-transparent hover:border-l-secondary cursor-pointer transition-all hover:shadow-md">
+<div class="flex items-start gap-space-sm mb-3 sm:mb-0">
+<input class="mt-1 accent-primary w-4 h-4" name="medical_slot" type="radio" value="slot_b"/>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded font-bold uppercase">Opción B</span>
+<span class="font-code-sm text-code-sm text-on-surface font-semibold">Mañana 03:15 PM</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold">Dra. Elena Ramos Carrión</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Consultorio 108 • Pabellón A (Medicina Interna)</p>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded">2 Vacantes</span>
+</div>
+</label>
+<!-- Option C -->
+<label class="slot-option relative flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-surface-container-low border-l-4 border-l-transparent hover:border-l-secondary cursor-pointer transition-all hover:shadow-md">
+<div class="flex items-start gap-space-sm mb-3 sm:mb-0">
+<input class="mt-1 accent-primary w-4 h-4" name="medical_slot" type="radio" value="slot_c"/>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded font-bold uppercase">Opción C</span>
+<span class="font-code-sm text-code-sm text-on-surface font-semibold">Pasado mañana 11:00 AM</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold">Dr. Javier Vargas Ortiz</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Consultorio 210 • Pabellón B (Medicina Familiar)</p>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded">4 Vacantes</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Right Column: Algorithmic Diagnostic + Official Appointment Ticket (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-lg">
+<!-- Algorithmic Live Result (Caso A) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="font-label-sm text-label-sm uppercase font-bold text-tertiary tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">neurology</span>
+              Diagnóstico Algorítmico
+            </span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-code-sm text-code-sm font-semibold">
+              TRIAGE NIVEL 2 - 3
+            </span>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low mb-space-md">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-on-secondary shadow-sm">
+<span class="material-symbols-outlined text-[28px]">medical_information</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Gravedad Leve a Moderada</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sin compromiso hemodinámico. Apto para atención ambulatoria.</p>
+</div>
+</div>
+<!-- Visual Bar Scale Indicating Triage Level 2-3 -->
+<div class="mt-space-md pt-space-sm border-t border-surface-container-high/60">
+<div class="flex justify-between font-label-sm text-label-sm mb-1.5">
+<span class="text-on-surface-variant">Clasificación asistencial</span>
+<span class="text-secondary font-bold">Nivel 2-3 / 5 (Estable)</span>
+</div>
+<div class="h-2.5 w-full bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="w-1/5 bg-primary h-full"></div>
+<div class="w-1/5 bg-primary-container h-full"></div>
+<div class="w-1/5 bg-secondary h-full relative">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-surface-container-lowest animate-pulse"></div>
+</div>
+<div class="w-1/5 bg-surface-container-high h-full"></div>
+<div class="w-1/5 bg-surface-container-high h-full"></div>
+</div>
+<div class="flex justify-between font-code-sm text-code-sm text-on-surface-variant mt-1">
+<span>N1 Mínimo</span>
+<span>N3 Moderado</span>
+<span>N5 Resucitación</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex items-center justify-between text-body-sm font-body-sm py-1 border-b border-surface-container-low">
+<span class="text-on-surface-variant">Tiempo estimado de atención:</span>
+<span class="font-bold text-on-surface">Menor a 24 horas</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm py-1 border-b border-surface-container-low">
+<span class="text-on-surface-variant">Riesgo vital computado:</span>
+<span class="font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                Negativo (0 / 4)
+              </span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm py-1">
+<span class="text-on-surface-variant">Canal prioritario:</span>
+<span class="font-bold text-on-surface">Consulta Ambulatoria Asignada</span>
+</div>
+</div>
+</div>
+<!-- Official Medical Appointment Ticket -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-md border-l-4 border-l-primary relative overflow-hidden">
+<!-- Watermark Shield Icon -->
+<div class="absolute right-2 bottom-2 text-surface-container opacity-40 pointer-events-none">
+<span class="material-symbols-outlined text-[140px]">shield</span>
+</div>
+<!-- Ticket Header -->
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Documento Sanitario Oficial</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Ticket de Solicitud de Cita Médica</h3>
+<p class="font-code-sm text-code-sm text-on-surface-variant">Ministerio de Salud Pública • Red SISALUD</p>
+</div>
+<div class="px-3 py-1.5 rounded-lg bg-surface-container text-primary font-code-sm text-code-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">fingerprint</span>
+<span>VERIFICADO</span>
+</div>
+</div>
+<!-- Shift Number Big Highlight -->
+<div class="bg-primary/5 rounded-xl p-4 mb-space-md flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Número de Turno Asignado</span>
+<div class="font-headline-xl text-headline-xl font-bold text-primary tracking-tight" id="ticket-number">
+                SIS-2025-08492
+              </div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Fecha Registro</span>
+<span class="font-code-sm text-code-sm font-bold text-on-surface">Hoy, 10:42 hrs</span>
+</div>
+</div>
+<!-- Doctor Profile Module -->
+<div class="p-space-sm rounded-lg bg-surface-container-low mb-space-md flex items-center gap-space-sm">
+<img class="w-14 h-14 rounded-full object-cover shadow-sm" data-alt="Close-up portrait of a professional Hispanic male physician in a white clinical coat with stethoscope, soft hospital clinic lighting, natural trustworthy smile, high realism and institutional public health branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTjIW7eo_CidfF528KNV-hBImjkKL_uItHKtEixn0ZPTF5VYDAQ4rmsAmrh50P_spj-LmhOonJAWRc1EXSjq_eRNZ1iLeTVrIKD6gFnyeywoWn398gQ6yml_9GMQT2X8Fm82gApciHNnxqiIFbmoQGvw9BDrYC6toY0OBKzgDW8Dfw_UG4nwvKplhNUiffgD_Q8RcrNQu6TE4mcV9s_ADyUJR9GQc6zoos--R78HF9MBhCH5kFLQLwvw"/>
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-1.5">
+<h4 class="font-title-md text-title-md text-on-surface font-bold truncate">Dr. Carlos Mendoza Solís</h4>
+<span class="font-code-sm text-code-sm px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-semibold">CMP 48219</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-medium">Medicina General / Neumología</p>
+<p class="font-code-sm text-code-sm text-on-surface-variant">Sede: Hospital Nacional Central • Cons. 204</p>
+</div>
+</div>
+<!-- Large Verification QR Code with Vector Matrix -->
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col sm:flex-row items-center gap-space-md mb-space-md">
+<!-- Institutional QR SVG code -->
+<div class="w-32 h-32 bg-surface-container-lowest p-2 rounded-lg shadow-sm shrink-0 flex items-center justify-center">
+<svg class="w-full h-full text-on-surface" fill="currentColor" viewbox="0 0 100 100">
+<!-- Outer Corners -->
+<rect height="26" rx="3" width="26" x="5" y="5"></rect>
+<rect fill="white" height="18" rx="2" width="18" x="9" y="9"></rect>
+<rect height="10" rx="1" width="10" x="13" y="13"></rect>
+<rect height="26" rx="3" width="26" x="69" y="5"></rect>
+<rect fill="white" height="18" rx="2" width="18" x="73" y="9"></rect>
+<rect height="10" rx="1" width="10" x="77" y="13"></rect>
+<rect height="26" rx="3" width="26" x="5" y="69"></rect>
+<rect fill="white" height="18" rx="2" width="18" x="9" y="73"></rect>
+<rect height="10" rx="1" width="10" x="13" y="77"></rect>
+<!-- Data Matrix Simulation -->
+<rect height="6" width="6" x="36" y="8"></rect>
+<rect height="6" width="6" x="46" y="8"></rect>
+<rect height="6" width="6" x="56" y="8"></rect>
+<rect height="6" width="6" x="36" y="18"></rect>
+<rect height="6" width="6" x="46" y="24"></rect>
+<rect height="6" width="6" x="56" y="18"></rect>
+<rect height="6" width="6" x="8" y="36"></rect>
+<rect height="6" width="6" x="18" y="44"></rect>
+<rect height="6" width="6" x="24" y="36"></rect>
+<rect height="6" width="6" x="8" y="52"></rect>
+<rect height="6" width="6" x="20" y="56"></rect>
+<!-- Center Core -->
+<rect class="text-primary" height="12" rx="2" width="12" x="36" y="36"></rect>
+<rect height="6" width="6" x="52" y="36"></rect>
+<rect height="6" width="6" x="62" y="42"></rect>
+<rect height="6" width="8" x="72" y="36"></rect>
+<rect height="6" width="6" x="84" y="44"></rect>
+<rect height="8" width="8" x="36" y="52"></rect>
+<rect height="6" width="6" x="48" y="52"></rect>
+<rect height="6" width="8" x="58" y="60"></rect>
+<rect height="8" width="6" x="70" y="52"></rect>
+<rect height="6" width="8" x="82" y="56"></rect>
+<rect height="6" width="6" x="36" y="68"></rect>
+<rect height="6" width="8" x="46" y="76"></rect>
+<rect height="8" width="6" x="58" y="72"></rect>
+<rect height="6" width="8" x="70" y="68"></rect>
+<rect height="6" width="8" x="82" y="76"></rect>
+<rect height="6" width="14" x="36" y="86"></rect>
+<rect height="6" width="6" x="54" y="86"></rect>
+<rect height="6" width="8" x="64" y="82"></rect>
+<rect height="6" width="14" x="76" y="86"></rect>
+</svg>
+</div>
+<div class="flex-1 text-center sm:text-left">
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wider block mb-0.5">Validación en Admisión</span>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-1">Muestre este código al ingresar por el Módulo B</p>
+<p class="font-code-sm text-code-sm text-on-surface-variant">Tótem de autoatención habilitado desde las 08:30 AM para emisión del ticket impreso en papel térmico.</p>
+</div>
+</div>
+<!-- Notification Policy Banner -->
+<div class="p-3 rounded-lg bg-secondary-fixed/40 text-on-secondary-fixed mb-space-lg flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[20px] text-secondary mt-0.5">notifications_active</span>
+<div class="font-body-sm text-body-sm">
+<strong class="font-semibold text-on-secondary-fixed">Notificación estimada al día siguiente vía SMS/WhatsApp:</strong>
+<p class="text-on-secondary-fixed-variant mt-0.5">Recibirá el enlace interactivo con la confirmación final de la agenda médica y las instrucciones de preparación de triaje previo.</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row items-center gap-space-sm">
+<button class="w-full sm:flex-1 py-3 px-4 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-primary-container active:scale-[0.98] transition-all shadow-sm" id="btn-download-pdf" type="button">
+<span class="material-symbols-outlined text-[20px]">download</span>
+              Descargar Ticket PDF
+            </button>
+<a class="w-full sm:flex-1 py-3 px-4 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg flex items-center justify-center gap-2 transition-all" data-path="mis-citas" href="#">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+              Ir a Mis Citas
+            </a>
+</div>
+</div>
+<!-- Emergency Protocol Quick Callout -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">emergency</span>
+</div>
+<div>
+<span class="font-title-md text-title-md text-on-surface block">¿Sus síntomas empeoraron repentinamente?</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Llamada prioritaria sin costo al SAMU Central</span>
+</div>
+</div>
+<a class="px-3 py-2 rounded-lg bg-error text-on-error font-label-sm text-label-sm font-bold flex items-center gap-1 hover:opacity-95 transition-opacity" href="tel:106">
+<span class="material-symbols-outlined text-[16px]">call</span>
+            Llamar 106
+          </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Logic Script -->
+<script>
+    (function() {
+      // 1. Symptom selector logic
+      const symptomButtons = document.querySelectorAll('.symptom-btn');
+      symptomButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          symptomButtons.forEach(b => {
+            b.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm', 'selected-symptom');
+            b.classList.add('bg-surface-container-low', 'text-on-surface');
+            const iconWrap = b.querySelector('span:first-child');
+            if(iconWrap) {
+              iconWrap.classList.remove('bg-surface-container-lowest', 'text-primary');
+              iconWrap.classList.add('bg-surface-container-lowest', 'text-primary');
+            }
+          });
+          btn.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm', 'selected-symptom');
+          btn.classList.remove('bg-surface-container-low');
+        });
+      });
+
+      // 2. Pain Scale Logic
+      const painButtons = document.querySelectorAll('.pain-btn');
+      const painDisplay = document.getElementById('pain-level-display');
+      const painDescriptor = document.getElementById('pain-descriptor');
+
+      const descriptors = {
+        '1': '<strong class="text-on-surface">Muy leve / Rutina:</strong> El malestar es casi imperceptible. Se sugiere evaluación preventiva diferida o control en posta médica comunitaria.',
+        '2': '<strong class="text-on-surface">Molestia moderada:</strong> El síntoma no impide el movimiento voluntario ni las funciones respiratorias básicas. Apto para turno diferido programado.',
+        '3': '<strong class="text-on-surface">Dolor notable:</strong> Dolor punzante o continuo que incomoda tareas cotidianas pero sin descompensación vital evidente.',
+        '4': '<strong class="text-on-surface">Intenso e incapacitante:</strong> Postración o dolor severo que limita el habla o reposo. Requiere atención prioritaria dentro de las 6 a 12 horas.',
+        '5': '<strong class="text-on-surface text-error">Crítico / Urgencia Extrema:</strong> Riesgo vital o colapso inminente. Debe presentarse inmediatamente al Servicio de Emergencias.'
+      };
+
+      painButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const score = btn.getAttribute('data-score');
+          painButtons.forEach(b => {
+            b.className = 'pain-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container flex flex-col items-center text-center transition-all';
+            const num = b.querySelector('span:first-child');
+            if (num) num.className = 'font-headline-md text-headline-md font-bold text-on-surface';
+          });
+
+          btn.className = 'pain-btn p-3 rounded-lg bg-secondary text-on-secondary flex flex-col items-center text-center transition-all ring-2 ring-secondary shadow-sm';
+          const activeNum = btn.querySelector('span:first-child');
+          if (activeNum) activeNum.className = 'font-headline-md text-headline-md font-bold text-on-secondary';
+
+          if (painDisplay) painDisplay.textContent = `Nivel ${score}/5`;
+          if (painDescriptor && descriptors[score]) {
+            painDescriptor.innerHTML = descriptors[score];
+          }
+        });
+      });
+
+      // 3. Slot Option highlighting
+      const slotInputs = document.querySelectorAll('input[name="medical_slot"]');
+      slotInputs.forEach(input => {
+        input.addEventListener('change', () => {
+          document.querySelectorAll('.slot-option').forEach(slot => {
+            slot.classList.remove('border-l-primary');
+            slot.classList.add('border-l-transparent');
+          });
+          const parent = input.closest('.slot-option');
+          if (parent) {
+            parent.classList.remove('border-l-transparent');
+            parent.classList.add('border-l-primary');
+          }
+        });
+      });
+
+      // 4. Download PDF Mock confirmation
+      const btnPdf = document.getElementById('btn-download-pdf');
+      if (btnPdf) {
+        btnPdf.addEventListener('click', () => {
+          const originalText = btnPdf.innerHTML;
+          btnPdf.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span> Generando PDF...';
+          btnPdf.classList.add('pointer-events-none', 'opacity-80');
+          setTimeout(() => {
+            btnPdf.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span> Ticket Descargado';
+            setTimeout(() => {
+              btnPdf.innerHTML = originalText;
+              btnPdf.classList.remove('pointer-events-none', 'opacity-80');
+            }, 2500);
+          }, 1200);
+        });
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-2xl py-space-2xl"><div class="max-w-7xl mx-auto px-gutter"><div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-space-xl"><div class="space-y-space-sm"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm text-primary font-bold">SISALUD</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Plataforma integrada de provisión y reserva de consultas médicas asistenciales de la Red Pública Nacional de Salud.</p></div><div><h4 class="font-label-lg text-label-lg text-on-surface mb-space-sm">Líneas de Asistencia</h4><ul class="space-y-1 font-body-sm text-body-sm text-on-surface-variant"><li>Emergencias Críticas SAMU: 106</li><li>Orientación Sanitaria Gratuita: 113</li><li>Soporte Técnico Sistema: (01) 800-4420</li><li>Atención al Asegurado y Derechos: Opción 4</li></ul></div><div><h4 class="font-label-lg text-label-lg text-on-surface mb-space-sm">Accesos Principales</h4><ul class="space-y-1 font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Portal Ciudadano Digital</a></li><li><a class="hover:text-primary transition-colors" href="#">Registro Nominal de Vacunación</a></li><li><a class="hover:text-primary transition-colors" href="#">Disponibilidad de Medicamentos</a></li><li><a class="hover:text-primary transition-colors" href="#">Directorio Médico Nacional</a></li></ul></div><div><h4 class="font-label-lg text-label-lg text-on-surface mb-space-sm">Seguridad e Integridad</h4><p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">Servicio regulado bajo directivas de interoperabilidad y protección estricta de historiales clínicos.</p><div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-on-surface font-label-sm text-label-sm"><span class="material-symbols-outlined text-[16px] text-primary">verified_user</span><span>Portal Oficial Verificado</span></div></div></div><div class="pt-space-md border-t border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant"><span>© 2025 SISALUD - Ministerio de Salud Pública. Todos los derechos reservados.</span><div class="flex gap-space-md font-label-sm text-label-sm"><span>Privacidad de Datos Clínicos</span><span>Términos de Servicio Sanitario</span><span>Accesibilidad AA</span></div></div></div></footer></body></html>

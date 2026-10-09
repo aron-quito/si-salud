@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    actor P as Paciente (Cancela)
+    participant F as Frontend
+    participant S as Motor Agendamiento
+    participant DB as Base de Datos
+    participant LE as Lista de Espera (Pacientes)
+    participant N as Notificaciones
+
+    P->>F: Solicita Cancelación con Justificación
+    F->>S: POST /citas/cancelar
+    S->>DB: Update CITA (Estado: Cancelado)
+    S->>DB: Update BLOQUE_HORARIO (Estado: Libre)
+    
+    Note over S,LE: Smart Slotting Reactivo
+    S->>DB: Query: ¿Hay pacientes en lista de espera para esta especialidad?
+    DB-->>S: Retorna pacientes de Alta Urgencia
+    S->>N: Trigger de liberación de horario
+    N-->>LE: Correo: "Horario disponible, tómalo rápido"
+    
+    LE->>F: Paciente en espera reclama el slot
+    F->>S: POST /citas/reclamar
+    S->>DB: Bloqueo Optimista (Intenta tomar slot)
+    alt Slot disponible
+        S->>DB: Update BLOQUE_HORARIO (Estado: Ocupado)
+        S-->>LE: Cita Confirmada Exitosamente
+    else Slot ya fue tomado por otro
+        S-->>LE: Error: Slot ya ocupado
+    end

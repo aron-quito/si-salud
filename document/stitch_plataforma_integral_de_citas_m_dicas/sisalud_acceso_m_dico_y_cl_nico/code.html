@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Acceso Médico y Asistencial | SISALUD</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "tertiary-container": "#006fa8",
+            "surface-tint": "#006a63",
+            "inverse-surface": "#213145",
+            "tertiary-fixed": "#cce5ff",
+            "error-container": "#ffdad6",
+            "on-surface": "#0b1c30",
+            "primary-fixed-dim": "#80d5cb",
+            "on-secondary-fixed": "#00164e",
+            "surface-container": "#e5eeff",
+            "error": "#ba1a1a",
+            "on-background": "#0b1c30",
+            "on-error-container": "#93000a",
+            "surface-container-low": "#eff4ff",
+            "surface-container-highest": "#d3e4fe",
+            "surface": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#8fa7fe",
+            "on-primary-fixed-variant": "#00504a",
+            "tertiary-fixed-dim": "#93ccff",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-fixed-variant": "#004b73",
+            "background": "#f8f9ff",
+            "on-surface-variant": "#3e4947",
+            "secondary-fixed": "#dce1ff",
+            "on-secondary-fixed-variant": "#264191",
+            "on-tertiary-container": "#dbecff",
+            "inverse-on-surface": "#eaf1ff",
+            "primary": "#005c55",
+            "outline": "#6e7977",
+            "primary-fixed": "#9cf2e8",
+            "surface-container-lowest": "#ffffff",
+            "surface-variant": "#d3e4fe",
+            "tertiary": "#005683",
+            "primary-container": "#0f766e",
+            "secondary": "#4059aa",
+            "surface-container-high": "#dce9ff",
+            "on-secondary-container": "#1d3989",
+            "outline-variant": "#bdc9c6",
+            "on-primary-container": "#a3faef",
+            "on-tertiary-fixed": "#001d31",
+            "on-primary-fixed": "#00201d",
+            "secondary-fixed-dim": "#b6c4ff",
+            "inverse-primary": "#80d5cb",
+            "on-primary": "#ffffff",
+            "surface-dim": "#cbdbf5",
+            "on-error": "#ffffff",
+            "surface-bright": "#f8f9ff"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "code-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "label-sm": ["Inter"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+      }
+    }
+    input::placeholder {
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-white">
+<!-- Top Navigation Header -->
+<header class="w-full bg-surface-container-lowest/90 backdrop-blur border-b border-surface-container-highest/60 sticky top-0 z-30">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+<!-- SISALUD Logo & Portal Tag -->
+<div class="flex items-center gap-4">
+<div class="h-10 flex items-center">
+<img alt="SISALUD - Red Hospitalaria Pública" class="h-9 sm:h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UpFCk4xhFFku3scKcfAWun4GILW9yOGWacXJAiLvcnTncsH4Tk_I6x29vd6ldpI8tqUfypNhSLexnO_Mu-XrMl41u3eCwiyV9OOkTUvKtEGtxdKVcSFpfe5mm38D0R5Z6NcO_nXgmkzjeNYb-TOGp9dEc-B1mTo8IMAZcHxdM7X5KO6m8bjC3ZITWI7FD3S5LpOaxT1J9hI4eV6Fw3b7Hds5sH2BM_vtIcjYrMN6Lxe0bc4_5Y_oPc1t29"/>
+</div>
+<div class="h-6 w-[1px] bg-slate-200 hidden sm:block"></div>
+<div class="hidden sm:flex items-center gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-semibold bg-primary/10 text-primary border border-primary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-1.5 animate-pulse"></span>
+            Portal Médico y Asistencial
+          </span>
+</div>
+</div>
+<!-- Security / MINSA Credentials Sello -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-surface-container-high text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+<span class="hidden md:inline font-medium">HCE Directiva N° 084-MINSA</span>
+<span class="hidden md:inline text-slate-300">|</span>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            TLS 1.3
+          </span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Container (Desktop 2-Column Layout) -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex items-center justify-center">
+<div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Columna Izquierda / Central: Formulario Médico Principal -->
+<div class="lg:col-span-7 xl:col-span-8 bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container-high/60 overflow-hidden">
+<!-- Card Header Banner -->
+<div class="p-6 sm:p-8 pb-6 border-b border-surface-container-low bg-gradient-to-r from-surface-container-low/60 via-surface-container-low/20 to-transparent">
+<div class="flex items-center gap-2 text-primary font-label-sm font-semibold tracking-wider uppercase mb-2">
+<span class="material-symbols-outlined text-[18px]">stethoscope</span>
+<span>Estación Clínica Autorizada</span>
+</div>
+<h1 class="text-2xl sm:text-3xl font-headline-lg font-bold text-on-surface tracking-tight">
+            Acceso Médico y Asistencial
+          </h1>
+<p class="mt-1.5 text-on-surface-variant font-body-md text-sm sm:text-base">
+            Ingreso regulado a historia clínica electrónica y agenda médica hospitalaria.
+          </p>
+</div>
+<!-- Form Body -->
+<form class="p-6 sm:p-8 space-y-6" id="auth-form" onsubmit="handleLogin(event)">
+<!-- Fila: Tipo de Colegiatura + Número Documento -->
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">
+              Credencial Profesional
+            </label>
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+<!-- Selector de Colegiatura / Tipo Doc -->
+<div class="sm:col-span-4 relative">
+<select class="w-full h-12 pl-3.5 pr-8 bg-surface-container-low border border-slate-200 hover:border-slate-300 rounded-xl text-on-surface font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all cursor-pointer" id="doc-type">
+<option value="CMP">CMP (Médicos)</option>
+<option value="COP">COP (Odontólogos)</option>
+<option value="CEP">CEP (Enfermeros)</option>
+<option value="DNI">DNI (Personal)</option>
+</select>
+</div>
+<!-- Input de Número de Colegiatura / Documento -->
+<div class="sm:col-span-8 relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px] pointer-events-none">badge</span>
+<input class="w-full h-12 pl-11 pr-4 bg-surface-container-low border border-slate-200 hover:border-slate-300 rounded-xl text-on-surface font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" id="colegiatura" placeholder="Ej. 084923" required="" type="text"/>
+</div>
+</div>
+</div>
+<!-- Contraseña Institucional -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="password">
+                Contraseña Institucional
+              </label>
+<a class="text-xs font-semibold text-primary hover:text-primary-container hover:underline transition-colors" href="#recuperar">
+                ¿Olvidó su clave?
+              </a>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px] pointer-events-none">lock</span>
+<input class="w-full h-12 pl-11 pr-11 bg-surface-container-low border border-slate-200 hover:border-slate-300 rounded-xl text-on-surface font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" id="password" placeholder="Introduzca su clave institucional" required="" type="password"/>
+<button aria-label="Mostrar u ocultar contraseña" class="absolute right-3 text-slate-400 hover:text-slate-600 p-1 flex items-center justify-center transition-colors" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined text-[20px]" id="eye-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Sede o Red Hospitalaria -->
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2" for="sede">
+              Sede o Red Hospitalaria de Turno
+            </label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px] pointer-events-none">domain</span>
+<select class="w-full h-12 pl-11 pr-10 bg-surface-container-low border border-slate-200 hover:border-slate-300 rounded-xl text-on-surface font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all cursor-pointer" id="sede" required="">
+<option value="1">Hospital Nacional Cayetano Heredia · Red Norte</option>
+<option value="2">Hospital Nacional Dos de Mayo · Red Centro</option>
+<option value="3">Hospital Central de Emergencias · Lima Centro</option>
+<option value="4">Hospital Nacional Arzobispo Loayza · Red Centro</option>
+<option value="5">Instituto Nacional de Salud del Niño · Breña</option>
+</select>
+</div>
+</div>
+<!-- Código Token Digital / 2FA -->
+<div class="p-4 sm:p-5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">vpn_key</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-semibold text-on-surface">Token Digital / 2FA</span>
+<span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-primary/10 text-primary">Requerido</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-0.5">Código dinámico de 6 dígitos de SISALUD Autenticador.</p>
+</div>
+</div>
+<!-- Input Token 6 Dígitos -->
+<div class="shrink-0">
+<input class="w-36 h-11 text-center font-bold tracking-[0.35em] text-base bg-surface-container-lowest border border-slate-300 rounded-lg text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent shadow-sm" id="token-input" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="••••••" required="" type="text"/>
+</div>
+</div>
+<!-- Casilla Recordar Sede -->
+<div class="flex items-center gap-3 pt-1">
+<input class="w-4 h-4 rounded text-primary border-slate-300 focus:ring-primary cursor-pointer" id="remember-session" type="checkbox"/>
+<label class="text-xs sm:text-sm text-on-surface-variant select-none cursor-pointer" for="remember-session">
+              Recordar sede en este terminal seguro de estación asistencial.
+            </label>
+</div>
+<!-- Botón de Envío -->
+<div class="pt-2">
+<button class="w-full h-12 bg-primary hover:bg-[#004d47] text-on-primary font-semibold text-sm sm:text-base rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-[0.99]" id="submit-btn" type="submit">
+<span class="material-symbols-outlined text-[20px]">login</span>
+<span>Ingresar al Módulo Clínico</span>
+</button>
+</div>
+<!-- Enlace de pie al Portal Ciudadano -->
+<div class="pt-2 text-center border-t border-slate-100">
+<p class="text-xs text-on-surface-variant">
+              ¿Es usted un paciente? 
+              <a class="text-tertiary font-semibold hover:underline inline-flex items-center gap-0.5 ml-1" href="#portal-ciudadano">
+                Ir al Portal Ciudadano de Citas
+                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</p>
+</div>
+</form>
+</div>
+<!-- Columna Derecha: Panel de Operatividad y Soporte Clínico -->
+<div class="lg:col-span-5 xl:col-span-4 space-y-4">
+<!-- Tarjeta Operatividad de Red Asistencial -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-surface-container-high/60 shadow-sm">
+<div class="flex items-center justify-between pb-4 border-b border-surface-container-low">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[22px]">monitoring</span>
+<h2 class="text-sm font-bold text-on-surface uppercase tracking-wide">Operatividad Asistencial</h2>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Operativo Normal
+            </span>
+</div>
+<div class="mt-4 space-y-3">
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low text-xs">
+<span class="text-on-surface-variant font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">hub</span>
+                Red Asistencial Integrada
+              </span>
+<span class="font-bold text-primary">Sincronizada</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low text-xs">
+<span class="text-on-surface-variant font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">family_restroom</span>
+                Pacientes en Triaje
+              </span>
+<span class="font-bold text-on-surface text-sm">14 en espera</span>
+</div>
+<div class="p-3 rounded-xl bg-surface-container-low">
+<div class="flex items-center justify-between text-xs text-on-surface-variant mb-1.5">
+<span>Ocupación Camas Críticas (UCI/UCE)</span>
+<span class="font-bold text-on-surface">82%</span>
+</div>
+<div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 82%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tarjeta Aviso Clínico de Guardia -->
+<div class="bg-gradient-to-br from-amber-50/90 to-amber-100/40 rounded-2xl p-5 border border-amber-200/80 shadow-sm">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">notification_important</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-xs font-bold uppercase tracking-wider text-amber-900">Aviso de Guardia Activo</h3>
+<span class="text-[10px] font-bold bg-amber-200/70 text-amber-900 px-1.5 py-0.5 rounded">Protocolo</span>
+</div>
+<p class="text-xs text-amber-950 mt-1.5 leading-relaxed">
+                Prioridad de atención respiratoria según directiva N° 12-2025 en urgencias adultos y pediatría.
+              </p>
+</div>
+</div>
+</div>
+<!-- Tarjeta Soporte de Firma Digital RENIEC -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 border border-surface-container-high/60 shadow-sm">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-primary-fixed/50 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">fingerprint</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-bold uppercase tracking-wide text-on-surface">Firma Digital RENIEC</h3>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                  Activo
+                </span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1 leading-normal">
+                Controlador criptográfico USB v4.2 validado para altas médicas y recetas electrónicas.
+              </p>
+</div>
+</div>
+</div>
+<!-- Tarjeta Anexo Asistencia Médica 24/7 -->
+<div class="bg-surface-container-low rounded-2xl p-4 sm:p-5 border border-surface-container-high/80 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]">headset_mic</span>
+</div>
+<div class="truncate">
+<h4 class="text-xs font-bold text-on-surface truncate">Soporte Clínico Prioritario</h4>
+<p class="text-[11px] text-on-surface-variant truncate">Mesa de ayuda hospitalaria 24/7</p>
+</div>
+</div>
+<div class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-lowest text-tertiary font-bold text-xs shrink-0 shadow-sm border border-slate-200">
+<span class="material-symbols-outlined text-[16px]">call</span>
+<span>Anexo 4001</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Legal & Security Footer -->
+<footer class="w-full bg-surface-container-lowest/80 border-t border-surface-container-high/60 py-4 mt-auto">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]">policy</span>
+<span>Acceso protegido por la Ley de Protección de Datos Personales N° 29733 - República del Perú</span>
+</div>
+<div class="font-code-sm text-slate-500 text-[11px] flex items-center gap-3">
+<span>Terminal ID: HNDCH-SRV-094</span>
+<span>·</span>
+<span>Versión HCE 4.12.0</span>
+</div>
+</div>
+</footer>
+<script>
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eye-icon');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.textContent = 'visibility_off';
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.textContent = 'visibility';
+      }
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">progress_activity</span><span>Verificando credenciales médicas...</span>';
+      
+      setTimeout(() => {
+        btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check_circle</span><span>Identidad confirmada. Accediendo...</span>';
+        btn.classList.remove('bg-primary', 'hover:bg-[#004d47]');
+        btn.classList.add('bg-tertiary');
+      }, 1200);
+    }
+  </script>
+</body></html>
