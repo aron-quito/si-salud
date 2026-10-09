@@ -1,0 +1,56 @@
+@startuml
+left to right direction
+
+skinparam shadowing false
+skinparam actor {
+  BackgroundColor #F4F6F7
+  BorderColor #2C3E50
+  FontColor #2C3E50
+}
+skinparam usecase {
+  BackgroundColor #EBF5FB
+  BorderColor #2980B9
+  FontColor #154360
+  ArrowColor #2980B9
+}
+skinparam arrow {
+  Color #34495E
+  Thickness 1.5
+}
+skinparam package {
+  BackgroundColor #FDEDEC
+  BorderColor #C0392B
+  FontColor #922B21
+}
+
+
+actor "Público General" as Pub
+actor "Paciente" as Pac
+actor "Médico" as Med
+actor "Administrador" as Adm
+
+package "MÓDULO 1: Portal y autenticación" {
+  usecase "Mostrar portal público" as UC1
+  usecase "Iniciar sesión" as UC2
+  usecase "Recuperar cuenta" as UC3
+  usecase "Aplicar doble factor de autenticación" as UC5
+  usecase "Personalizar cuenta" as UC4
+}
+
+UC1 .> UC2 : <<include>>
+
+Pub -[#5D6D7E]-> UC1
+
+Pac -[#27AE60]-> UC1
+Pac -[#27AE60]-> UC3
+Pac -[#27AE60]-> UC5
+Pac -[#27AE60]-> UC4
+
+Med -[#D35400]-> UC1
+Med -[#D35400]-> UC3
+Med -[#D35400]-> UC5
+
+Adm -[#8E44AD]-> UC1
+Adm -[#8E44AD]-> UC3
+Adm -[#8E44AD]-> UC5
+@enduml

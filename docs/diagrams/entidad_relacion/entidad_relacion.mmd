@@ -4,6 +4,7 @@ erDiagram
         string email
         string password
         string rol "Paciente, Medico, Cajero, Admin"
+        string estado "Activo, Bloqueado"
     }
     PACIENTE {
         int id PK
@@ -89,7 +90,7 @@ erDiagram
         int tipo_consulta_id FK
         int solicitud_id FK
         int aseguradora_id FK
-        string estado "Programada, Pagada, Atendida, Cancelada"
+        string estado "Programada, Pagada, Atendida, Cancelada, Reprogramada"
     }
     HISTORIAL_REPROGRAMACION {
         int id PK
@@ -97,6 +98,20 @@ erDiagram
         string motivo_cambio
         datetime fecha_transaccion
         string estado
+    }
+    TICKET_ASISTENCIA {
+        int id PK
+        int cita_id FK
+        datetime fecha_generacion
+        string codigo_turno
+        string estado "Impreso, Llamado, Finalizado"
+    }
+    PAGO_VOUCHER {
+        int id PK
+        int cita_id FK
+        string url_imagen
+        decimal monto
+        string estado_auditoria "Pendiente, Aprobado, Rechazado"
     }
 
     %% Relaciones
@@ -115,6 +130,8 @@ erDiagram
     MEDICO ||--|{ CITA : "atiende"
     TIPO_CONSULTA ||--|{ CITA : "clasifica"
     ASEGURADORA ||--o{ CITA : "cubre"
-    CITA ||--|{ HISTORIAL_REPROGRAMACION : "registra"
+    CITA ||--|{ HISTORIAL_REPROGRAMACION : "registra cambios"
+    CITA ||--o| TICKET_ASISTENCIA : "genera en recepción"
+    CITA ||--o| PAGO_VOUCHER : "tiene comprobante"
     PACIENTE ||--|{ LISTA_ESPERA : "ingresa a"
     ESPECIALIDAD ||--|{ LISTA_ESPERA : "escola por"

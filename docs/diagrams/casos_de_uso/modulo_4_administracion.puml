@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+
+skinparam shadowing false
+skinparam actor {
+  BackgroundColor #F4F6F7
+  BorderColor #2C3E50
+  FontColor #2C3E50
+}
+skinparam usecase {
+  BackgroundColor #EBF5FB
+  BorderColor #2980B9
+  FontColor #154360
+  ArrowColor #2980B9
+}
+skinparam arrow {
+  Color #34495E
+  Thickness 1.5
+}
+skinparam package {
+  BackgroundColor #FDEDEC
+  BorderColor #C0392B
+  FontColor #922B21
+}
+
+
+actor "Admin" as Adm
+
+package "MÓDULO 4: Administración y catálogos" {
+  usecase "CRUD de sedes, consultorios y especialidades" as UC1
+  usecase "Forzar consultas emergentes" as UC2
+  usecase "Limitar reprogramaciones" as UC3
+  usecase "Mostrar dashboard admin" as UC4
+  usecase "Aprobar excepciones" as UC5
+  usecase "Forzar asignaciones" as UC6
+}
+
+Adm -[#8E44AD]-> UC1
+Adm -[#8E44AD]-> UC2
+Adm -[#8E44AD]-> UC3
+Adm -[#8E44AD]-> UC4
+Adm -[#8E44AD]-> UC5
+Adm -[#8E44AD]-> UC6
+@enduml

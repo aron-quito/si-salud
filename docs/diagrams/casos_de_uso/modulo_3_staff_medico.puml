@@ -1,0 +1,58 @@
+@startuml
+left to right direction
+
+skinparam shadowing false
+skinparam actor {
+  BackgroundColor #F4F6F7
+  BorderColor #2C3E50
+  FontColor #2C3E50
+}
+skinparam usecase {
+  BackgroundColor #EBF5FB
+  BorderColor #2980B9
+  FontColor #154360
+  ArrowColor #2980B9
+}
+skinparam arrow {
+  Color #34495E
+  Thickness 1.5
+}
+skinparam package {
+  BackgroundColor #FDEDEC
+  BorderColor #C0392B
+  FontColor #922B21
+}
+
+
+actor "Público General" as Pub
+actor "Paciente" as Pac
+actor "Médico" as Med
+actor "Admin" as Adm
+actor "Sistema" as Sis
+
+package "MÓDULO 3: Directorio y staff médico" {
+  usecase "CRUD para médicos" as UC1
+  usecase "Asignar especialidades y jerarquía" as UC2
+  usecase "Realizar búsqueda y filtros" as UC3
+  usecase "Mostrar staff público de médico" as UC4
+  usecase "Mostrar agenda médica (Diaria/Semanal)" as UC5
+  usecase "Restringir atención" as UC6
+  usecase "Emitir recetas (mock)" as UC7
+}
+
+UC1 .> UC2 : <<include>>
+UC5 .> UC6 : <<include>>
+
+Adm -[#8E44AD]-> UC1
+
+Pac -[#27AE60]-> UC3
+Pac -[#27AE60]-> UC4
+
+Pub -[#5D6D7E]-> UC3
+Pub -[#5D6D7E]-> UC4
+
+Med -[#D35400]-> UC5
+Med -[#D35400]-> UC7
+
+Sis -[#E74C3C]-> UC6
+@enduml

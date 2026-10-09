@@ -1,0 +1,49 @@
+@startuml
+left to right direction
+
+skinparam shadowing false
+skinparam actor {
+  BackgroundColor #F4F6F7
+  BorderColor #2C3E50
+  FontColor #2C3E50
+}
+skinparam usecase {
+  BackgroundColor #EBF5FB
+  BorderColor #2980B9
+  FontColor #154360
+  ArrowColor #2980B9
+}
+skinparam arrow {
+  Color #34495E
+  Thickness 1.5
+}
+skinparam package {
+  BackgroundColor #FDEDEC
+  BorderColor #C0392B
+  FontColor #922B21
+}
+
+
+actor "Sistema" as Sis
+
+package "MÓDULO 5: Motor de lógica de negocio" {
+  usecase "Detectar formularios de urgencia" as UC1
+  usecase "Asignar consultorios" as UC2
+  usecase "Validar edad" as UC3
+  usecase "Validar formularios de pacientes" as UC4
+  usecase "Prevenir el solapamiento" as UC5
+  usecase "Compatibilidad de especialidad" as UC6
+}
+
+UC1 <.[#E74C3C]. UC2 : <<extend>>
+UC2 .[#E74C3C].> UC3 : <<include>>
+UC2 .[#E74C3C].> UC4 : <<include>>
+UC2 .[#E74C3C].> UC5 : <<include>>
+UC2 .[#E74C3C].> UC6 : <<include>>
+
+Sis -[#E74C3C]-> UC1
+Sis -[#E74C3C]-> UC3
+Sis -[#E74C3C]-> UC4
+Sis -[#E74C3C]-> UC5
+Sis -[#E74C3C]-> UC6
+@enduml

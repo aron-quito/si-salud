@@ -1,0 +1,56 @@
+flowchart TD
+    subgraph Frontend ["Cliente / Frontend (Next.js)"]
+        UI_P[Portal Paciente]
+        UI_M[Panel Médico]
+        UI_A[Panel Administrativo]
+        UI_R[Módulo Recepción/Caja]
+    end
+
+    subgraph API ["API Gateway & Auth"]
+        AG[API Gateway / Load Balancer]
+        Auth[Servicio de Autenticación / 2FA]
+    end
+
+    subgraph Backend ["Microservicios Backend (Node.js/Python)"]
+        MS_Triaje[Servicio de Triaje e IA]
+        MS_Agenda[Motor de Agendamiento / Smart Slotting]
+        MS_Notif[Servicio de Notificaciones]
+        MS_Admin[Servicio de Catálogos y Bloqueos]
+    end
+
+    subgraph IA ["Inteligencia Artificial"]
+        Alg[Algoritmo NLP / Urgencia]
+    end
+
+    subgraph Colas ["Procesamiento Asíncrono"]
+        Redis[(Redis Cache)]
+        BullMQ[[Cola de Tareas / BullMQ]]
+        Cron((Cron Jobs Medianoche))
+    end
+
+    subgraph Datos ["Persistencia (PostgreSQL)"]
+        DB[(Base de Datos ACID)]
+        Bag[[Bolsa de Solicitudes Pendientes]]
+    end
+
+    UI_P <--> AG
+    UI_M <--> AG
+    UI_A <--> AG
+    UI_R <--> AG
+    
+    AG <--> Auth
+    AG <--> MS_Triaje
+    AG <--> MS_Agenda
+    AG <--> MS_Notif
+    AG <--> MS_Admin
+    
+    MS_Triaje <--> Alg
+    MS_Triaje --> Bag
+    
+    MS_Agenda <--> Redis
+    Redis <--> BullMQ
+    Cron --> BullMQ
+    BullMQ --> MS_Agenda
+    
+    MS_Agenda <--> DB
+    MS_Admin <--> DB

@@ -41,281 +41,31 @@ A continuación, los requerimientos distribuidos por módulos principales, integ
 ## 2. Diagramas Propuestos (UML)
 
 ### 2.1 Diagrama de Casos de Uso
-```mermaid
-flowchart TD
-    %% Actores
-    P([Paciente])
-    M([Médico])
-    A([Administrador])
-    R([Recepción/Cajero])
-    S([Sistema / Motor IA])
-
-    subgraph M1_M2 [1-2: Autenticación y Perfil]
-        UC_Auth(Iniciar Sesión y 2FA)
-        UC_Hist(Descargar Historial)
-    end
-
-    subgraph M3_M4 [3-4: Staff, Catálogos y Admin]
-        UC_Dir(Buscar Médico)
-        UC_Crud(CRUD Sedes/Consultorios)
-        UC_Forzar(Forzar Asignaciones y Excepciones)
-    end
-
-    subgraph M5_M6 [5-6: Lógica de Negocio y Horarios]
-        UC_Triaje(Validar Triaje y Urgencia)
-        UC_Slot(Generar Bloques y Prevenir Solapamiento)
-    end
-
-    subgraph M7_M8 [7-8: Citas y Lista de Espera]
-        UC_Repro(Reprogramar Cita)
-        UC_Bloq(Bloquear por Límite de Cambios)
-        UC_Asist(Registrar Asistencia en Recepción)
-        UC_Esp(Ordenar Cola y Asignar desde Lista)
-    end
-
-    P --> UC_Auth
-    P --> UC_Hist
-    P --> UC_Dir
-    P --> UC_Repro
-
-    M --> UC_Dir
-
-    A --> UC_Crud
-    A --> UC_Forzar
-
-    R --> UC_Asist
-
-    S --> UC_Triaje
-    S --> UC_Slot
-    S --> UC_Bloq
-    S --> UC_Esp
-
-    UC_Repro -. include .-> UC_Bloq
-    UC_Triaje -. triggers .-> UC_Slot
-    UC_Esp -. updates .-> UC_Slot
-```
+Los diagramas de casos de uso han sido diseñados exhaustivamente por módulo utilizando **PlantUML (.puml)**. 
+Puedes encontrarlos estructurados y listos para su edición en la carpeta dedicada `docs/diagrams/casos_de_uso/`:
+* `modulo_1_autenticacion.puml`
+* `modulo_2_pacientes.puml`
+* `modulo_3_staff_medico.puml`
+* `modulo_4_administracion.puml`
+* `modulo_5_logica_negocio.puml`
+* `modulo_6_horarios.puml`
+* `modulo_7_gestion_citas.puml`
+* `modulo_8_lista_espera.puml`
 
 ### 2.2 Diagrama de Arquitectura / Componentes
-```mermaid
-flowchart TD
-    subgraph Frontend [Cliente / Frontend]
-        UI_P[Portal Paciente]
-        UI_M[Panel Médico]
-    end
-
-    subgraph Backend [API & Microservicios]
-        AG[API Gateway]
-        MS_Triaje[Servicio Triaje]
-        MS_Agenda[Servicio Agendamiento / Smart Slotting]
-        MS_Notif[Servicio Notificaciones]
-    end
-
-    subgraph IA [Inteligencia Artificial]
-        Alg[Algoritmo Urgencia]
-    end
-
-    subgraph Datos [Base de Datos y Colas]
-        DB[(Base de Datos)]
-        Bag[[Bolsa de Solicitudes]]
-    end
-
-    UI_P <--> AG
-    UI_M <--> AG
-    
-    AG <--> MS_Triaje
-    AG <--> MS_Agenda
-    AG <--> MS_Notif
-    
-    MS_Triaje <--> Alg
-    MS_Triaje --> Bag
-    
-    MS_Agenda <--> Bag
-    MS_Agenda <--> DB
-```
+![Arquitectura](diagrams/arquitectura/arquitectura.png)
 
 ### 2.3 Diagrama Entidad-Relación (DER)
-```mermaid
-erDiagram
-    USUARIO {
-        int id PK
-        string email
-        string password
-        string rol "Paciente, Medico, Cajero, Admin"
-    }
-    PACIENTE {
-        int id PK
-        int usuario_id FK
-        string dni
-        date fecha_nacimiento
-        string telefono
-    }
-    MEDICO {
-        int id PK
-        int usuario_id FK
-        string cmp
-        string nombres
-        string apellidos
-        string jerarquia
-    }
-    SEDE {
-        int id PK
-        string nombre
-        string direccion
-        boolean activa
-    }
-    CONSULTORIO {
-        int id PK
-        int sede_id FK
-        string numero_nombre
-        boolean activo
-    }
-    ESPECIALIDAD {
-        int id PK
-        string nombre
-        string descripcion
-        boolean activa
-    }
-    MEDICO_ESPECIALIDAD {
-        int medico_id FK
-        int especialidad_id FK
-    }
-    TIPO_CONSULTA {
-        int id PK
-        string nombre
-        int duracion_base_minutos
-        boolean activo
-    }
-    ASEGURADORA {
-        int id PK
-        string nombre
-        string tipo
-        boolean activa
-    }
-    BLOQUE_HORARIO {
-        int id PK
-        int medico_id FK
-        int consultorio_id FK
-        date fecha
-        time hora_inicio
-        time hora_fin
-        string estado "Libre, Ocupado, Bloqueado"
-    }
-    SOLICITUD_TRIAJE {
-        int id PK
-        int paciente_id FK
-        int especialidad_id FK
-        text sintomas
-        string preferencia_horario
-        int score_urgencia
-        string modalidad "Presencial, Meet, Llamada"
-        string estado "Pendiente, Agendado, Cancelado"
-    }
-    LISTA_ESPERA {
-        int id PK
-        int paciente_id FK
-        int especialidad_id FK
-        datetime fecha_ingreso
-        int prioridad
-        string estado "En Espera, Atendido"
-    }
-    CITA {
-        int id PK
-        int paciente_id FK
-        int medico_id FK
-        int bloque_horario_id FK
-        int tipo_consulta_id FK
-        int solicitud_id FK
-        int aseguradora_id FK
-        string estado "Programada, Pagada, Atendida, Cancelada"
-    }
-    HISTORIAL_REPROGRAMACION {
-        int id PK
-        int cita_id FK
-        string motivo_cambio
-        datetime fecha_transaccion
-        string estado
-    }
-
-    %% Relaciones
-    USUARIO ||--o| PACIENTE : "es un"
-    USUARIO ||--o| MEDICO : "es un"
-    SEDE ||--|{ CONSULTORIO : "alberga"
-    MEDICO ||--|{ MEDICO_ESPECIALIDAD : "tiene"
-    ESPECIALIDAD ||--|{ MEDICO_ESPECIALIDAD : "asignada a"
-    MEDICO ||--|{ BLOQUE_HORARIO : "dispone de"
-    CONSULTORIO ||--|{ BLOQUE_HORARIO : "se utiliza en"
-    PACIENTE ||--|{ SOLICITUD_TRIAJE : "genera (Bolsa)"
-    ESPECIALIDAD ||--|{ SOLICITUD_TRIAJE : "requiere"
-    SOLICITUD_TRIAJE ||--o| CITA : "deriva en"
-    BLOQUE_HORARIO ||--o| CITA : "es ocupado por"
-    PACIENTE ||--|{ CITA : "asiste a"
-    MEDICO ||--|{ CITA : "atiende"
-    TIPO_CONSULTA ||--|{ CITA : "clasifica"
-    ASEGURADORA ||--o{ CITA : "cubre"
-    CITA ||--|{ HISTORIAL_REPROGRAMACION : "registra"
-    PACIENTE ||--|{ LISTA_ESPERA : "ingresa a"
-    ESPECIALIDAD ||--|{ LISTA_ESPERA : "escola por"
-```
+![Entidad Relacion](diagrams/entidad_relacion/entidad_relacion.png)
 
 ### 2.4 Diagrama de Secuencia (Flujo de Agendamiento)
-```mermaid
-sequenceDiagram
-    actor P as Paciente
-    participant F as Frontend
-    participant T as Servicio Triaje
-    participant IA as Algoritmo IA
-    participant B as Bolsa (Bag)
-    participant S as Motor Agendamiento
-    participant N as Servicio Notificaciones
-
-    P->>F: Llena formulario de síntomas
-    F->>T: POST /solicitud
-    T->>IA: Analiza texto (Síntomas)
-    IA-->>T: Devuelve [Score Urgencia, Resumen]
-    T->>B: Guarda Solicitud en Bolsa
-    T-->>F: Confirmación de recepción
-    
-    Note over B,S: 12:00 AM (Medianoche)
-    S->>B: Obtiene solicitudes pendientes
-    S->>S: Ordena por Score Urgencia
-    S->>S: Aplica Smart Slotting / Bloques Elásticos
-    S->>B: Cambia estado a 'Agendado'
-    S->>N: Trigger de citas asignadas
-    N-->>P: Correo: "Cita Asignada"
-```
+![Secuencia Agendamiento](diagrams/secuencia/secuencia.png)
 
 ### 2.5 Diagrama de Secuencia (Flujo Reactivo: Cancelación y Lista de Espera)
-```mermaid
-sequenceDiagram
-    autonumber
-    actor P as Paciente (Cancela)
-    participant F as Frontend
-    participant S as Motor Agendamiento
-    participant DB as Base de Datos
-    participant LE as Lista de Espera (Pacientes)
-    participant N as Notificaciones
+![Secuencia Reactiva](diagrams/secuencia/secuencia_reactiva.png)
 
-    P->>F: Solicita Cancelación con Justificación
-    F->>S: POST /citas/cancelar
-    S->>DB: Update CITA (Estado: Cancelado)
-    S->>DB: Update BLOQUE_HORARIO (Estado: Libre)
-    
-    Note over S,LE: Smart Slotting Reactivo
-    S->>DB: Query: ¿Hay pacientes en lista de espera para esta especialidad?
-    DB-->>S: Retorna pacientes de Alta Urgencia
-    S->>N: Trigger de liberación de horario
-    N-->>LE: Correo: "Horario disponible, tómalo rápido"
-    
-    LE->>F: Paciente en espera reclama el slot
-    F->>S: POST /citas/reclamar
-    S->>DB: Bloqueo Optimista (Intenta tomar slot)
-    alt Slot disponible
-        S->>DB: Update BLOQUE_HORARIO (Estado: Ocupado)
-        S-->>LE: Cita Confirmada Exitosamente
-    else Slot ya fue tomado por otro
-        S-->>LE: Error: Slot ya ocupado
-    end
-```
+### 2.6 Diagrama de Secuencia (Flujo Lógico: Bloqueos y Límites de Reprogramación)
+![Secuencia Reprogramacion](diagrams/secuencia/secuencia_reprogramacion.png)
 
 ---
 

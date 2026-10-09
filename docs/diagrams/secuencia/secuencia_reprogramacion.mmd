@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    actor P as Paciente
+    participant F as Frontend
+    participant S as Motor Citas
+    participant DB as Base de Datos
+    
+    P->>F: Solicita Reprogramar Cita
+    F->>S: POST /citas/reprogramar
+    
+    S->>DB: Query: COUNT(*) en Historial_Reprogramacion
+    DB-->>S: Retorna cantidad de cambios previos
+    
+    alt Límite Excedido (ej. >= 3)
+        S->>DB: Update USUARIO (Estado: Bloqueado)
+        S-->>F: Error 403: Límite de cambios excedido.
+        F-->>P: Alerta: Cuenta bloqueada temporalmente.
+    else Límite Permitido
+        S->>DB: Update BLOQUE_HORARIO_VIEJO (Estado: Libre)
+        S->>DB: Insert HISTORIAL_REPROGRAMACION
+        S->>DB: Update CITA (Nuevo Bloque, Estado: Reprogramada)
+        S-->>F: 200 OK: Cita Reprogramada
+        F-->>P: Muestra confirmación de nueva fecha
+    end
