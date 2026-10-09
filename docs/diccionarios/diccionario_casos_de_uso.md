@@ -18,6 +18,7 @@ Este documento detalla exhaustivamente las acciones que pueden realizar los dist
 ---
 
 ## Módulo 1: Portal y Autenticación
+**Descripción General:** Este módulo controla la capa de acceso y seguridad del sistema. Administra cómo los diferentes actores ingresan a sus respectivos perfiles, asegurando que las cuentas críticas tengan autenticación de doble factor y permitiendo a los pacientes recuperar accesos perdidos sin intervención administrativa.
 
 | Caso de Uso | Actor(es) Principal(es) | Descripción de la Interacción |
 | :--- | :--- | :--- |
@@ -30,6 +31,7 @@ Este documento detalla exhaustivamente las acciones que pueden realizar los dist
 ---
 
 ## Módulo 2: Pacientes
+**Descripción General:** Enfocado exclusivamente en la autogestión del paciente. Permite a los usuarios llevar el control de su propia información clínica, modificar datos de contacto que son vitales para las notificaciones y tener un panorama centralizado de su historial y documentos médicos sin tener que llamar a la clínica.
 
 | Caso de Uso | Actor(es) Principal(es) | Descripción de la Interacción |
 | :--- | :--- | :--- |
@@ -42,6 +44,7 @@ Este documento detalla exhaustivamente las acciones que pueden realizar los dist
 ---
 
 ## Módulo 3: Directorio y Staff Médico
+**Descripción General:** Constituye el núcleo de la oferta de servicios de salud. Para los pacientes, es la vitrina donde buscan a los especialistas; para los médicos, es el panel donde revisan sus turnos de trabajo y emiten indicaciones post-consulta. La administración centraliza aquí el alta y baja del personal de salud.
 
 | Caso de Uso | Actor(es) Principal(es) | Descripción de la Interacción |
 | :--- | :--- | :--- |
@@ -55,6 +58,7 @@ Este documento detalla exhaustivamente las acciones que pueden realizar los dist
 ---
 
 ## Módulo 4: Administración y Catálogos
+**Descripción General:** Es el panel de control maestro. Permite a los directores médicos o administradores configurar las reglas globales (sedes, políticas, bloqueos de usuarios maliciosos) e intervenir manualmente la lógica del sistema para casos excepcionales (como forzar citas de extrema urgencia pasando por alto la bolsa).
 
 | Caso de Uso | Actor(es) Principal(es) | Descripción de la Interacción |
 | :--- | :--- | :--- |
@@ -68,6 +72,7 @@ Este documento detalla exhaustivamente las acciones que pueden realizar los dist
 ---
 
 ## Módulo 5: Motor de Lógica de Negocio (IA)
+**Descripción General:** Es el "cerebro" en la sombra del sistema. No tiene interfaz gráfica propia, sino que procesa grandes volúmenes de datos mediante algoritmos (NLP e IA) para asignar citas basándose en la gravedad médica, las limitantes de edad de las especialidades y la optimización extrema del espacio (Smart Slotting).
 
 | Caso de Uso | Actor(es) Principal(es) | Descripción de la Interacción |
 | :--- | :--- | :--- |
@@ -80,6 +85,7 @@ Este documento detalla exhaustivamente las acciones que pueden realizar los dist
 ---
 
 ## Módulo 6: Horarios y Disponibilidad
+**Descripción General:** Gobierna la capa temporal de la clínica. Define los fragmentos de tiempo (slots) que el motor inteligente puede utilizar y administra las políticas que dictan cuánto tiempo antes un paciente puede cancelar para que otro paciente tenga tiempo de reacción para tomar su cupo liberado.
 
 | Caso de Uso | Actor(es) Principal(es) | Descripción de la Interacción |
 | :--- | :--- | :--- |
@@ -91,6 +97,7 @@ Este documento detalla exhaustivamente las acciones que pueden realizar los dist
 ---
 
 ## Módulo 7: Gestión de Citas
+**Descripción General:** Abarca todo el ciclo de vida de una cita formal: desde que el paciente redacta sus síntomas iniciales, hasta que la reserva pasa a estado "Pagada", y culminando con el momento físico en el que la Recepcionista valida la llegada del paciente y emite el ticket físico para la consulta.
 
 | Caso de Uso | Actor(es) Principal(es) | Descripción de la Interacción |
 | :--- | :--- | :--- |
@@ -104,6 +111,7 @@ Este documento detalla exhaustivamente las acciones que pueden realizar los dist
 ---
 
 ## Módulo 8: Lista de Espera y Prioridades
+**Descripción General:** El componente reactivo para optimizar la ocupación de consultorios (evitar "no-shows" o vacíos). Si un médico está lleno, los pacientes esperan en una cola virtual, y ante una cancelación, este módulo prioriza de manera automatizada quién debe ser el primero en recibir el cupo liberado.
 
 | Caso de Uso | Actor(es) Principal(es) | Descripción de la Interacción |
 | :--- | :--- | :--- |
