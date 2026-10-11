@@ -180,65 +180,14 @@ Puedes encontrarlos estructurados y listos para su edición en la carpeta dedica
 
 ---
 
-## 4. Estimación y Desglose en Tareas Técnicas
+## 4. Desglose en Tareas Técnicas y Backlog Ágil
 
-### Requerimiento: HU-01 (Formulario de Triaje y Captura)
-*   **Estimación:** 8 Puntos de Historia / ~24 Horas
-*   **Tareas:**
-    1.  [Frontend] Diseñar y maquetar formulario (React/Next.js) con validaciones.
-    2.  [Backend] Crear endpoint `POST /api/triaje/solicitud`.
-    3.  [Backend] Integrar SDK de IA para procesar el campo `síntomas` y obtener score de urgencia.
-    4.  [BD] Crear migración para tabla `SolicitudTriaje`.
+Para mantener el control del proyecto y facilitar la gestión del equipo de desarrollo, el desglose técnico detallado se ha independizado. En él encontrarás las tareas fundacionales de Infraestructura (Sprint 0) y el mapa técnico de las 10 Historias de Usuario (divididas en Frontend, Backend y DevOps).
 
-### Requerimiento: HU-02 (Procesamiento Batch Medianoche)
-*   **Estimación:** 13 Puntos de Historia / ~40 Horas
-*   **Tareas:**
-    1.  [Infra] Configurar servicio Cron para ejecutar tarea a las 00:00.
-    2.  [Backend] Crear script de obtención y ordenamiento de `SolicitudTriaje`.
-    3.  [Backend] Desarrollar algoritmo *Smart Slotting* para buscar huecos libres en la agenda.
-    4.  [Backend] Lógica de *Bloques Elásticos* (ajustar duración de la cita según la IA).
-    5.  [BD] Configurar transacciones ACID para evitar concurrencia.
-    6.  [Backend] Enviar correos de "Cita Confirmada".
+Todo ha sido estructurado en "Tickets" listos para ser importados a tableros como Jira o Trello.
 
-### Requerimiento: HU-04 (Cancelación y Lista de Espera)
-*   **Estimación:** 5 Puntos de Historia / ~16 Horas
-*   **Tareas:**
-    1.  [Frontend] Modal de cancelación con formulario de justificación.
-    2.  [Backend] Endpoint `POST /api/citas/cancelar`.
-    3.  [Backend] Event Listener: Al cancelar, buscar pacientes compatibles en espera.
-    4.  [Backend] Integración con servicio de correo para alertas.
-
-### Requerimiento: HU-05 (Panel Médico y Recetas PDF)
-*   **Estimación:** 8 Puntos de Historia / ~24 Horas
-*   **Tareas:**
-    1.  [Frontend] Dashboard médico con agenda diaria y resumen IA.
-    2.  [Backend] Endpoints para historia clínica `GET /api/historia/:id` y `POST /api/historia/guardar`.
-    3.  [Backend] Generación dinámica de PDF (ej. con Puppeteer o PDFKit) para recetas.
-    4.  [BD] Creación de tablas para `HistoriaClinica` y `Recetas`.
-
-### Requerimiento: HU-06 (Módulo de Caja y Pagos)
-*   **Estimación:** 8 Puntos de Historia / ~24 Horas
-*   **Tareas:**
-    1.  [Frontend] Panel administrativo para visualización de "Órdenes Pendientes" y "Vouchers".
-    2.  [Backend] Lógica de estado de cita: "Agendada" -> "Pagada".
-    3.  [Backend] Integración de subida de imágenes (vouchers) a Cloud Storage (ej. AWS S3 o Firebase Storage).
-    4.  [BD] Crear tabla de logs (trazabilidad) para auditar quién aprueba los pagos.
-
-### Requerimiento: HU-08 (Mantenimiento de Catálogos: Sedes, Seguros y Bloques Fijos)
-*   **Estimación:** 10 Puntos de Historia / ~30 Horas
-*   **Tareas:**
-    1.  [Frontend] Paneles CRUD para gestionar `Sedes`, `Consultorios`, `Aseguradoras` y `Tipos de Consulta`.
-    2.  [Backend] Endpoints de mantenimiento (crear, leer, actualizar, desactivar).
-    3.  [BD] Motor para generar `Bloques_Horarios` fijos semanalmente asociados a un `Medico` y un `Consultorio`.
-    4.  [Backend] Integrar la validación de seguros y consultorios en el motor de agendamiento Batch de medianoche.
-
-### Requerimiento: HU-09 y HU-10 (Asistencia en Sede y Bloqueos)
-*   **Estimación:** 8 Puntos de Historia / ~24 Horas
-*   **Tareas:**
-    1.  [Frontend] Módulo de Recepción (Dashboard para buscar citas del día y generar tickets).
-    2.  [Backend] Endpoint de Check-in físico `POST /api/recepcion/asistencia`.
-    3.  [Backend] Middleware/Servicio para auditar límite de reprogramaciones/cancelaciones por paciente cruzando con `Historial_Reprogramacion`.
-    4.  [Frontend] Vista Admin para "Levantar Castigos / Aprobar Excepciones".
+👉 **[Ver Backlog Técnico Detallado (Markdown)](diccionarios/backlog_tareas_jira.md)**
+👉 **[Ver Archivo CSV de Importación](diccionarios/jira_import.csv)**
 
 ---
 
