@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SI-SALUD · Agenda Médica</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="brand-dot"></span>
+      SI-SALUD <span style="color:var(--text-muted);font-weight:400;margin-left:4px">/ Agenda médica</span>
+    </div>
+    <div class="topbar-user">
+      <div class="avatar" id="avatarInitial">M</div>
+      <span id="topbarName">Médico</span>
+      <button class="btn-logout" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <nav class="sidebar">
+    <div class="nav-section">
+      <div class="nav-section-label">Clínico</div>
+      <button class="nav-item active" onclick="showPage('agenda')"><span class="icon">📅</span>Agenda del día</button>
+      <button class="nav-item" onclick="showPage('resumen')"><span class="icon">📊</span>Resumen</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Diseño U1</div>
+      <a href="/pages/mockups.html" class="nav-item" style="text-decoration:none;"><span class="icon">🖼️</span>Galería Mockups</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="page active" id="page-agenda">
+      <div class="page-header flex-between">
+        <div>
+          <h2 class="page-title">Agenda</h2>
+          <p class="page-subtitle">Bloques de <code>BLOQUE_HORARIO</code> y citas asociadas</p>
+        </div>
+        <div class="flex gap-1">
+          <select id="selFecha" class="form-control" style="width:auto" onchange="loadAgenda()"></select>
+          <button class="btn btn-secondary btn-sm" onclick="loadAgenda()">↺</button>
+        </div>
+      </div>
+      <div id="agendaTimeline" class="timeline">
+        <div class="empty-state"><span class="spinner"></span></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-resumen">
+      <div class="page-header">
+        <h2 class="page-title">Resumen de la fecha</h2>
+        <p class="page-subtitle">Ocupación de la agenda seleccionada</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon">🟩</div><div class="stat-value" id="nLibres">—</div><div class="stat-label">Libres</div></div>
+        <div class="stat-card"><div class="stat-icon">🟦</div><div class="stat-value" id="nOcupados">—</div><div class="stat-label">Ocupados</div></div>
+        <div class="stat-card"><div class="stat-icon">🎫</div><div class="stat-value" id="nTickets">—</div><div class="stat-label">Con ticket</div></div>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast-container"></div>
+<script src="/js/api.js"></script>
+<script>
+let currentUser = null;
+
+(async () => {
+  currentUser = await requireSession(['Medico']);
+  if (!currentUser) return;
+  document.getElementById('topbarName').textContent = currentUser.nombre;
+  document.getElementById('avatarInitial').textContent = (currentUser.nombre || 'M')[0];
+
+  const fechas = await API.fechasAgenda();
+  const sel = document.getElementById('selFecha');
+  const seed = fechas.length ? fechas : ['2026-10-28'];
+  sel.innerHTML = seed.map(f => `<option value="${f}">${fmtDate(f)}</option>`).join('');
+  if (seed.includes('2026-10-28')) sel.value = '2026-10-28';
+  loadAgenda();
+})();
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item')[id === 'agenda' ? 0 : 1].classList.add('active');
+  if (id === 'resumen') loadAgenda();
+}
+
+async function loadAgenda() {
+  const fecha = document.getElementById('selFecha').value;
+  const box = document.getElementById('agendaTimeline');
+  box.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
+  try {
+    const rows = await API.agendaMedico(fecha);
+    const libres = rows.filter(r => r.estado === 'Libre').length;
+    const ocupados = rows.filter(r => r.estado === 'Ocupado').length;
+    const tickets = rows.filter(r => r.codigo_turno).length;
+    document.getElementById('nLibres').textContent = libres;
+    document.getElementById('nOcupados').textContent = ocupados;
+    document.getElementById('nTickets').textContent = tickets;
+
+    if (!rows.length) {
+      box.innerHTML = '<div class="empty-state"><span class="empty-icon">📭</span>Sin bloques en esta fecha. El seed usa 28–30 oct 2026.</div>';
+      return;
+    }
+    box.innerHTML = rows.map(r => {
+      const cls = r.estado === 'Libre' ? 'libre' : r.cita_estado === 'Cancelada' ? 'cancelada' : 'ocupado';
+      const detail = r.cita_id
+        ? `<div class="fw-600">Cita #${r.cita_id} · DNI ${r.dni || '—'}</div>
+           <div class="text-sm text-muted">${r.tipo_consulta || ''} · ${r.aseguradora || ''} · ${r.sede} · ${r.consultorio}</div>
+           <div class="mt-1">${badgeEstado(r.cita_estado)}${r.codigo_turno ? ' ' + badgeEstado(r.codigo_turno) : ''}</div>`
+        : `<div class="fw-600">Slot ${r.estado}</div>
+           <div class="text-sm text-muted">${r.sede} · ${r.consultorio}</div>
+           <div class="mt-1">${badgeEstado(r.estado)}</div>`;
+      return `<div class="timeline-item ${cls}">
+        <div class="timeline-time">${fmtTime(r.hora_inicio)}<br>${fmtTime(r.hora_fin)}</div>
+        <div class="timeline-detail">${detail}</div>
+      </div>`;
+    }).join('');
+  } catch (err) {
+    box.innerHTML = `<p class="text-danger">${err.message}</p>`;
+  }
+}
+</script>
+</body>
+</html>

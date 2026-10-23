@@ -242,9 +242,8 @@
       transition: background .2s;
     }
     .overlay-close:hover { background: rgba(255,80,80,.3); }
-    iframe#preview {
-      flex: 1; border: none; width: 100%;
-    }
+    .overlay-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.5rem; overflow: auto; }
+    .overlay-img { max-width: 95%; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid var(--border); object-fit: contain; }
   </style>
 </head>
 <body>
@@ -263,28 +262,35 @@
 
 <!-- ═══ HERO ══════════════════════════════════════════════════ -->
 <section class="hero">
-  <h1>Prototipo Interactivo</h1>
-  <p>Navega por las 16 pantallas del sistema. Haz clic en cualquier card para abrir el mockup completo en pantalla completa.</p>
+  <div style="background:rgba(0,180,216,0.15);border:1px solid rgba(0,180,216,0.4);border-radius:12px;padding:1rem 1.5rem;margin:0 auto 1.5rem;max-width:850px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <div style="text-align:left;">
+      <strong style="color:#fff;font-size:1.05rem;">🚀 SI-SALUD MVP Funcional en Vivo</strong>
+      <p style="color:var(--text);font-size:0.85rem;margin:0.25rem 0 0;">Express + MySQL · Roles Paciente, Médico y Admin con Laboratorio de Pruebas U1</p>
+    </div>
+    <a href="http://localhost:3000" target="_blank" style="background:linear-gradient(135deg,var(--primary),var(--accent));color:#03045e;font-weight:700;padding:0.6rem 1.25rem;border-radius:8px;text-decoration:none;font-size:0.9rem;box-shadow:0 4px 15px rgba(0,180,216,0.4);">Abrir Aplicación Funcional →</a>
+  </div>
+  <h1>Prototipo y Mockups UI</h1>
+  <p>Navega por las 16 pantallas del sistema. Haz clic en cualquier tarjeta para inspeccionar el mockup en alta resolución.</p>
 
   <!-- Flujo principal de usuario -->
   <div class="flow">
-    <a class="flow-step" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_ingreso_ciudadano_y_pacientes/code.html','Login Ciudadano')">
+    <a class="flow-step" onclick="openScreen('../capturas_pantallas/sisalud_ingreso_ciudadano_y_pacientes.png','Login Ciudadano')">
       🔐 Login
     </a>
     <span class="flow-arrow">→</span>
-    <a class="flow-step" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_registro_y_afiliaci_n_de_paciente_1/code.html','Registro de Paciente')">
+    <a class="flow-step" onclick="openScreen('../capturas_pantallas/sisalud_registro_y_afiliaci_n_de_paciente_1.png','Registro de Paciente')">
       📝 Registro
     </a>
     <span class="flow-arrow">→</span>
-    <a class="flow-step" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_triaje_inteligente_y_solicitud_de_cita_1/code.html','Triaje Inteligente')">
+    <a class="flow-step" onclick="openScreen('../capturas_pantallas/sisalud_triaje_inteligente_y_solicitud_de_cita_1.png','Triaje Inteligente')">
       🩺 Triaje
     </a>
     <span class="flow-arrow">→</span>
-    <a class="flow-step" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_mis_citas_y_gesti_n_de_paciente_1/code.html','Mis Citas')">
+    <a class="flow-step" onclick="openScreen('../capturas_pantallas/sisalud_mis_citas_y_gesti_n_de_paciente_1.png','Mis Citas')">
       📅 Mis Citas
     </a>
     <span class="flow-arrow">→</span>
-    <a class="flow-step" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_diaria_y_consulta/code.html','Agenda Médica')">
+    <a class="flow-step" onclick="openScreen('../capturas_pantallas/sisalud_agenda_m_dica_diaria_y_consulta.png','Agenda Médica')">
       👨‍⚕️ Agenda Médica
     </a>
   </div>
@@ -300,8 +306,8 @@
     </div>
   </div>
   <div class="screens" style="padding: 0; max-width: none; margin-bottom: 2.5rem;">
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_ingreso_ciudadano_y_pacientes/code.html','Login Ciudadano y Pacientes')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_ingreso_ciudadano_y_pacientes/screen.png" alt="Login" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_ingreso_ciudadano_y_pacientes.png','Login Ciudadano y Pacientes')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_ingreso_ciudadano_y_pacientes.png" alt="Login" />
       <div class="card-body">
         <div class="card-tag">Módulo 1 · Autenticación</div>
         <div class="card-title">Login Ciudadano y Pacientes</div>
@@ -310,8 +316,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_ingreso_ciudadano_minimalista_1/code.html','Login Minimalista v1')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_ingreso_ciudadano_minimalista_1/screen.png" alt="Login minimalista 1" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_ingreso_ciudadano_minimalista_1.png','Login Minimalista v1')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_ingreso_ciudadano_minimalista_1.png" alt="Login minimalista 1" />
       <div class="card-body">
         <div class="card-tag">Módulo 1 · Variante A</div>
         <div class="card-title">Login Minimalista v1</div>
@@ -320,8 +326,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_ingreso_ciudadano_minimalista_2/code.html','Login Minimalista v2')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_ingreso_ciudadano_minimalista_2/screen.png" alt="Login minimalista 2" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_ingreso_ciudadano_minimalista_2.png','Login Minimalista v2')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_ingreso_ciudadano_minimalista_2.png" alt="Login minimalista 2" />
       <div class="card-body">
         <div class="card-tag">Módulo 1 · Variante B</div>
         <div class="card-title">Login Minimalista v2</div>
@@ -330,7 +336,7 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_acceso_y_registro_de_pacientes_y_m_dicos_1/code.html','Acceso y Registro')">
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_acceso_y_registro_de_pacientes_y_m_dicos_1.png','Acceso y Registro')">
       <div class="card-thumb-placeholder">🆕</div>
       <div class="card-body">
         <div class="card-tag">Módulo 1 · Registro</div>
@@ -352,8 +358,8 @@
     </div>
   </div>
   <div class="screens" style="padding: 0; max-width: none; margin-bottom: 2.5rem;">
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_registro_y_afiliaci_n_de_paciente_1/code.html','Registro de Paciente v1')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_registro_y_afiliaci_n_de_paciente_1/screen.png" alt="Registro paciente 1" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_registro_y_afiliaci_n_de_paciente_1.png','Registro de Paciente v1')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_registro_y_afiliaci_n_de_paciente_1.png" alt="Registro paciente 1" />
       <div class="card-body">
         <div class="card-tag">Módulo 2 · CU-02</div>
         <div class="card-title">Registro y Afiliación de Paciente v1</div>
@@ -362,8 +368,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_registro_y_afiliaci_n_de_paciente_2/code.html','Registro de Paciente v2')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_registro_y_afiliaci_n_de_paciente_2/screen.png" alt="Registro paciente 2" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_registro_y_afiliaci_n_de_paciente_2.png','Registro de Paciente v2')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_registro_y_afiliaci_n_de_paciente_2.png" alt="Registro paciente 2" />
       <div class="card-body">
         <div class="card-tag">Módulo 2 · Variante</div>
         <div class="card-title">Registro y Afiliación v2</div>
@@ -372,8 +378,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_triaje_inteligente_y_solicitud_de_cita_1/code.html','Triaje Inteligente v1')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_triaje_inteligente_y_solicitud_de_cita_1/screen.png" alt="Triaje 1" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_triaje_inteligente_y_solicitud_de_cita_1.png','Triaje Inteligente v1')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_triaje_inteligente_y_solicitud_de_cita_1.png" alt="Triaje 1" />
       <div class="card-body">
         <div class="card-tag">Módulo 5 · CU-01 + CU-02</div>
         <div class="card-title">Triaje Inteligente y Solicitud de Cita v1</div>
@@ -382,8 +388,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_triaje_inteligente_y_solicitud_de_cita_2/code.html','Triaje Inteligente v2')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_triaje_inteligente_y_solicitud_de_cita_2/screen.png" alt="Triaje 2" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_triaje_inteligente_y_solicitud_de_cita_2.png','Triaje Inteligente v2')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_triaje_inteligente_y_solicitud_de_cita_2.png" alt="Triaje 2" />
       <div class="card-body">
         <div class="card-tag">Módulo 5 · Variante</div>
         <div class="card-title">Triaje Inteligente v2</div>
@@ -392,8 +398,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_mis_citas_y_gesti_n_de_paciente_1/code.html','Mis Citas v1')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_mis_citas_y_gesti_n_de_paciente_1/screen.png" alt="Mis citas 1" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_mis_citas_y_gesti_n_de_paciente_1.png','Mis Citas v1')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_mis_citas_y_gesti_n_de_paciente_1.png" alt="Mis citas 1" />
       <div class="card-body">
         <div class="card-tag">Módulo 7 · CU-03 + CU-04</div>
         <div class="card-title">Mis Citas y Gestión de Paciente v1</div>
@@ -402,8 +408,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_mis_citas_y_gesti_n_de_paciente_2/code.html','Mis Citas v2')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_mis_citas_y_gesti_n_de_paciente_2/screen.png" alt="Mis citas 2" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_mis_citas_y_gesti_n_de_paciente_2.png','Mis Citas v2')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_mis_citas_y_gesti_n_de_paciente_2.png" alt="Mis citas 2" />
       <div class="card-body">
         <div class="card-tag">Módulo 7 · Variante</div>
         <div class="card-title">Mis Citas v2</div>
@@ -424,8 +430,8 @@
     </div>
   </div>
   <div class="screens" style="padding: 0; max-width: none; margin-bottom: 2.5rem;">
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_acceso_m_dico_y_cl_nico/code.html','Acceso Médico y Clínico')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_acceso_m_dico_y_cl_nico/screen.png" alt="Acceso medico" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_acceso_m_dico_y_cl_nico.png','Acceso Médico y Clínico')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_acceso_m_dico_y_cl_nico.png" alt="Acceso medico" />
       <div class="card-body">
         <div class="card-tag">Módulo 3 · Staff</div>
         <div class="card-title">Acceso Médico y Clínico</div>
@@ -434,8 +440,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_diaria_y_consulta/code.html','Agenda Diaria')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_diaria_y_consulta/screen.png" alt="Agenda diaria" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_agenda_m_dica_diaria_y_consulta.png','Agenda Diaria')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_agenda_m_dica_diaria_y_consulta.png" alt="Agenda diaria" />
       <div class="card-body">
         <div class="card-tag">Módulo 3 · Agenda</div>
         <div class="card-title">Agenda Médica Diaria y Consulta</div>
@@ -444,8 +450,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_semanal/code.html','Agenda Semanal')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_semanal/screen.png" alt="Agenda semanal" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_agenda_m_dica_semanal.png','Agenda Semanal')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_agenda_m_dica_semanal.png" alt="Agenda semanal" />
       <div class="card-body">
         <div class="card-tag">Módulo 3 · Planificación</div>
         <div class="card-title">Agenda Médica Semanal</div>
@@ -454,8 +460,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_semanal_minimalista/code.html','Agenda Semanal Minimalista')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_semanal_minimalista/screen.png" alt="Agenda semanal min" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_agenda_m_dica_semanal_minimalista.png','Agenda Semanal Minimalista')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_agenda_m_dica_semanal_minimalista.png" alt="Agenda semanal min" />
       <div class="card-body">
         <div class="card-tag">Módulo 3 · Variante</div>
         <div class="card-title">Agenda Semanal Minimalista</div>
@@ -464,7 +470,7 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_diaria_y_consulta_minimalista/code.html','Agenda Diaria Minimalista')">
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_agenda_diaria_y_consulta_minimalista.png','Agenda Diaria Minimalista')">
       <div class="card-thumb-placeholder">📋</div>
       <div class="card-body">
         <div class="card-tag">Módulo 3 · Variante</div>
@@ -474,8 +480,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_y_consulta_cl_nica_1/code.html','Agenda + Consulta Clínica v1')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_y_consulta_cl_nica_1/screen.png" alt="Agenda consulta 1" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_agenda_m_dica_y_consulta_cl_nica_1.png','Agenda + Consulta Clínica v1')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_agenda_m_dica_y_consulta_cl_nica_1.png" alt="Agenda consulta 1" />
       <div class="card-body">
         <div class="card-tag">Módulo 3 · Consulta</div>
         <div class="card-title">Agenda + Consulta Clínica v1</div>
@@ -484,8 +490,8 @@
       </div>
     </div>
 
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_y_consulta_cl_nica_2/code.html','Agenda + Consulta Clínica v2')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_agenda_m_dica_y_consulta_cl_nica_2/screen.png" alt="Agenda consulta 2" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_agenda_m_dica_y_consulta_cl_nica_2.png','Agenda + Consulta Clínica v2')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_agenda_m_dica_y_consulta_cl_nica_2.png" alt="Agenda consulta 2" />
       <div class="card-body">
         <div class="card-tag">Módulo 3 · Variante</div>
         <div class="card-title">Agenda + Consulta Clínica v2</div>
@@ -506,8 +512,8 @@
     </div>
   </div>
   <div class="screens" style="padding: 0; max-width: none; margin-bottom: 3rem;">
-    <div class="card" onclick="openScreen('../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_logo/code.html','Logotipo SI-SALUD')">
-      <img class="card-thumb" src="../../../document/stitch_plataforma_integral_de_citas_m_dicas/sisalud_logo/screen.png" alt="Logo" />
+    <div class="card" onclick="openScreen('../capturas_pantallas/sisalud_logo.png','Logotipo SI-SALUD')">
+      <img class="card-thumb" src="../capturas_pantallas/sisalud_logo.png" alt="Logo" />
       <div class="card-body">
         <div class="card-tag">Design System</div>
         <div class="card-title">Logotipo SI-SALUD</div>
@@ -522,9 +528,14 @@
 <div class="overlay" id="overlay">
   <div class="overlay-header">
     <span class="overlay-title" id="overlay-title">Pantalla</span>
-    <button class="overlay-close" onclick="closeScreen()">✕</button>
+    <div style="display:flex;gap:0.75rem;align-items:center;">
+      <a id="overlay-full" href="#" target="_blank" class="flow-step" style="padding:0.35rem 0.8rem;font-size:0.75rem;">Abrir en pestaña nueva ↗</a>
+      <button class="overlay-close" onclick="closeScreen()">✕</button>
+    </div>
   </div>
-  <iframe id="preview" title="Mockup Preview"></iframe>
+  <div class="overlay-body">
+    <img id="previewImg" class="overlay-img" src="" alt="Mockup" />
+  </div>
 </div>
 
 <!-- ═══ FOOTER ════════════════════════════════════════════════ -->
@@ -534,21 +545,23 @@
 </footer>
 
 <script>
-  function openScreen(path, title) {
+  function openScreen(imagePath, title) {
     const overlay = document.getElementById('overlay');
-    const iframe  = document.getElementById('preview');
+    const img     = document.getElementById('previewImg');
     const label   = document.getElementById('overlay-title');
+    const link    = document.getElementById('overlay-full');
     label.textContent = title || 'Pantalla';
-    iframe.src = path;
+    img.src = imagePath;
+    if (link) link.href = imagePath;
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
   function closeScreen() {
     const overlay = document.getElementById('overlay');
-    const iframe  = document.getElementById('preview');
+    const img     = document.getElementById('previewImg');
     overlay.classList.remove('open');
-    iframe.src = 'about:blank';
+    if (img) img.src = '';
     document.body.style.overflow = '';
   }
 

@@ -78,7 +78,26 @@ CONTENIDO DEL ARCHIVO .ZIP
     Escenario 6: Vista consolidada del sistema (reporte final)
 
 ============================================================
-  PASO 3: Ver la Demo Web Navegable
+  PASO 3: MVP funcional (MySQL si_salud + procedimientos)
+============================================================
+
+  La carpeta 04_Mockups_e_Interfaz/demo_navegable/ incluye un servidor
+  Node.js que se conecta a la MISMA base cargada en el Paso 1 y ejecuta
+  los stored procedures del Paso 2 (también desde la UI Admin).
+
+  1. cd 04_Mockups_e_Interfaz/demo_navegable
+  2. Copiar .env.example a .env y poner usuario/clave MySQL
+  3. npm install && npm start
+  4. Abrir http://localhost:3000
+     Contraseña demo: demo123
+     Admin (laboratorio de los escenarios .txt): admin@sisalud.pe
+     Paciente: juan.perez@gmail.com
+     Médico:   dr.torres@sisalud.pe
+     Cajero:   caja.central@sisalud.pe  (check-in CU-05)
+     Agenda seed: 2026-10-28 a 2026-10-30
+
+============================================================
+  PASO 4: Ver la Demo Web Navegable (mockups estáticos)
 ============================================================
 
   OPCIÓN A (recomendada para la presentación):

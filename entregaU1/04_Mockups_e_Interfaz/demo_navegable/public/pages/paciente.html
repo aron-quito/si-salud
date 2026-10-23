@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SI-SALUD · Portal Paciente</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="brand-dot"></span>
+      SI-SALUD <span style="color:var(--text-muted);font-weight:400;margin-left:4px">/ Portal Paciente</span>
+    </div>
+    <div class="topbar-user">
+      <div class="avatar" id="avatarInitial">P</div>
+      <span id="topbarName">Paciente</span>
+      <button class="btn-logout" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="nav-section">
+      <div class="nav-section-label">Principal</div>
+      <button class="nav-item active" onclick="showPage('inicio')"><span class="icon">🏠</span>Inicio</button>
+      <button class="nav-item" onclick="showPage('agendar')"><span class="icon">📅</span>Agendar Cita</button>
+      <button class="nav-item" onclick="showPage('mis-citas')"><span class="icon">📋</span>Mis Citas</button>
+      <button class="nav-item" onclick="showPage('triaje')"><span class="icon">🩺</span>Solicitar Triaje</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Cuenta</div>
+      <button class="nav-item" onclick="showPage('perfil')"><span class="icon">👤</span>Mi Perfil</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Diseño U1</div>
+      <a href="/pages/mockups.html" class="nav-item" style="text-decoration:none;"><span class="icon">🖼️</span>Galería Mockups</a>
+    </div>
+  </nav>
+
+  <!-- Contenido -->
+  <main class="main-content">
+
+    <!-- ── INICIO ──────────────────────────────────────────── -->
+    <section class="page active" id="page-inicio">
+      <div class="page-header">
+        <h2 class="page-title">Bienvenido, <span id="welcomeName">Paciente</span></h2>
+        <p class="page-subtitle">Gestiona tus citas médicas desde aquí</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value" id="statCitasPendientes">—</div>
+          <div class="stat-label">Citas pendientes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="statCitasAtendidas">—</div>
+          <div class="stat-label">Citas atendidas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🩺</div>
+          <div class="stat-value" id="statTriajes">—</div>
+          <div class="stat-label">Triajes activos</div>
+        </div>
+        <div class="stat-card" style="--primary:#10b981;">
+          <div class="stat-icon">🎂</div>
+          <div class="stat-value" id="statEdad">—</div>
+          <div class="stat-label">Años</div>
+        </div>
+      </div>
+
+      <!-- Próxima cita -->
+      <div class="card mb-3">
+        <div class="card-title">Próxima cita programada</div>
+        <div id="proximaCita">
+          <div class="empty-state"><span class="empty-icon">📭</span>No tienes citas próximas. <a href="#" onclick="showPage('agendar')">Agenda una ahora →</a></div>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button class="btn btn-primary" onclick="showPage('agendar')">📅 Agendar nueva cita</button>
+        <button class="btn btn-secondary" onclick="showPage('triaje')">🩺 Solicitar triaje</button>
+      </div>
+    </section>
+
+    <!-- ── AGENDAR CITA ──────────────────────────────────── -->
+    <section class="page" id="page-agendar">
+      <div class="page-header flex-between">
+        <div>
+          <h2 class="page-title">Agendar Cita</h2>
+          <p class="page-subtitle">Slots seed: 28–29 oct (Torres/Quispe) y 30 oct (Vargas). Llama a <code>sp_registrar_cita_medica</code>.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <form id="formAgendar">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Especialidad</label>
+              <select id="selEspecialidad" class="form-control" onchange="filtrarMedicos()">
+                <option value="">— Todas —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Médico</label>
+              <select id="selMedico" class="form-control" onchange="cargarSlotsAgendar()">
+                <option value="">— Seleccionar —</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Fecha</label>
+              <input id="inpFecha" type="date" class="form-control" onchange="cargarSlotsAgendar()" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tipo de Consulta</label>
+              <select id="selTipo" class="form-control" required></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Aseguradora / Cobertura</label>
+            <select id="selAseguradora" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Horarios disponibles</label>
+            <div id="slotGrid" class="slot-grid">
+              <p class="text-muted text-sm">Selecciona médico y fecha para ver los horarios</p>
+            </div>
+            <input type="hidden" id="bloqueSeleccionado" />
+          </div>
+
+          <div class="modal-footer" style="margin-top:1.5rem;justify-content:flex-start;">
+            <button type="submit" class="btn btn-primary" id="btnConfirmar" disabled>
+              ✅ Confirmar Cita
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetFormAgendar()">Limpiar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ── MIS CITAS ─────────────────────────────────────── -->
+    <section class="page" id="page-mis-citas">
+      <div class="page-header flex-between">
+        <div>
+          <h2 class="page-title">Mis Citas</h2>
+          <p class="page-subtitle">Historial y gestión de tus citas médicas</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="loadMisCitas()">↺ Actualizar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Fecha</th><th>Hora</th><th>Médico</th>
+              <th>Sede</th><th>Tipo</th><th>Estado</th><th>Turno</th><th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyCitas">
+            <tr><td colspan="9" class="text-center text-muted">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── TRIAJE ─────────────────────────────────────────── -->
+    <section class="page" id="page-triaje">
+      <div class="page-header">
+        <h2 class="page-title">Solicitar Triaje</h2>
+        <p class="page-subtitle">Describe tus síntomas para priorización médica</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div class="card">
+          <div class="card-title">Nueva solicitud</div>
+          <form id="formTriaje">
+            <div class="form-group">
+              <label class="form-label">Especialidad requerida</label>
+              <select id="selEspTriaje" class="form-control" required></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Describe tus síntomas</label>
+              <textarea id="txtSintomas" class="form-control" minlength="20" placeholder="Describe detalladamente qué sientes (mín. 20 caracteres)..." required></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Preferencia horaria</label>
+                <select id="selPrefHorario" class="form-control">
+                  <option>Mañanas</option><option>Tardes</option><option>Indiferente</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Modalidad</label>
+                <select id="selModalidad" class="form-control">
+                  <option>Presencial</option><option>Meet</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">🩺 Enviar solicitud</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="card-title flex-between">
+            Mis solicitudes de triaje
+            <button class="btn btn-secondary btn-sm" onclick="loadMisTriajes()">↺</button>
+          </div>
+          <div id="triajeLista">
+            <div class="empty-state"><span class="empty-icon">🩺</span>Sin solicitudes</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PERFIL ─────────────────────────────────────────── -->
+    <section class="page" id="page-perfil">
+      <div class="page-header">
+        <h2 class="page-title">Mi Perfil</h2>
+        <p class="page-subtitle">Información personal registrada en el sistema</p>
+      </div>
+      <div class="card" id="perfilCard">
+        <div class="empty-state"><span class="spinner"></span></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Modal Cancelar -->
+<div class="modal-overlay hidden" id="modalCancelar">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">❌ Cancelar Cita</span>
+      <button class="modal-close" onclick="closeModal('modalCancelar')">✕</button>
+    </div>
+    <p class="text-muted text-sm mb-2">Esta acción liberará el bloque horario y notificará al sistema.</p>
+    <div class="form-group">
+      <label class="form-label">Motivo de cancelación</label>
+      <textarea id="motivoCancelar" class="form-control" placeholder="Indica el motivo..." required></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modalCancelar')">Cancelar</button>
+      <button class="btn btn-danger" id="btnConfirmarCancelar" onclick="confirmarCancelar()">Confirmar cancelación</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Reprogramar -->
+<div class="modal-overlay hidden" id="modalReprogramar">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">🔄 Reprogramar Cita</span>
+      <button class="modal-close" onclick="closeModal('modalReprogramar')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Médico</label>
+      <select id="reproMedico" class="form-control" onchange="loadSlotsRepro()"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nueva Fecha</label>
+      <input id="reproFecha" type="date" class="form-control" onchange="loadSlotsRepro()" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nuevo Horario</label>
+      <div id="reproSlotGrid" class="slot-grid"><p class="text-muted text-sm">Selecciona médico y fecha</p></div>
+      <input type="hidden" id="reproBloque" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Motivo de reprogramación</label>
+      <textarea id="motivoRepro" class="form-control" placeholder="Indica el motivo..." required></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modalReprogramar')">Cancelar</button>
+      <button class="btn btn-warning" onclick="confirmarReprogramar()">🔄 Reprogramar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="/js/api.js"></script>
+<script>
+// ── Estado global ─────────────────────────────────────────────
+let currentUser = null;
+let todosMedicos = [];
+let todasEspecialidades = [];
+let citaActiva = null;
+
+// ── Init ──────────────────────────────────────────────────────
+(async () => {
+  currentUser = await requireSession(['Paciente']);
+  document.getElementById('topbarName').textContent = currentUser.nombre;
+  document.getElementById('welcomeName').textContent = currentUser.nombre.split(' ')[0];
+  document.getElementById('avatarInitial').textContent = currentUser.nombre[0].toUpperCase();
+
+  // Cargar catálogos
+  const [medicos, especialidades, tipos, aseguradoras] = await Promise.all([
+    API.medicos(), API.especialidades(), API.tipos(), API.aseguradoras()
+  ]);
+  todosMedicos = medicos;
+  todasEspecialidades = especialidades;
+  poblarSelect('selEspecialidad', especialidades, 'id', 'nombre', true);
+  poblarSelect('selEspTriaje', especialidades, 'id', 'nombre');
+  poblarSelect('selTipo', tipos, 'id', 'nombre');
+  poblarSelect('selAseguradora', aseguradoras, 'id', e => `${e.nombre} (${e.tipo})`);
+  poblarMedicos(medicos);
+  poblarSelect('reproMedico', medicos, 'id', m => `${m.nombres} ${m.apellidos}`);
+
+  document.getElementById('inpFecha').value = '2026-10-28';
+  document.getElementById('reproFecha').value = '2026-10-28';
+
+  loadInicio();
+})();
+
+function poblarSelect(id, items, valKey, labelFn, addEmpty = false) {
+  const sel = document.getElementById(id);
+  if (!sel) return;
+  if (addEmpty) sel.innerHTML = '<option value="">— Todas —</option>';
+  else sel.innerHTML = '';
+  items.forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item[valKey];
+    opt.textContent = typeof labelFn === 'function' ? labelFn(item) : item[labelFn];
+    sel.appendChild(opt);
+  });
+}
+
+function poblarMedicos(medicos) {
+  const sel = document.getElementById('selMedico');
+  sel.innerHTML = '<option value="">— Seleccionar médico —</option>';
+  medicos.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = `Dr/a. ${m.nombres} ${m.apellidos} — ${m.especialidades}`;
+    sel.appendChild(opt);
+  });
+}
+
+// ── Navegación ────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const idx = ['inicio','agendar','mis-citas','triaje','perfil'];
+  const btns = document.querySelectorAll('.nav-item');
+  const i = idx.indexOf(id);
+  if (btns[i]) btns[i].classList.add('active');
+
+  if (id === 'mis-citas') loadMisCitas();
+  if (id === 'triaje')    loadMisTriajes();
+  if (id === 'perfil')    loadPerfil();
+}
+
+// ── INICIO ────────────────────────────────────────────────────
+async function loadInicio() {
+  try {
+    const [citas, triajes, perfil] = await Promise.all([
+      API.misCitas(), API.misTriajes(), API.perfil()
+    ]);
+    const pendientes  = citas.filter(c => ['Programada','Reprogramada','Pagada'].includes(c.estado));
+    const atendidas   = citas.filter(c => c.estado === 'Atendida');
+    const triajePend  = triajes.filter(t => t.estado === 'Pendiente');
+
+    document.getElementById('statCitasPendientes').textContent = pendientes.length;
+    document.getElementById('statCitasAtendidas').textContent  = atendidas.length;
+    document.getElementById('statTriajes').textContent         = triajePend.length;
+    document.getElementById('statEdad').textContent            = perfil.edad ?? '—';
+
+    const proxima = pendientes.sort((a,b) => new Date(a.fecha+'T'+a.hora_inicio) - new Date(b.fecha+'T'+b.hora_inicio))[0];
+    if (proxima) {
+      document.getElementById('proximaCita').innerHTML = `
+        <div class="timeline-item ocupado">
+            <div class="timeline-time">${fmtTime(proxima.hora_inicio)}</div>
+            <div class="timeline-detail">
+              <div class="fw-600">Dr/a. ${proxima.medico_nombres} ${proxima.medico_apellidos}</div>
+              <div class="text-sm text-muted">${fmtDate(proxima.fecha)} · ${proxima.sede} · ${proxima.consultorio}</div>
+            <div class="mt-1">${badgeEstado(proxima.estado)}</div>
+          </div>
+        </div>`;
+    }
+  } catch(err) { toast(err.message, 'error'); }
+}
+
+// ── AGENDAR ───────────────────────────────────────────────────
+function filtrarMedicos() {
+  const espId = document.getElementById('selEspecialidad').value;
+  const esp = todasEspecialidades.find(e => String(e.id) === String(espId));
+  const filtrados = esp
+    ? todosMedicos.filter(m => (m.especialidades || '').includes(esp.nombre))
+    : todosMedicos;
+  poblarMedicos(filtrados);
+  document.getElementById('selMedico').value = '';
+  document.getElementById('slotGrid').innerHTML = '<p class="text-muted text-sm">Selecciona médico y fecha</p>';
+}
+
+async function cargarSlotsAgendar() {
+  const medicoId = document.getElementById('selMedico').value;
+  const fecha    = document.getElementById('inpFecha').value;
+  const grid     = document.getElementById('slotGrid');
+  document.getElementById('bloqueSeleccionado').value = '';
+  document.getElementById('btnConfirmar').disabled = true;
+
+  if (!medicoId || !fecha) {
+    grid.innerHTML = '<p class="text-muted text-sm">Selecciona médico y fecha</p>';
+    return;
+  }
+
+  grid.innerHTML = '<span class="spinner"></span>';
+  try {
+    const slots = await API.slots(medicoId, fecha);
+    if (!slots.length) {
+      grid.innerHTML = '<p class="text-muted text-sm">Sin bloques disponibles para esta fecha</p>';
+      return;
+    }
+    grid.innerHTML = '';
+    slots.forEach(s => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `slot-btn ${s.estado !== 'Libre' ? 'ocupado' : ''}`;
+      btn.textContent = `${fmtTime(s.hora_inicio)} – ${fmtTime(s.hora_fin)}`;
+      btn.disabled = s.estado !== 'Libre';
+      btn.title = s.estado !== 'Libre' ? 'Ocupado' : `${s.sede} · ${s.consultorio}`;
+      btn.onclick = () => {
+        document.querySelectorAll('#slotGrid .slot-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('bloqueSeleccionado').value = s.id;
+        document.getElementById('btnConfirmar').disabled = false;
+      };
+      grid.appendChild(btn);
+    });
+  } catch(err) { grid.innerHTML = `<p class="text-danger text-sm">${err.message}</p>`; }
+}
+
+document.getElementById('formAgendar').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const bloque_id       = document.getElementById('bloqueSeleccionado').value;
+  const tipo_consulta_id= document.getElementById('selTipo').value;
+  const aseguradora_id  = document.getElementById('selAseguradora').value;
+
+  if (!bloque_id) return toast('Selecciona un horario disponible', 'error');
+
+  const btn = document.getElementById('btnConfirmar');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+
+  try {
+    const res = await API.agendarCita({ bloque_id, tipo_consulta_id, aseguradora_id });
+    toast(`✅ ${res.mensaje} · Cita #${res.cita_id}`, 'success');
+    resetFormAgendar();
+    showPage('mis-citas');
+  } catch(err) {
+    toast(err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '✅ Confirmar Cita';
+  }
+});
+
+function resetFormAgendar() {
+  document.getElementById('formAgendar').reset();
+  document.getElementById('slotGrid').innerHTML = '<p class="text-muted text-sm">Selecciona médico y fecha</p>';
+  document.getElementById('bloqueSeleccionado').value = '';
+  document.getElementById('btnConfirmar').disabled = true;
+}
+
+// ── MIS CITAS ─────────────────────────────────────────────────
+async function loadMisCitas() {
+  const tbody = document.getElementById('tbodyCitas');
+  tbody.innerHTML = '<tr><td colspan="9" class="text-center"><span class="spinner"></span></td></tr>';
+  try {
+    const citas = await API.misCitas();
+    if (!citas.length) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Sin citas registradas</td></tr>';
+      return;
+    }
+    tbody.innerHTML = citas.map(c => `
+      <tr>
+        <td class="text-muted">#${c.id}</td>
+        <td>${fmtDate(c.fecha)}</td>
+        <td>${fmtTime(c.hora_inicio)} – ${fmtTime(c.hora_fin)}</td>
+        <td class="fw-600">Dr/a. ${c.medico_nombres} ${c.medico_apellidos}</td>
+        <td class="text-muted">${c.sede || ''} · ${c.consultorio || ''}</td>
+        <td class="text-muted">${c.tipo_consulta}</td>
+        <td>${badgeEstado(c.estado)}</td>
+        <td>${c.codigo_turno ? `<span class="badge badge-primary">${c.codigo_turno}</span>` : '—'}</td>
+        <td>
+          ${['Programada','Reprogramada','Pagada'].includes(c.estado) ? `
+            <button class="btn btn-warning btn-sm" onclick="openReprogramar(${c.id})">🔄</button>
+            <button class="btn btn-danger btn-sm" onclick="openCancelar(${c.id})">✕</button>
+          ` : ''}
+        </td>
+      </tr>`).join('');
+  } catch(err) { toast(err.message, 'error'); }
+}
+
+// ── CANCELAR ──────────────────────────────────────────────────
+function openCancelar(id) {
+  citaActiva = id;
+  document.getElementById('motivoCancelar').value = '';
+  document.getElementById('modalCancelar').classList.remove('hidden');
+}
+async function confirmarCancelar() {
+  const motivo = document.getElementById('motivoCancelar').value.trim();
+  if (!motivo) return toast('Ingresa el motivo', 'error');
+  try {
+    const res = await API.cancelarCita(citaActiva, motivo);
+    toast('Cita cancelada correctamente', 'success');
+    if (res.paciente_espera_id > 0) toast(`Lista de espera: paciente #${res.paciente_espera_id} notificado`, 'info');
+    closeModal('modalCancelar');
+    loadMisCitas();
+  } catch(err) { toast(err.message, 'error'); }
+}
+
+// ── REPROGRAMAR ───────────────────────────────────────────────
+function openReprogramar(id) {
+  citaActiva = id;
+  document.getElementById('reproBloque').value = '';
+  document.getElementById('reproSlotGrid').innerHTML = '<p class="text-muted text-sm">Selecciona médico y fecha</p>';
+  document.getElementById('modalReprogramar').classList.remove('hidden');
+}
+async function loadSlotsRepro() {
+  const medicoId = document.getElementById('reproMedico').value;
+  const fecha    = document.getElementById('reproFecha').value;
+  if (!medicoId || !fecha) return;
+  const grid = document.getElementById('reproSlotGrid');
+  grid.innerHTML = '<span class="spinner"></span>';
+  try {
+    const slots = await API.slots(medicoId, fecha);
+    grid.innerHTML = '';
+    slots.filter(s => s.estado === 'Libre').forEach(s => {
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'slot-btn';
+      btn.textContent = `${fmtTime(s.hora_inicio)} – ${fmtTime(s.hora_fin)}`;
+      btn.onclick = () => {
+        document.querySelectorAll('#reproSlotGrid .slot-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('reproBloque').value = s.id;
+      };
+      grid.appendChild(btn);
+    });
+    if (!slots.filter(s=>s.estado==='Libre').length) grid.innerHTML='<p class="text-muted text-sm">Sin bloques libres</p>';
+  } catch(err) { grid.innerHTML = `<p class="text-danger">${err.message}</p>`; }
+}
+async function confirmarReprogramar() {
+  const nuevo_bloque_id = document.getElementById('reproBloque').value;
+  const motivo          = document.getElementById('motivoRepro').value.trim();
+  if (!nuevo_bloque_id) return toast('Selecciona un horario', 'error');
+  if (!motivo)          return toast('Indica el motivo', 'error');
+  try {
+    const res = await API.reprogramarCita(citaActiva, { nuevo_bloque_id, motivo });
+    toast(res.mensaje, 'success');
+    closeModal('modalReprogramar');
+    loadMisCitas();
+  } catch(err) { toast(err.message, 'error'); }
+}
+
+// ── TRIAJE ────────────────────────────────────────────────────
+document.getElementById('formTriaje').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.submitter;
+  btn.disabled = true;
+  try {
+    await API.solicitarTriaje({
+      especialidad_id:     document.getElementById('selEspTriaje').value,
+      sintomas:            document.getElementById('txtSintomas').value,
+      preferencia_horario: document.getElementById('selPrefHorario').value,
+      modalidad:           document.getElementById('selModalidad').value,
+    });
+    toast('Solicitud de triaje enviada. El equipo médico la revisará pronto.', 'success');
+    e.target.reset();
+    loadMisTriajes();
+  } catch(err) { toast(err.message, 'error'); }
+  finally { btn.disabled = false; }
+});
+
+async function loadMisTriajes() {
+  const cont = document.getElementById('triajeLista');
+  cont.innerHTML = '<div class="text-center"><span class="spinner"></span></div>';
+  try {
+    const items = await API.misTriajes();
+    if (!items.length) { cont.innerHTML = '<div class="empty-state"><span class="empty-icon">🩺</span>Sin solicitudes</div>'; return; }
+    cont.innerHTML = items.map(t => `
+      <div style="padding:0.75rem 0;border-bottom:1px solid var(--border)">
+        <div class="flex-between mb-1">
+          <span class="fw-600">${t.especialidad}</span>
+          ${badgeEstado(t.estado)}
+        </div>
+        <p class="text-sm text-muted" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${t.sintomas}</p>
+        <div class="text-sm text-muted mt-1">Urgencia ${t.score_urgencia}/10 · ${t.modalidad} · ${t.preferencia_horario}</div>
+      </div>`).join('');
+  } catch(err) { cont.innerHTML = `<p class="text-danger">${err.message}</p>`; }
+}
+
+// ── PERFIL ────────────────────────────────────────────────────
+async function loadPerfil() {
+  const card = document.getElementById('perfilCard');
+  try {
+    const p = await API.perfil();
+    card.innerHTML = `
+      <div class="card-title">Información personal</div>
+      <div class="form-row">
+        <div><span class="form-label">Email</span><p>${p.email}</p></div>
+        <div><span class="form-label">DNI</span><p>${p.dni}</p></div>
+        <div><span class="form-label">Teléfono</span><p>${p.telefono || '—'}</p></div>
+        <div><span class="form-label">Fecha de nacimiento</span><p>${fmtDate(p.fecha_nacimiento)}</p></div>
+        <div><span class="form-label">Edad calculada (BD)</span><p class="fw-600 text-primary-c">${p.edad} años</p></div>
+        <div><span class="form-label">Estado de cuenta</span><p>${badgeEstado(p.estado || 'Activo')}</p></div>
+      </div>`;
+  } catch(err) { card.innerHTML = `<p class="text-danger">${err.message}</p>`; }
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+</script>
+</body>
+</html>

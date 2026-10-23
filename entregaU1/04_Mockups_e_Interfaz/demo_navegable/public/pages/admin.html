@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SI-SALUD · Administración</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="brand-dot"></span>
+      SI-SALUD <span style="color:var(--text-muted);font-weight:400;margin-left:4px">/ Panel</span>
+    </div>
+    <div class="topbar-user">
+      <div class="avatar" id="avatarInitial">A</div>
+      <span id="topbarName">Admin</span>
+      <button class="btn-logout" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <nav class="sidebar">
+    <div class="nav-section">
+      <div class="nav-section-label">Operación</div>
+      <button class="nav-item active" onclick="showPage('inicio')"><span class="icon">🏠</span>Dashboard</button>
+      <button class="nav-item" onclick="showPage('checkin')"><span class="icon">🎫</span>Check-in / Ticket</button>
+      <button class="nav-item" onclick="showPage('citas')"><span class="icon">📋</span>Citas</button>
+      <button class="nav-item" onclick="showPage('triaje')"><span class="icon">🩺</span>Bolsa de triaje</button>
+      <button class="nav-item" onclick="showPage('espera')"><span class="icon">⏳</span>Lista de espera</button>
+    </div>
+    <div class="nav-section" id="navAdminOnly">
+      <div class="nav-section-label">U1 / Admin</div>
+      <button class="nav-item" onclick="showPage('agenda')"><span class="icon">🗓️</span>Generar agenda</button>
+      <button class="nav-item" onclick="showPage('lab')"><span class="icon">🧪</span>Laboratorio pruebas</button>
+      <button class="nav-item" onclick="showPage('usuarios')"><span class="icon">👤</span>Usuarios</button>
+      <a href="/pages/mockups.html" class="nav-item" style="text-decoration:none;"><span class="icon">🖼️</span>Galería Mockups</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="page active" id="page-inicio">
+      <div class="page-header">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-subtitle">Estado actual de la base <code>si_salud</code></p>
+      </div>
+      <div class="stats-grid" id="statsGrid"></div>
+    </section>
+
+    <section class="page" id="page-checkin">
+      <div class="page-header">
+        <h2 class="page-title">Check-in físico (CU-05)</h2>
+        <p class="page-subtitle">Busca por DNI o ID de cita y genera el ticket con <code>sp_registrar_asistencia_ticket</code></p>
+      </div>
+      <div class="card mb-3">
+        <form id="formBuscar" class="form-row">
+          <div class="form-group">
+            <label class="form-label">DNI del paciente</label>
+            <input id="inpDni" class="form-control" placeholder="45231987 (Juan Pérez)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">ID de cita</label>
+            <input id="inpCitaId" class="form-control" placeholder="ej. 1" />
+          </div>
+        </form>
+        <button class="btn btn-primary" onclick="buscarCheckin()">Buscar</button>
+        <p class="hint-dates">Seed: Juan 45231987 · María 52108743 · Carlos 67342198 · Ana 43218976 · Luis 71234098</p>
+      </div>
+      <div id="checkinResult"></div>
+    </section>
+
+    <section class="page" id="page-citas">
+      <div class="page-header flex-between">
+        <div>
+          <h2 class="page-title">Citas</h2>
+          <p class="page-subtitle">Todas las filas de <code>CITA</code></p>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="loadCitas()">↺</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Fecha</th><th>Hora</th><th>Paciente</th><th>Médico</th><th>Estado</th><th>Ticket</th></tr></thead>
+          <tbody id="tbodyCitas"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="page" id="page-triaje">
+      <div class="page-header">
+        <h2 class="page-title">Bolsa de triaje (CU-02)</h2>
+        <p class="page-subtitle">Ordenada por <code>score_urgencia</code></p>
+      </div>
+      <div id="triajeBox"></div>
+    </section>
+
+    <section class="page" id="page-espera">
+      <div class="page-header">
+        <h2 class="page-title">Lista de espera (CU-03)</h2>
+        <p class="page-subtitle">Candidatos que recibe <code>sp_cancelar_cita_reactiva</code></p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>DNI</th><th>Especialidad</th><th>Prioridad</th><th>Estado</th></tr></thead>
+          <tbody id="tbodyEspera"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="page" id="page-agenda">
+      <div class="page-header">
+        <h2 class="page-title">Generar bloques (HU-08)</h2>
+        <p class="page-subtitle">Llama a <code>sp_crear_bloques_horarios</code> — Escenario 1A usa Dra. Quispe, consultorio 2, 2026-11-03, 08:00–12:00, 30 min</p>
+      </div>
+      <div class="card">
+        <form id="formBloques">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Médico</label>
+              <select id="blMedico" class="form-control" required></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Consultorio</label>
+              <select id="blConsultorio" class="form-control" required></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Fecha</label>
+              <input id="blFecha" type="date" class="form-control" value="2026-11-03" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Intervalo (min)</label>
+              <input id="blInt" type="number" class="form-control" value="30" min="10" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Hora inicio</label>
+              <input id="blIni" type="time" class="form-control" value="08:00" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hora fin</label>
+              <input id="blFin" type="time" class="form-control" value="12:00" required />
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Generar bloques</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="page" id="page-lab">
+      <div class="page-header flex-between">
+        <div>
+          <h2 class="page-title">Laboratorio · pruebas_procedimientos_mysql.txt</h2>
+          <p class="page-subtitle">Mismos CALL del archivo oficial, con resultado esperado vs real</p>
+        </div>
+        <div class="flex gap-1">
+          <button class="btn btn-secondary" onclick="resetSeed()">🔄 Reiniciar BD (Seed Limpio)</button>
+          <button class="btn btn-warning" onclick="runSecuencia()">▶️ Ejecutar 0→6 en orden</button>
+        </div>
+      </div>
+      <div class="lab-banner">
+        Ejecutar sobre una BD recién cargada con <code>si_salud_database_completa.sql</code>.
+        Los pasos 1A–5 mutan datos (IDs del seed: paciente 1 = Juan, bloque 1 = Dr. Torres 28-oct 08:00).
+        Si ya corriste el .txt en Workbench, vuelve a cargar el script SQL.
+      </div>
+      <div class="stats-grid" id="labStats"></div>
+      <div id="labPasos" class="mb-3"></div>
+      <div class="card">
+        <div class="card-title">Escenario 6 · Vista consolidada</div>
+        <pre class="pre-json" id="labConsola">Carga el estado o ejecuta un paso.</pre>
+      </div>
+    </section>
+
+    <section class="page" id="page-usuarios">
+      <div class="page-header">
+        <h2 class="page-title">Usuarios</h2>
+        <p class="page-subtitle">Tras el escenario 4, Carlos (paciente 3) queda <code>Bloqueado</code></p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Email</th><th>Rol</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="tbodyUsers"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast-container"></div>
+<script src="/js/api.js"></script>
+<script>
+let currentUser = null;
+const isAdmin = () => currentUser && currentUser.rol === 'Admin';
+
+(async () => {
+  currentUser = await requireSession(['Admin', 'Cajero']);
+  if (!currentUser) return;
+  document.getElementById('topbarName').textContent = currentUser.nombre;
+  document.getElementById('avatarInitial').textContent = (currentUser.nombre || 'A')[0];
+  if (!isAdmin()) document.getElementById('navAdminOnly').classList.add('hidden');
+  loadInicio();
+})();
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const map = { inicio:0, checkin:1, citas:2, triaje:3, espera:4, agenda:5, lab:6, usuarios:7 };
+  const btns = document.querySelectorAll('.nav-item');
+  if (btns[map[id]]) btns[map[id]].classList.add('active');
+  if (id === 'inicio') loadInicio();
+  if (id === 'citas') loadCitas();
+  if (id === 'triaje') loadTriaje();
+  if (id === 'espera') loadEspera();
+  if (id === 'agenda') loadFormAgenda();
+  if (id === 'lab') loadLab();
+  if (id === 'usuarios') loadUsers();
+}
+
+async function loadInicio() {
+  const s = await API.stats();
+  const items = [
+    ['Citas', s.citas_total, '📅'],
+    ['Slots libres', s.bloques_libres, '🟩'],
+    ['Slots ocupados', s.bloques_ocupados, '🟦'],
+    ['Triaje pendiente', s.triaje_pendiente, '🩺'],
+    ['Lista espera', s.lista_espera, '⏳'],
+    ['Tickets', s.tickets, '🎫'],
+  ];
+  document.getElementById('statsGrid').innerHTML = items.map(([l,v,i]) =>
+    `<div class="stat-card"><div class="stat-icon">${i}</div><div class="stat-value">${v}</div><div class="stat-label">${l}</div></div>`
+  ).join('');
+}
+
+async function buscarCheckin() {
+  const dni = document.getElementById('inpDni').value.trim();
+  const cita_id = document.getElementById('inpCitaId').value.trim();
+  const q = [];
+  if (dni) q.push('dni=' + encodeURIComponent(dni));
+  if (cita_id) q.push('cita_id=' + encodeURIComponent(cita_id));
+  const rows = await API.allCitas(q.length ? '?' + q.join('&') : '');
+  const box = document.getElementById('checkinResult');
+  if (!rows.length) {
+    box.innerHTML = '<div class="empty-state">Sin citas para esos datos</div>';
+    return;
+  }
+  box.innerHTML = rows.map(c => `
+    <div class="card mb-2">
+      <div class="flex-between">
+        <div>
+          <div class="fw-600">Cita #${c.id} · DNI ${c.paciente_dni}</div>
+          <div class="text-sm text-muted">${fmtDate(c.fecha)} ${fmtTime(c.hora_inicio)}–${fmtTime(c.hora_fin)} · Dr/a. ${c.medico_nombres} ${c.medico_apellidos} · ${c.sede}</div>
+          <div class="mt-1">${badgeEstado(c.estado)} ${c.codigo_turno ? badgeEstado(c.codigo_turno) : ''}</div>
+        </div>
+        ${['Programada','Pagada'].includes(c.estado) ? `<button class="btn btn-primary" onclick="doCheckin(${c.id})">Registrar llegada</button>` : ''}
+      </div>
+      <div id="ticket-${c.id}" class="mt-2"></div>
+    </div>`).join('');
+}
+
+async function doCheckin(id) {
+  try {
+    const res = await API.checkinCita(id);
+    document.getElementById('ticket-' + id).innerHTML =
+      `<div class="ticket-card"><div class="text-sm text-muted">Turno de sala de espera</div><div class="ticket-code">${res.codigo_turno}</div></div>`;
+    toast('Ticket ' + res.codigo_turno, 'success');
+  } catch (err) { toast(err.message, 'error'); }
+}
+
+async function loadCitas() {
+  const rows = await API.allCitas();
+  document.getElementById('tbodyCitas').innerHTML = rows.length ? rows.map(c => `
+    <tr>
+      <td>#${c.id}</td><td>${fmtDate(c.fecha)}</td>
+      <td>${fmtTime(c.hora_inicio)}–${fmtTime(c.hora_fin)}</td>
+      <td>${c.paciente_dni}</td>
+      <td>${c.medico_nombres} ${c.medico_apellidos}</td>
+      <td>${badgeEstado(c.estado)}</td>
+      <td>${c.codigo_turno || '—'}</td>
+    </tr>`).join('') : '<tr><td colspan="7" class="text-center text-muted">Sin citas</td></tr>';
+}
+
+async function loadTriaje() {
+  const rows = await API.allTriaje();
+  document.getElementById('triajeBox').innerHTML = rows.map(t => `
+    <div class="card mb-2">
+      <div class="flex-between mb-1">
+        <span class="fw-600">${t.especialidad} · DNI ${t.paciente_dni} · ${t.paciente_edad} años</span>
+        ${badgeEstado(t.estado)}
+      </div>
+      <p class="text-sm">${t.sintomas}</p>
+      <div class="text-sm text-muted mt-1">Urgencia ${t.score_urgencia}/10 · ${t.modalidad} · ${t.preferencia_horario}</div>
+    </div>`).join('') || '<div class="empty-state">Sin solicitudes</div>';
+}
+
+async function loadEspera() {
+  const rows = await API.listaEspera();
+  document.getElementById('tbodyEspera').innerHTML = rows.map(r => `
+    <tr><td>#${r.id}</td><td>${r.dni}</td><td>${r.especialidad}</td><td>${r.prioridad}</td><td>${badgeEstado(r.estado)}</td></tr>
+  `).join('');
+}
+
+async function loadFormAgenda() {
+  const [medicos, cons] = await Promise.all([API.adminMedicos(), API.adminConsultorios()]);
+  document.getElementById('blMedico').innerHTML = medicos.map(m =>
+    `<option value="${m.id}">${m.nombres} ${m.apellidos}</option>`).join('');
+  document.getElementById('blConsultorio').innerHTML = cons.map(c =>
+    `<option value="${c.id}">${c.numero_nombre} · ${c.sede}</option>`).join('');
+  document.getElementById('blMedico').value = '2';
+  document.getElementById('blConsultorio').value = '2';
+}
+
+document.getElementById('formBloques').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const res = await API.crearBloques({
+      medico_id: document.getElementById('blMedico').value,
+      consultorio_id: document.getElementById('blConsultorio').value,
+      fecha: document.getElementById('blFecha').value,
+      hora_inicio: document.getElementById('blIni').value,
+      hora_fin: document.getElementById('blFin').value,
+      intervalo: Number(document.getElementById('blInt').value),
+    });
+    toast(`Bloques creados: ${res.bloques_creados}`, 'success');
+  } catch (err) { toast(err.message, 'error'); }
+});
+
+async function loadLab() {
+  if (!isAdmin()) return;
+  const estado = await API.labEstado();
+  const c = estado.conteos;
+  document.getElementById('labStats').innerHTML = [
+    ['Tablas', estado.tablas], ['Usuarios', c.usuarios], ['Bloques', c.bloques],
+    ['Citas', c.citas], ['Edad Juan', estado.funciones.edad_juan],
+    ['Slot 1 libre', estado.funciones.slot_1_libre],
+  ].map(([l,v]) => `<div class="stat-card"><div class="stat-value">${v}</div><div class="stat-label">${l}</div></div>`).join('');
+
+  const pasos = await API.labPasos();
+  document.getElementById('labPasos').innerHTML = pasos.map(p => `
+    <div class="lab-step" id="lab-${p.id}">
+      <div class="flex-between">
+        <div>
+          <div class="fw-600">${p.titulo}</div>
+          <div class="text-sm text-muted">${p.muta ? 'Mutante · requiere seed limpio' : 'Solo lectura'}</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="runPaso('${p.id}')">Ejecutar</button>
+      </div>
+      <div class="mt-1" id="lab-out-${p.id}"></div>
+    </div>`).join('');
+  document.getElementById('labConsola').textContent = JSON.stringify({ citas: estado.citas, bloques: estado.bloques }, null, 2);
+}
+
+function renderChecks(target, data) {
+  const el = document.getElementById(target);
+  const step = document.getElementById(target.replace('lab-out-', 'lab-'));
+  if (step) {
+    step.classList.remove('pass', 'fail');
+    step.classList.add(data.ok ? 'pass' : 'fail');
+  }
+  el.innerHTML = (data.checks || []).map(c =>
+    `<div class="lab-check">${c.ok ? '✅' : '❌'} ${c.nombre}<br><span class="text-muted">actual: ${c.actual} · esperado: ${c.esperado}</span></div>`
+  ).join('') + (data.error ? `<p class="text-danger">${data.error}</p>` : '');
+}
+
+async function runPaso(id) {
+  try {
+    const data = await API.labEjecutar(id);
+    renderChecks('lab-out-' + id, data);
+    toast(data.ok ? data.titulo + ' · OK' : data.titulo + ' · revisar', data.ok ? 'success' : 'error');
+    const estado = await API.labEstado();
+    document.getElementById('labConsola').textContent = JSON.stringify({ paso: data, citas: estado.citas }, null, 2);
+  } catch (err) { toast(err.message, 'error'); }
+}
+
+async function runSecuencia() {
+  try {
+    toast('Ejecutando escenarios 0 a 6…', 'info');
+    const data = await API.labSecuencia();
+    (data.resultados || []).forEach(r => {
+      const box = document.getElementById('lab-out-' + r.id);
+      if (box) renderChecks('lab-out-' + r.id, r);
+    });
+    toast(data.ok ? 'Secuencia completa: todos coinciden' : 'Secuencia con diferencias (¿seed limpio?)', data.ok ? 'success' : 'error');
+    const estado = await API.labEstado();
+    document.getElementById('labConsola').textContent = JSON.stringify({ secuencia: data, citas: estado.citas }, null, 2);
+  } catch (err) { toast(err.message, 'error'); }
+}
+
+async function resetSeed() {
+  try {
+    toast('Reiniciando base de datos a seed original...', 'info');
+    const res = await API.labResetSeed();
+    toast(res.mensaje || 'Base de datos restaurada', 'success');
+    await loadLab();
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+}
+
+async function loadUsers() {
+  const rows = await API.usuarios();
+  document.getElementById('tbodyUsers').innerHTML = rows.map(u => `
+    <tr>
+      <td>${u.id}</td><td>${u.email}</td><td>${u.rol}</td>
+      <td>${badgeEstado(u.estado)}</td>
+      <td>${u.estado === 'Bloqueado' ? `<button class="btn btn-secondary btn-sm" onclick="unlock(${u.id})">Desbloquear</button>` : ''}</td>
+    </tr>`).join('');
+}
+async function unlock(id) {
+  await API.desbloquear(id);
+  toast('Usuario reactivado', 'success');
+  loadUsers();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SI-SALUD · Demo Navegable · Entrega U1</title>
+  <meta name="description" content="Demo interactivo del sistema SI-SALUD — Plataforma Integral de Citas Médicas. Prototipo navegable para exposición académica." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:   #00b4d8;
+      --primary-d: #0096c7;
+      --accent:    #48cae4;
+      --dark:      #03045e;
+      --mid:       #023e8a;
+      --surface:   rgba(255,255,255,0.07);
+      --border:    rgba(255,255,255,0.12);
+      --text:      #e0f4ff;
+      --muted:     rgba(224,244,255,0.55);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #03045e 0%, #023e8a 50%, #0077b6 100%);
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    /* ─── HEADER ─────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      background: rgba(3,4,94,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .logo {
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .logo-text { font-size: 1.25rem; font-weight: 700; letter-spacing: -.5px; }
+    .logo-sub  { font-size: .7rem; font-weight: 400; color: var(--muted); }
+    .badge {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: #000;
+      font-size: .7rem; font-weight: 700;
+      padding: .25rem .75rem;
+      border-radius: 999px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    /* ─── HERO ───────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 2rem 2.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      background: linear-gradient(90deg, #fff, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2; margin-bottom: .75rem;
+    }
+    .hero p {
+      font-size: 1rem; color: var(--muted); max-width: 600px; margin: 0 auto 2rem;
+    }
+
+    /* ─── FLOW STEPPER ───────────────────── */
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+      padding: 0 1rem;
+    }
+    .flow-step {
+      display: flex; align-items: center; gap: .5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: .5rem 1.1rem;
+      font-size: .8rem; font-weight: 600;
+      cursor: pointer;
+      transition: all .25s ease;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .flow-step:hover {
+      background: rgba(0,180,216,.18);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0,180,216,.25);
+    }
+    .flow-step.active {
+      background: var(--primary);
+      color: #000; border-color: var(--primary);
+      font-weight: 700;
+    }
+    .flow-arrow { color: var(--muted); font-size: .85rem; }
+
+    /* ─── SCREEN GRID ────────────────────── */
+    .section-title {
+      text-align: center;
+      font-size: 1rem; font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+    }
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 0 2.5rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex; flex-direction: column;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(0,180,216,.3);
+      border-color: rgba(0,180,216,.4);
+    }
+    .card-thumb {
+      width: 100%; aspect-ratio: 16/10;
+      object-fit: cover; object-position: top;
+      background: linear-gradient(135deg, #023e8a, #0077b6);
+      display: block;
+    }
+    .card-thumb-placeholder {
+      width: 100%; aspect-ratio: 16/10;
+      background: linear-gradient(135deg, #023e8a 0%, #0096c7 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+    }
+    .card-body {
+      padding: 1rem 1.25rem 1.25rem;
+      flex: 1; display: flex; flex-direction: column;
+    }
+    .card-tag {
+      font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--primary);
+      margin-bottom: .35rem;
+    }
+    .card-title {
+      font-size: .95rem; font-weight: 700;
+      color: #fff; margin-bottom: .35rem; line-height: 1.3;
+    }
+    .card-desc {
+      font-size: .78rem; color: var(--muted);
+      flex: 1; line-height: 1.5;
+    }
+    .card-cta {
+      display: inline-flex; align-items: center; gap: .4rem;
+      margin-top: .85rem;
+      font-size: .78rem; font-weight: 600; color: var(--primary);
+      transition: gap .2s;
+    }
+    .card:hover .card-cta { gap: .7rem; }
+
+    /* ─── GROUPS ─────────────────────────── */
+    .group {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+    .group + .group { margin-top: 1rem; }
+    .group-header {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .group-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .group-title { font-size: 1.05rem; font-weight: 700; }
+    .group-subtitle { font-size: .78rem; color: var(--muted); }
+
+    /* ─── FOOTER ─────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: .78rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    footer strong { color: var(--primary); }
+
+    /* ─── IFRAME OVERLAY ─────────────────── */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(3,4,94,.92);
+      backdrop-filter: blur(8px);
+      flex-direction: column;
+    }
+    .overlay.open { display: flex; }
+    .overlay-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .75rem 1.5rem;
+      background: rgba(3,4,94,.98);
+      border-bottom: 1px solid var(--border);
+    }
+    .overlay-title { font-size: .9rem; font-weight: 600; }
+    .overlay-close {
+      background: rgba(255,255,255,.1);
+      border: none; color: #fff;
+      width: 36px; height: 36px;
+      border-radius: 8px; cursor: pointer;
+      font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .overlay-close:hover { background: rgba(255,80,80,.3); }
+    .overlay-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.5rem; overflow: auto; }
+    .overlay-img { max-width: 95%; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid var(--border); object-fit: contain; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══════════════════════════════════════════════ -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏥</div>
+    <div>
+      <div class="logo-text">SI-SALUD</div>
+      <div class="logo-sub">Sistema Integral de Citas Médicas · Galería de Mockups</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:0.75rem;align-items:center;">
+    <a href="/" class="badge" style="text-decoration:none;cursor:pointer;">← Volver al Portal / Login</a>
+  </div>
+</header>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div style="background:rgba(0,180,216,0.15);border:1px solid rgba(0,180,216,0.4);border-radius:12px;padding:1rem 1.5rem;margin:0 auto 1.5rem;max-width:850px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <div style="text-align:left;">
+      <strong style="color:#fff;font-size:1.05rem;">🚀 SI-SALUD MVP Funcional en Vivo</strong>
+      <p style="color:var(--text);font-size:0.85rem;margin:0.25rem 0 0;">Express + MySQL · Roles Paciente, Médico y Admin con Laboratorio de Pruebas U1</p>
+    </div>
+    <a href="http://localhost:3000" target="_blank" style="background:linear-gradient(135deg,var(--primary),var(--accent));color:#03045e;font-weight:700;padding:0.6rem 1.25rem;border-radius:8px;text-decoration:none;font-size:0.9rem;box-shadow:0 4px 15px rgba(0,180,216,0.4);">Abrir Aplicación Funcional →</a>
+  </div>
+  <h1>Prototipo y Mockups UI</h1>
+  <p>Navega por las 16 pantallas del sistema. Haz clic en cualquier tarjeta para inspeccionar el mockup en alta resolución.</p>
+
+  <!-- Flujo principal de usuario -->
+  <div class="flow">
+    <a class="flow-step" onclick="openScreen('/capturas/sisalud_ingreso_ciudadano_y_pacientes.png','Login Ciudadano')">
+      🔐 Login
+    </a>
+    <span class="flow-arrow">→</span>
+    <a class="flow-step" onclick="openScreen('/capturas/sisalud_registro_y_afiliaci_n_de_paciente_1.png','Registro de Paciente')">
+      📝 Registro
+    </a>
+    <span class="flow-arrow">→</span>
+    <a class="flow-step" onclick="openScreen('/capturas/sisalud_triaje_inteligente_y_solicitud_de_cita_1.png','Triaje Inteligente')">
+      🩺 Triaje
+    </a>
+    <span class="flow-arrow">→</span>
+    <a class="flow-step" onclick="openScreen('/capturas/sisalud_mis_citas_y_gesti_n_de_paciente_1.png','Mis Citas')">
+      📅 Mis Citas
+    </a>
+    <span class="flow-arrow">→</span>
+    <a class="flow-step" onclick="openScreen('/capturas/sisalud_agenda_m_dica_diaria_y_consulta.png','Agenda Médica')">
+      👨‍⚕️ Agenda Médica
+    </a>
+  </div>
+</section>
+
+<!-- ═══ GRUPO 1: ACCESO Y AUTENTICACIÓN ═══════════════════════ -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-icon">🔐</div>
+    <div>
+      <div class="group-title">Acceso y Autenticación</div>
+      <div class="group-subtitle">Portal público, login y registro de cuentas</div>
+    </div>
+  </div>
+  <div class="screens" style="padding: 0; max-width: none; margin-bottom: 2.5rem;">
+    <div class="card" onclick="openScreen('/capturas/sisalud_ingreso_ciudadano_y_pacientes.png','Login Ciudadano y Pacientes')">
+      <img class="card-thumb" src="/capturas/sisalud_ingreso_ciudadano_y_pacientes.png" alt="Login" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 1 · Autenticación</div>
+        <div class="card-title">Login Ciudadano y Pacientes</div>
+        <div class="card-desc">Portal principal de ingreso al sistema para todos los roles. Diseño institucional con gradiente azul profundo.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_ingreso_ciudadano_minimalista_1.png','Login Minimalista v1')">
+      <img class="card-thumb" src="/capturas/sisalud_ingreso_ciudadano_minimalista_1.png" alt="Login minimalista 1" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 1 · Variante A</div>
+        <div class="card-title">Login Minimalista v1</div>
+        <div class="card-desc">Variante de diseño más limpia y enfocada en la usabilidad rápida del formulario de acceso.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_ingreso_ciudadano_minimalista_2.png','Login Minimalista v2')">
+      <img class="card-thumb" src="/capturas/sisalud_ingreso_ciudadano_minimalista_2.png" alt="Login minimalista 2" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 1 · Variante B</div>
+        <div class="card-title">Login Minimalista v2</div>
+        <div class="card-desc">Segunda variante de la pantalla de acceso con fondo oscuro y énfasis en el formulario centrado.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_acceso_y_registro_de_pacientes_y_m_dicos_1.png','Acceso y Registro')">
+      <div class="card-thumb-placeholder">🆕</div>
+      <div class="card-body">
+        <div class="card-tag">Módulo 1 · Registro</div>
+        <div class="card-title">Acceso y Registro Pacientes/Médicos</div>
+        <div class="card-desc">Pantalla dual que permite tanto el login como el alta de nuevas cuentas en el sistema.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GRUPO 2: PACIENTES ════════════════════════════════════ -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-icon">👤</div>
+    <div>
+      <div class="group-title">Portal del Paciente</div>
+      <div class="group-subtitle">Registro, triaje, gestión de citas y perfil personal</div>
+    </div>
+  </div>
+  <div class="screens" style="padding: 0; max-width: none; margin-bottom: 2.5rem;">
+    <div class="card" onclick="openScreen('/capturas/sisalud_registro_y_afiliaci_n_de_paciente_1.png','Registro de Paciente v1')">
+      <img class="card-thumb" src="/capturas/sisalud_registro_y_afiliaci_n_de_paciente_1.png" alt="Registro paciente 1" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 2 · CU-02</div>
+        <div class="card-title">Registro y Afiliación de Paciente v1</div>
+        <div class="card-desc">Formulario de onboarding: DNI, fecha de nacimiento, teléfono, seguro médico y preferencias de contacto.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_registro_y_afiliaci_n_de_paciente_2.png','Registro de Paciente v2')">
+      <img class="card-thumb" src="/capturas/sisalud_registro_y_afiliaci_n_de_paciente_2.png" alt="Registro paciente 2" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 2 · Variante</div>
+        <div class="card-title">Registro y Afiliación v2</div>
+        <div class="card-desc">Segunda variante del flujo de registro con paso a paso más detallado y validación en tiempo real.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_triaje_inteligente_y_solicitud_de_cita_1.png','Triaje Inteligente v1')">
+      <img class="card-thumb" src="/capturas/sisalud_triaje_inteligente_y_solicitud_de_cita_1.png" alt="Triaje 1" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 5 · CU-01 + CU-02</div>
+        <div class="card-title">Triaje Inteligente y Solicitud de Cita v1</div>
+        <div class="card-desc">Formulario asíncrono de síntomas analizado por IA. Genera `score_urgencia` e ingresa a la bolsa de triaje.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_triaje_inteligente_y_solicitud_de_cita_2.png','Triaje Inteligente v2')">
+      <img class="card-thumb" src="/capturas/sisalud_triaje_inteligente_y_solicitud_de_cita_2.png" alt="Triaje 2" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 5 · Variante</div>
+        <div class="card-title">Triaje Inteligente v2</div>
+        <div class="card-desc">Variante del flujo de triaje con indicador visual del score de urgencia en tiempo real.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_mis_citas_y_gesti_n_de_paciente_1.png','Mis Citas v1')">
+      <img class="card-thumb" src="/capturas/sisalud_mis_citas_y_gesti_n_de_paciente_1.png" alt="Mis citas 1" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 7 · CU-03 + CU-04</div>
+        <div class="card-title">Mis Citas y Gestión de Paciente v1</div>
+        <div class="card-desc">Dashboard personal con listado de citas: estado, botones de cancelar y reprogramar con control anti-abuso.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_mis_citas_y_gesti_n_de_paciente_2.png','Mis Citas v2')">
+      <img class="card-thumb" src="/capturas/sisalud_mis_citas_y_gesti_n_de_paciente_2.png" alt="Mis citas 2" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 7 · Variante</div>
+        <div class="card-title">Mis Citas v2</div>
+        <div class="card-desc">Vista alternativa con calendario integrado y filtros por estado: Programada, Cancelada, Atendida.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GRUPO 3: MÉDICO ═══════════════════════════════════════ -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-icon">👨‍⚕️</div>
+    <div>
+      <div class="group-title">Portal del Médico</div>
+      <div class="group-subtitle">Agenda diaria, agenda semanal y consulta clínica</div>
+    </div>
+  </div>
+  <div class="screens" style="padding: 0; max-width: none; margin-bottom: 2.5rem;">
+    <div class="card" onclick="openScreen('/capturas/sisalud_acceso_m_dico_y_cl_nico.png','Acceso Médico y Clínico')">
+      <img class="card-thumb" src="/capturas/sisalud_acceso_m_dico_y_cl_nico.png" alt="Acceso medico" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 3 · Staff</div>
+        <div class="card-title">Acceso Médico y Clínico</div>
+        <div class="card-desc">Panel de ingreso exclusivo para médicos con su calendario diario y alertas de pacientes pendientes.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_agenda_m_dica_diaria_y_consulta.png','Agenda Diaria')">
+      <img class="card-thumb" src="/capturas/sisalud_agenda_m_dica_diaria_y_consulta.png" alt="Agenda diaria" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 3 · Agenda</div>
+        <div class="card-title">Agenda Médica Diaria y Consulta</div>
+        <div class="card-desc">Vista timeline del día con bloques horarios: Libre (verde), Ocupado (azul), Bloqueado (rojo). Click para ver detalle del paciente.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_agenda_m_dica_semanal.png','Agenda Semanal')">
+      <img class="card-thumb" src="/capturas/sisalud_agenda_m_dica_semanal.png" alt="Agenda semanal" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 3 · Planificación</div>
+        <div class="card-title">Agenda Médica Semanal</div>
+        <div class="card-desc">Vista de 5 días con todos los bloques horarios de la semana. Permite identificar huecos y planificar la agenda del médico.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_agenda_m_dica_semanal_minimalista.png','Agenda Semanal Minimalista')">
+      <img class="card-thumb" src="/capturas/sisalud_agenda_m_dica_semanal_minimalista.png" alt="Agenda semanal min" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 3 · Variante</div>
+        <div class="card-title">Agenda Semanal Minimalista</div>
+        <div class="card-desc">Versión compacta de la agenda semanal optimizada para tablets y pantallas pequeñas.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_agenda_diaria_y_consulta_minimalista.png','Agenda Diaria Minimalista')">
+      <div class="card-thumb-placeholder">📋</div>
+      <div class="card-body">
+        <div class="card-tag">Módulo 3 · Variante</div>
+        <div class="card-title">Agenda Diaria Minimalista</div>
+        <div class="card-desc">Vista simplificada de la agenda diaria para tótem de recepción o pantallas de sala de espera.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_agenda_m_dica_y_consulta_cl_nica_1.png','Agenda + Consulta Clínica v1')">
+      <img class="card-thumb" src="/capturas/sisalud_agenda_m_dica_y_consulta_cl_nica_1.png" alt="Agenda consulta 1" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 3 · Consulta</div>
+        <div class="card-title">Agenda + Consulta Clínica v1</div>
+        <div class="card-desc">Panel integrado donde el médico ve su agenda y puede registrar notas clínicas y emitir recetas durante la consulta activa.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openScreen('/capturas/sisalud_agenda_m_dica_y_consulta_cl_nica_2.png','Agenda + Consulta Clínica v2')">
+      <img class="card-thumb" src="/capturas/sisalud_agenda_m_dica_y_consulta_cl_nica_2.png" alt="Agenda consulta 2" />
+      <div class="card-body">
+        <div class="card-tag">Módulo 3 · Variante</div>
+        <div class="card-title">Agenda + Consulta Clínica v2</div>
+        <div class="card-desc">Variante con historial de atenciones previas del paciente visible durante la consulta actual.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GRUPO 4: IDENTIDAD ════════════════════════════════════ -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-icon">🎨</div>
+    <div>
+      <div class="group-title">Identidad y Design System</div>
+      <div class="group-subtitle">Logotipo, paleta de colores y guía de componentes</div>
+    </div>
+  </div>
+  <div class="screens" style="padding: 0; max-width: none; margin-bottom: 3rem;">
+    <div class="card" onclick="openScreen('/capturas/sisalud_logo.png','Logotipo SI-SALUD')">
+      <img class="card-thumb" src="/capturas/sisalud_logo.png" alt="Logo" />
+      <div class="card-body">
+        <div class="card-tag">Design System</div>
+        <div class="card-title">Logotipo SI-SALUD</div>
+        <div class="card-desc">Identidad visual: isotipo, tipografía institucional Inter y paleta de azules. Variantes claro y oscuro.</div>
+        <div class="card-cta">Abrir pantalla →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ OVERLAY PREVIEWER ═════════════════════════════════════ -->
+<div class="overlay" id="overlay">
+  <div class="overlay-header">
+    <span class="overlay-title" id="overlay-title">Pantalla</span>
+    <div style="display:flex;gap:0.75rem;align-items:center;">
+      <a id="overlay-full" href="#" target="_blank" class="flow-step" style="padding:0.35rem 0.8rem;font-size:0.75rem;">Abrir en pestaña nueva ↗</a>
+      <button class="overlay-close" onclick="closeScreen()">✕</button>
+    </div>
+  </div>
+  <div class="overlay-body">
+    <img id="previewImg" class="overlay-img" src="" alt="Mockup" />
+  </div>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+<footer>
+  <strong>SI-SALUD</strong> · Sistema Integral de Citas Médicas · Entrega Unidad 1 · Octubre 2026<br/>
+  16 pantallas HTML/CSS · 5 Stored Procedures · 16 tablas MySQL · 8 módulos de casos de uso
+</footer>
+
+<script>
+  function openScreen(imagePath, title) {
+    const overlay = document.getElementById('overlay');
+    const img     = document.getElementById('previewImg');
+    const label   = document.getElementById('overlay-title');
+    const link    = document.getElementById('overlay-full');
+    label.textContent = title || 'Pantalla';
+    img.src = imagePath;
+    if (link) link.href = imagePath;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeScreen() {
+    const overlay = document.getElementById('overlay');
+    const img     = document.getElementById('previewImg');
+    overlay.classList.remove('open');
+    if (img) img.src = '';
+    document.body.style.overflow = '';
+  }
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeScreen();
+  });
+</script>
+</body>
+</html>
