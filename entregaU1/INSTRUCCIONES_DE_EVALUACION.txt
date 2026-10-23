@@ -1,0 +1,226 @@
+================================================================================
+  PROYECTO: SI-SALUD · SISTEMA INTEGRAL DE CITAS MÉDICAS Y GESTIÓN HOSPITALARIA
+  GUÍA TÉCNICA DE INSTALACIÓN, EVALUACIÓN Y VALIDACIÓN TRANSACCIONAL
+  ENTREGABLE: HITO DE UNIDAD 1 (EVALUACIÓN BASE 20 PUNTOS)
+================================================================================
+
+El presente documento técnico ha sido estructurado para facilitar la revisión,
+despliegue y validación del entregable correspondiente a la Unidad 1 del proyecto
+SI-SALUD. A continuación se expone la organización de los artefactos del paquete,
+el protocolo de instalación en motor de base de datos MySQL 8.x, las pautas de
+verificación de los procedimientos almacenados y la puesta en marcha del entorno
+demostrativo funcional (MVP) desarrollado sobre la base de datos oficial.
+
+================================================================================
+  1. MANIFIESTO Y ESTRUCTURA DE ARTEFACTOS ENTREGABLES
+================================================================================
+
+El paquete de entrega se encuentra organizado en cuatro directorios temáticos:
+
+  01_Base_de_Datos_MySQL/
+    ├── si_salud_database_completa.sql   Script DDL/DML consolidado: 16 tablas
+    │                                    InnoDB normalizadas (3FN), 5 Stored
+    │                                    Procedures transaccionales, 2 Funciones
+    │                                    deterministas y población semilla coherente.
+    └── pruebas_procedimientos_mysql.txt Banco de pruebas transaccionales
+                                         (Escenarios 0 al 6 con asertos esperados).
+
+  02_Modelo_Relacional/
+    ├── modelo_relacional.png            Diagrama Entidad-Relación (DER) en alta
+    │                                    resolución con claves PK, FK, tipos de
+    │                                    datos estrictos y cardinalidades.
+    └── diccionario_campos.md           Diccionario de datos normalizado con la
+                                         especificación técnica de cada atributo.
+
+  03_Casos_de_Uso_y_Secuencias/
+    ├── casos_de_uso_flujos_detallados.md Especificación formal de CU-01 a CU-05
+    │                                     (actores, precondiciones, flujo principal,
+    │                                     flujos alternativos y postcondiciones).
+    ├── diagramas_casos_de_uso/           8 diagramas UML por subsistema (PNG).
+    └── diagramas_secuencia/              3 diagramas de interacción temporal (PNG):
+                                          - Agendamiento transaccional concurrente.
+                                          - Cancelación reactiva con lista de espera.
+                                          - Reprogramación con control anti-abuso.
+
+  04_Mockups_e_Interfaz/
+    ├── capturas_pantallas/               17 capturas en formato PNG de alta fidelidad.
+    └── demo_navegable/                   Entorno interactivo y MVP funcional:
+        ├── server.js                     Servidor backend Express + sesiones RBAC.
+        ├── db.js                         Conector MySQL2 con pool de conexiones.
+        ├── routes/                       Controladores modulares REST API.
+        ├── public/                       Interfaces web interactivas por rol.
+        └── index.html                    Visor de mockups y catálogo de diseño.
+
+  INSTRUCCIONES_DE_EVALUACION.txt         Este documento oficial de guía técnica.
+
+================================================================================
+  2. PROCEDIMIENTO DE DESPLIEGUE EN MOTOR MYSQL 8.X
+================================================================================
+
+Requisito: Servidor MySQL 8.0+ (o MariaDB 10.6+) en ejecución local o contenedor.
+
+Método A: Ejecución mediante MySQL Workbench
+─────────────────────────────────────────────
+  1. Iniciar sesión en su instancia local de MySQL.
+  2. Menú: File > Open SQL Script...
+  3. Seleccionar el archivo:
+     01_Base_de_Datos_MySQL/si_salud_database_completa.sql
+  4. Ejecutar el script completo (Ctrl+Shift+Enter / Cmd+Shift+Enter).
+  5. En el panel de esquemas aparecerá la base `si_salud` con 16 tablas InnoDB.
+
+Método B: Ejecución vía Terminal o Docker
+──────────────────────────────────────────
+  mysql --default-character-set=utf8mb4 -u root -p < 01_Base_de_Datos_MySQL/si_salud_database_completa.sql
+
+Consultas de verificación inmediata:
+────────────────────────────────────
+  USE si_salud;
+  SHOW TABLES;                              -- Debe listar exactamente 16 tablas
+  SELECT COUNT(*) FROM USUARIO;             -- Retorna 10 usuarios semilla
+  SELECT COUNT(*) FROM BLOQUE_HORARIO;      -- Retorna 32 bloques de agenda
+  SELECT fn_calcular_edad('1990-03-15');   -- Retorna 36 años
+  SELECT fn_verificar_slot_libre(1);        -- Retorna 1 (Slot disponible)
+
+================================================================================
+  3. PROTOCOLO DE VALIDACIÓN TRANSACCIONAL (PROCEDIMIENTOS Y FUNCIONES)
+================================================================================
+
+El archivo `01_Base_de_Datos_MySQL/pruebas_procedimientos_mysql.txt` contiene
+la batería de pruebas para comprobar la solidez de las reglas de negocio:
+
+  • Escenario 0: Verificación de instalación, tablas y funciones deterministas.
+  • Escenario 1: Generación masiva de agenda (sp_crear_bloques_horarios) y
+                 reserva concurrente con bloqueo pesimista (sp_registrar_cita_medica).
+  • Escenario 2: Prueba de concurrencia y prevención de doble reserva
+                 (retorna código -1 y mensaje controlado 'Error: Slot no disponible').
+  • Escenario 3: Cancelación reactiva (sp_cancelar_cita_reactiva), liberación
+                 inmediata del bloque y auditoría en LISTA_ESPERA.
+  • Escenario 4: Política anti-abuso (sp_reprogramar_cita): permite hasta 3
+                 reprogramaciones; al 4to intento suspende la cuenta a 'Bloqueado'.
+  • Escenario 5: Check-in presencial en recepción (sp_registrar_asistencia_ticket):
+                 emisión correlativa de ticket (C-00X) con garantía de idempotencia.
+  • Escenario 6: Auditoría y reporte consolidado multi-tabla del sistema.
+
+Nota: Los escenarios pueden ejecutarse bloque a bloque en MySQL Workbench o
+de manera automatizada en un clic desde el panel de Administración del MVP.
+
+================================================================================
+  4. PUESTA EN MARCHA DEL MVP FUNCIONAL DISTRIBUIDO (ENTORNO WEB)
+================================================================================
+
+Para complementar la evaluación, se provee un servidor funcional desarrollado
+en Node.js y Express con autenticación basada en sesiones y roles (RBAC),
+conectado directamente a la base de datos MySQL `si_salud`:
+
+Instrucciones de inicio rápido:
+───────────────────────────────
+  1. Abrir una terminal en el directorio:
+     cd 04_Mockups_e_Interfaz/demo_navegable
+  2. Ajustar si fuese necesario las credenciales en el archivo `.env`:
+     DB_HOST=127.0.0.1
+     DB_PORT=3306 (o 3307 según su entorno)
+     DB_USER=root
+     DB_PASSWORD=su_contraseña
+     DB_NAME=si_salud
+     PORT=3000
+  3. Instalar dependencias e iniciar el servidor:
+     npm install
+     npm start
+  4. Acceder en el navegador web a:
+     http://localhost:3000
+
+Credenciales de demostración precargadas (Contraseña para todos: demo123):
+────────────────────────────────────────────────────────────────────────
+  • Administrador del Sistema: admin@sisalud.pe
+    - Dashboard con métricas de base de datos en tiempo real.
+    - Generador masivo de bloques de horarios (HU-08).
+    - Laboratorio de pruebas interactivo: ejecuta los escenarios 0 a 6
+      directamente en MySQL con visualización de asertos (verde/rojo) y
+      botón de reinicio instantáneo de la base de datos a su seed original.
+    - Desbloqueo y gestión de cuentas de usuario.
+
+  • Paciente (Ciudadano):      juan.perez@gmail.com (o maria.lopez@gmail.com)
+    - Agendamiento de citas en tiempo real (CU-01 / CU-02) con selección de
+      médico, fecha y disponibilidad inmediata de slots.
+    - Cancelación reactiva (CU-03) con liberación en vivo del slot.
+    - Reprogramación de citas (CU-04) con control de intentos.
+    - Solicitud de triaje con cálculo de score de urgencia y regla pediátrica.
+    - Perfil con cálculo de edad mediante función SQL.
+
+  • Médico Especialista:       dr.torres@sisalud.pe (o dra.quispe@sisalud.pe)
+    - Agenda médica diaria (28 y 29 de octubre 2026), visualización de slots,
+      pacientes asignados y tickets de turno confirmados en sala.
+
+  • Cajero / Recepción:        caja.central@sisalud.pe
+    - Búsqueda de citas por DNI o ID y registro de check-in presencial (CU-05)
+      con emisión e impresión visual de ticket correlativo de turno.
+
+================================================================================
+  5. VISUALIZACIÓN DEL PROTOTIPO Y GALERÍA DE MOCKUPS (16 PANTALLAS)
+================================================================================
+
+Las 16 pantallas diseñadas en alta fidelidad pueden revisarse a través de:
+
+  Modalidad A (Integrada en la aplicación web):
+  ─────────────────────────────────────────────
+  Desde cualquier vista del sistema, acceder al enlace "Galería Mockups" o
+  navegar directamente a: http://localhost:3000/pages/mockups.html
+  Permite explorar los diseños organizados por subsistema con visor en alta calidad.
+
+  Modalidad B (Visualización estática independiente):
+  ──────────────────────────────────────────────────
+  Ejecutar en la carpeta `04_Mockups_e_Interfaz/demo_navegable`:
+     python3 -m http.server 8080
+  Y abrir en el navegador: http://localhost:8080
+  (Las pantallas cargan de forma autónoma desde `capturas_pantallas`).
+
+================================================================================
+  6. MATRIZ DE CUMPLIMIENTO DE RÚBRICA DE EVALUACIÓN (20 / 20 PUNTOS)
+================================================================================
+
+  [A] Modelo Relacional Completo (9 Puntos - 45%):
+      ✓ DER normalizado en 3FN con 16 entidades, claves primarias, claves foráneas,
+        tipos de datos estrictos y cardinalidades explícitas (modelo_relacional.png).
+      ✓ Diccionario de campos exhaustivo con justificación de dominio (diccionario_campos.md).
+      ✓ DDL con restricciones de integridad referencial, índices y tablas pivote.
+
+  [B] Procedimientos Almacenados y Funciones MySQL (6 Puntos - 30%):
+      ✓ sp_registrar_cita_medica: Transaccionalidad ACID mediante START TRANSACTION,
+        SELECT ... FOR UPDATE (bloqueo pesimista anti-colisión) y COMMIT/ROLLBACK.
+      ✓ sp_cancelar_cita_reactiva: Liberación de slot, registro de auditoría y
+        detección de pacientes prioritarios en LISTA_ESPERA.
+      ✓ sp_crear_bloques_horarios: Generación algorítmica de slots mediante WHILE.
+      ✓ sp_registrar_asistencia_ticket: Generación de turno correlativo e idempotente.
+      ✓ sp_reprogramar_cita: Control anti-abuso con suspensión automática de cuenta.
+      ✓ fn_calcular_edad y fn_verificar_slot_libre: Lógica encapsulada en base de datos.
+      ✓ pruebas_procedimientos_mysql.txt: 7 escenarios documentados con asertos exactos.
+
+  [C] Casos de Uso, Secuencias y Prototipos de Interfaz (5 Puntos - 25%):
+      ✓ Especificación formal de casos de uso CU-01 a CU-05 (flujo básico y alternos).
+      ✓ 8 diagramas de casos de uso UML por subsistema renderizados en PNG.
+      ✓ 3 diagramas de secuencia UML detallando interacciones temporales y transaccionales.
+      ✓ 16 mockups de interfaz en alta fidelidad agrupados por módulos operativos.
+      ✓ Entorno demostrativo interactivo (MVP) que integra y valida la solución integral.
+
+================================================================================
+  7. FUNDAMENTACIÓN TÉCNICA Y DECISIONES DE ARQUITECTURA
+================================================================================
+
+  1. Control de Concurrencia y Bloqueo Pesimista:
+     Para prevenir el doble agendamiento en accesos simultáneos, se ejecuta:
+     `SELECT estado FROM BLOQUE_HORARIO WHERE id = p_bloque_id FOR UPDATE;`
+     dentro de una transacción serializable. Esto otorga exclusividad sobre
+     el registro hasta el cierre de la transacción, evitando condiciones de carrera.
+
+  2. Política de Tolerancia y Anti-Abuso:
+     Toda solicitud de reprogramación audita la transacción en la tabla
+     `HISTORIAL_REPROGRAMACION`. Al alcanzar el límite estricto de 3 reprogramaciones
+     asociadas a la cita, el procedimiento actualiza de forma autónoma el estado
+     del usuario a 'Bloqueado', restringiendo futuras operaciones.
+
+  3. Idempotencia en la Emisión de Tickets de Turno:
+     El procedimiento `sp_registrar_asistencia_ticket` verifica previamente si ya
+     existe un ticket generado para la cita. En caso afirmativo, devuelve el código
+     existente sin crear duplicidades ni alterar el correlativo del sistema.
+
+================================================================================
