@@ -1,0 +1,316 @@
+============================================================
+  SI-SALUD · Pruebas de Procedimientos Almacenados MySQL
+  Sistema Integral de Citas Médicas
+  Ejecutar en MySQL Workbench DESPUÉS de cargar:
+    si_salud_database_completa.sql
+============================================================
+INSTRUCCIONES:
+  1. Primero ejecutar: si_salud_database_completa.sql completo
+  2. Abrir este archivo como guía
+  3. Copiar y pegar cada ESCENARIO en MySQL Workbench
+  4. Comparar el resultado real con el RESULTADO ESPERADO indicado
+============================================================
+
+╔══════════════════════════════════════════════════════════════╗
+║  ESCENARIO 0: Verificación de instalación                    ║
+╚══════════════════════════════════════════════════════════════╝
+
+USE si_salud;
+SHOW TABLES;
+
+RESULTADO ESPERADO (16 tablas):
+  ASEGURADORA
+  BLOQUE_HORARIO
+  CITA
+  CONSULTORIO
+  ESPECIALIDAD
+  HISTORIAL_REPROGRAMACION
+  LISTA_ESPERA
+  MEDICO
+  MEDICO_ESPECIALIDAD
+  PACIENTE
+  PAGO_VOUCHER
+  SEDE
+  SOLICITUD_TRIAJE
+  TICKET_ASISTENCIA
+  TIPO_CONSULTA
+  USUARIO
+
+-- Verificar datos semilla:
+SELECT COUNT(*) AS total_usuarios     FROM USUARIO;         -- ESPERADO: 10
+SELECT COUNT(*) AS total_medicos      FROM MEDICO;          -- ESPERADO: 3
+SELECT COUNT(*) AS total_pacientes    FROM PACIENTE;        -- ESPERADO: 5
+SELECT COUNT(*) AS total_bloques      FROM BLOQUE_HORARIO;  -- ESPERADO: 32
+SELECT COUNT(*) AS total_triajes      FROM SOLICITUD_TRIAJE;-- ESPERADO: 4
+
+-- Verificar funciones auxiliares:
+SELECT fn_calcular_edad('1990-03-15') AS edad_juan;  -- ESPERADO: 36 (aprox)
+SELECT fn_verificar_slot_libre(1) AS slot_libre;     -- ESPERADO: 1 (TRUE = Libre)
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  ESCENARIO 1: Generación de agenda + Reserva exitosa de cita ║
+╚══════════════════════════════════════════════════════════════╝
+
+-- PASO 1A: Generar bloques de agenda para la Dra. Quispe el 2026-11-03
+--          de 08:00 a 12:00 en intervalos de 30 minutos
+CALL sp_crear_bloques_horarios(2, 2, '2026-11-03', '08:00', '12:00', 30, @bloques_nuevos);
+SELECT @bloques_nuevos AS bloques_generados;
+
+RESULTADO ESPERADO:
+  bloques_generados = 8
+  (08:00-08:30, 08:30-09:00, 09:00-09:30, 09:30-10:00,
+   10:00-10:30, 10:30-11:00, 11:00-11:30, 11:30-12:00)
+
+-- Confirmar que se crearon:
+SELECT id, fecha, hora_inicio, hora_fin, estado
+  FROM BLOQUE_HORARIO
+ WHERE medico_id = 2 AND fecha = '2026-11-03'
+ ORDER BY hora_inicio;
+
+RESULTADO ESPERADO:
+  8 filas, todas con estado = 'Libre'
+
+
+-- PASO 1B: Registrar una cita para Juan Pérez (paciente_id=1)
+--          en el bloque 1 (Dr. Torres, 28-oct 08:00-08:30)
+--          Tipo: Primera Vez (id=1), Aseguradora: EsSalud (id=1)
+CALL sp_registrar_cita_medica(1, 1, 1, 1, 1, @nueva_cita_id, @mensaje_cita);
+SELECT @nueva_cita_id AS cita_id, @mensaje_cita AS resultado;
+
+RESULTADO ESPERADO:
+  cita_id  = 1
+  resultado = 'Cita registrada exitosamente'
+
+-- Verificar que el bloque quedó Ocupado:
+SELECT id, estado FROM BLOQUE_HORARIO WHERE id = 1;
+
+RESULTADO ESPERADO:
+  id=1, estado='Ocupado'
+
+-- Verificar que la solicitud de triaje se actualizó:
+SELECT id, estado FROM SOLICITUD_TRIAJE WHERE id = 1;
+
+RESULTADO ESPERADO:
+  id=1, estado='Agendado'
+
+-- Ver la cita completa:
+SELECT c.id, c.estado,
+       CONCAT(m.nombres,' ',m.apellidos) AS medico,
+       p.dni AS paciente_dni,
+       bh.fecha, bh.hora_inicio, bh.hora_fin
+  FROM CITA c
+  JOIN MEDICO m ON m.id = c.medico_id
+  JOIN PACIENTE p ON p.id = c.paciente_id
+  JOIN BLOQUE_HORARIO bh ON bh.id = c.bloque_horario_id
+ WHERE c.id = 1;
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  ESCENARIO 2: Intento de reservar un slot ya ocupado         ║
+║               (DEBE FALLAR — control de concurrencia)        ║
+╚══════════════════════════════════════════════════════════════╝
+
+-- Intentar reservar el MISMO bloque (id=1) con otro paciente
+CALL sp_registrar_cita_medica(2, 1, 1, 2, NULL, @cita_duplicada, @msg_error);
+SELECT @cita_duplicada AS cita_id, @msg_error AS resultado;
+
+RESULTADO ESPERADO:
+  cita_id  = -1
+  resultado = 'Error: Slot no disponible'
+
+-- El bloque debe seguir Ocupado:
+SELECT estado FROM BLOQUE_HORARIO WHERE id = 1;
+
+RESULTADO ESPERADO:
+  estado = 'Ocupado'
+
+-- No debe existir una segunda cita en ese bloque:
+SELECT COUNT(*) AS duplicados FROM CITA WHERE bloque_horario_id = 1;
+
+RESULTADO ESPERADO:
+  duplicados = 1   (solo la cita original)
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  ESCENARIO 3: Cancelación reactiva y liberación de slot      ║
+╚══════════════════════════════════════════════════════════════╝
+
+CALL sp_cancelar_cita_reactiva(1, 'Emergencia familiar imprevista', @candidato_espera);
+SELECT @candidato_espera AS id_paciente_lista_espera;
+
+RESULTADO ESPERADO:
+  id_paciente_lista_espera = (ID del registro en LISTA_ESPERA con mayor prioridad
+                               en la especialidad del médico, o -1 si no hay candidatos)
+
+-- Verificar que el bloque volvió a Libre:
+SELECT id, estado FROM BLOQUE_HORARIO WHERE id = 1;
+
+RESULTADO ESPERADO:
+  id=1, estado='Libre'
+
+-- Verificar estado de la cita:
+SELECT id, estado FROM CITA WHERE id = 1;
+
+RESULTADO ESPERADO:
+  id=1, estado='Cancelada'
+
+-- Verificar que se creó el registro de historial:
+SELECT * FROM HISTORIAL_REPROGRAMACION WHERE cita_id = 1;
+
+RESULTADO ESPERADO:
+  1 fila con motivo_cambio='Emergencia familiar imprevista', estado='Valido'
+
+-- Verificar que NO se bloqueó al usuario (solo 1 cancelación):
+SELECT estado FROM USUARIO WHERE id = (SELECT usuario_id FROM PACIENTE WHERE id = 1);
+
+RESULTADO ESPERADO:
+  estado = 'Activo'   (no bloqueado con 1 sola cancelación)
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  ESCENARIO 4: Límite de reprogramaciones y bloqueo de cuenta ║
+╚══════════════════════════════════════════════════════════════╝
+
+-- SETUP: Crear una nueva cita para hacer reprogramaciones de prueba
+CALL sp_registrar_cita_medica(3, 2, 2, 3, NULL, @cita_rp, @msg_rp);
+SELECT @cita_rp AS cita_a_reprogramar, @msg_rp;
+
+RESULTADO ESPERADO:
+  cita_a_reprogramar = 2 (o próximo ID disponible)
+  msg_rp = 'Cita registrada exitosamente'
+
+-- Reprogramación 1 (permitida):
+CALL sp_reprogramar_cita(@cita_rp, 3, 'Cambio de horario laboral', @m1);
+SELECT @m1 AS resultado_rp1;
+
+RESULTADO ESPERADO:
+  resultado_rp1 = '200 OK: Cita reprogramada exitosamente'
+
+-- Reprogramación 2 (permitida):
+CALL sp_reprogramar_cita(@cita_rp, 4, 'Compromiso familiar urgente', @m2);
+SELECT @m2 AS resultado_rp2;
+
+RESULTADO ESPERADO:
+  resultado_rp2 = '200 OK: Cita reprogramada exitosamente'
+
+-- Reprogramación 3 (permitida — es la tercera, aún no bloquea):
+CALL sp_reprogramar_cita(@cita_rp, 5, 'Otra razón de cambio', @m3);
+SELECT @m3 AS resultado_rp3;
+
+RESULTADO ESPERADO:
+  resultado_rp3 = '200 OK: Cita reprogramada exitosamente'
+
+-- Reprogramación 4 (DEBE FALLAR — ya excedió el límite):
+CALL sp_reprogramar_cita(@cita_rp, 6, 'Cuarto intento de reprogramación', @m4);
+SELECT @m4 AS resultado_rp4;
+
+RESULTADO ESPERADO:
+  resultado_rp4 = 'Error 403: Límite de reprogramaciones excedido. Cuenta suspendida.'
+
+-- Verificar que la cuenta fue bloqueada:
+SELECT u.estado
+  FROM USUARIO u
+  JOIN PACIENTE p ON p.usuario_id = u.id
+ WHERE p.id = 3;
+
+RESULTADO ESPERADO:
+  estado = 'Bloqueado'
+
+-- Verificar el historial de reprogramaciones:
+SELECT COUNT(*) AS total_reprogramaciones
+  FROM HISTORIAL_REPROGRAMACION
+ WHERE cita_id = @cita_rp;
+
+RESULTADO ESPERADO:
+  total_reprogramaciones = 3
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  ESCENARIO 5: Check-in físico y generación de ticket         ║
+╚══════════════════════════════════════════════════════════════╝
+
+-- SETUP: Crear una cita nueva en estado 'Programada' para hacer check-in
+CALL sp_registrar_cita_medica(4, 9, 1, 2, NULL, @cita_checkin, @msg_checkin);
+SELECT @cita_checkin AS nueva_cita_id, @msg_checkin;
+
+RESULTADO ESPERADO:
+  nueva_cita_id = (próximo ID disponible, ej. 3 o 4)
+  msg_checkin = 'Cita registrada exitosamente'
+
+-- Generar ticket de asistencia (check-in en recepción):
+CALL sp_registrar_asistencia_ticket(@cita_checkin, @codigo);
+SELECT @codigo AS codigo_turno_generado;
+
+RESULTADO ESPERADO:
+  codigo_turno_generado = 'C-003' (o 'C-00X' según el ID de la cita)
+
+-- Verificar en la tabla:
+SELECT ta.cita_id, ta.codigo_turno, ta.estado, ta.fecha_generacion
+  FROM TICKET_ASISTENCIA ta
+ WHERE ta.cita_id = @cita_checkin;
+
+RESULTADO ESPERADO:
+  cita_id = (ID de la cita)
+  codigo_turno = 'C-00X'
+  estado = 'Impreso'
+  fecha_generacion = timestamp actual
+
+-- Intentar generar el MISMO ticket dos veces (debe retornar código existente):
+CALL sp_registrar_asistencia_ticket(@cita_checkin, @codigo2);
+SELECT @codigo2 AS codigo_duplicado;
+
+RESULTADO ESPERADO:
+  codigo_duplicado = mismo código que antes (no crea duplicado)
+
+-- Solo debe existir 1 ticket por cita:
+SELECT COUNT(*) AS tickets_por_cita
+  FROM TICKET_ASISTENCIA
+ WHERE cita_id = @cita_checkin;
+
+RESULTADO ESPERADO:
+  tickets_por_cita = 1
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  ESCENARIO 6 (BONUS): Resumen del sistema tras las pruebas   ║
+╚══════════════════════════════════════════════════════════════╝
+
+-- Vista consolidada de citas con toda la información relacionada:
+SELECT
+    c.id                                      AS cita_id,
+    c.estado                                  AS estado_cita,
+    CONCAT(m.nombres, ' ', m.apellidos)       AS medico,
+    p.dni                                     AS dni_paciente,
+    bh.fecha                                  AS fecha_cita,
+    bh.hora_inicio, bh.hora_fin,
+    tc.nombre                                 AS tipo_consulta,
+    a.nombre                                  AS aseguradora,
+    ta.codigo_turno                           AS ticket,
+    u.estado                                  AS estado_cuenta_paciente
+FROM CITA c
+JOIN MEDICO m           ON m.id  = c.medico_id
+JOIN PACIENTE p         ON p.id  = c.paciente_id
+JOIN USUARIO u          ON u.id  = p.usuario_id
+JOIN BLOQUE_HORARIO bh  ON bh.id = c.bloque_horario_id
+JOIN TIPO_CONSULTA tc   ON tc.id = c.tipo_consulta_id
+LEFT JOIN ASEGURADORA a ON a.id  = c.aseguradora_id
+LEFT JOIN TICKET_ASISTENCIA ta ON ta.cita_id = c.id
+ORDER BY c.id;
+
+-- Resumen de bloques por médico y estado:
+SELECT
+    CONCAT(m.nombres, ' ', m.apellidos) AS medico,
+    bh.fecha,
+    SUM(bh.estado = 'Libre')    AS libres,
+    SUM(bh.estado = 'Ocupado')  AS ocupados,
+    SUM(bh.estado = 'Bloqueado') AS bloqueados
+FROM BLOQUE_HORARIO bh
+JOIN MEDICO m ON m.id = bh.medico_id
+GROUP BY m.id, bh.fecha
+ORDER BY bh.fecha, m.id;
+
+============================================================
+  FIN DE PRUEBAS
+  SI TODOS LOS RESULTADOS COINCIDEN = Sistema Funcional ✓
+============================================================

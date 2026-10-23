@@ -1,0 +1,156 @@
+============================================================
+  SI-SALUD · Instrucciones de Entrega
+  Sistema Integral de Citas Médicas
+  Entrega Unidad 1 · Octubre 2026
+============================================================
+
+CONTENIDO DEL ARCHIVO .ZIP
+─────────────────────────────────────────────────────────────
+  01_Base_de_Datos_MySQL/
+    ├── si_salud_database_completa.sql   ← Script principal MySQL
+    └── pruebas_procedimientos_mysql.txt ← Escenarios de prueba
+
+  02_Modelo_Relacional/
+    ├── modelo_relacional.png            ← DER (16 entidades, PK/FK/tipos)
+    └── diccionario_campos.md           ← Diccionario de datos detallado
+
+  03_Casos_de_Uso_y_Secuencias/
+    ├── casos_de_uso_flujos_detallados.md ← CU-01 a CU-05 con flujos formales
+    ├── diagramas_casos_de_uso/           ← 8 módulos PlantUML renderizados
+    │   ├── modulo_1_autenticacion.png
+    │   ├── modulo_2_pacientes.png
+    │   ├── modulo_3_staff_medico.png
+    │   ├── modulo_4_administracion.png
+    │   ├── modulo_5_logica_negocio.png
+    │   ├── modulo_6_horarios.png
+    │   ├── modulo_7_gestion_citas.png
+    │   └── modulo_8_lista_espera.png
+    └── diagramas_secuencia/
+        ├── secuencia_agendamiento_lote.png
+        ├── secuencia_reactiva_cancelacion.png
+        └── secuencia_reprogramacion_bloqueo.png
+
+  04_Mockups_e_Interfaz/
+    ├── capturas_pantallas/               ← 17 capturas PNG de las pantallas
+    └── demo_navegable/
+        └── index.html                    ← Demo interactivo (ver instrucciones)
+
+  LEAME_INSTRUCCIONES.txt                ← Este archivo
+
+============================================================
+  PASO 1: Ejecutar la Base de Datos en MySQL Workbench
+============================================================
+
+  1. Abrir MySQL Workbench
+  2. Conectarse al servidor MySQL local (localhost:3306)
+  3. Ir a: File > Open SQL Script...
+  4. Seleccionar: 01_Base_de_Datos_MySQL/si_salud_database_completa.sql
+  5. Pulsar: Ctrl+Shift+Enter  (Ejecutar Script Completo)
+  6. Verificar en el panel de mensajes que no hay errores
+  7. En el panel izquierdo (Schemas) debe aparecer la base "si_salud"
+     con 16 tablas listadas.
+
+  VERIFICACIÓN RÁPIDA (ejecutar en una nueva pestaña):
+  ─────────────────────────────────────────────────────
+    USE si_salud;
+    SHOW TABLES;                       -- Debe listar 16 tablas
+    SELECT COUNT(*) FROM USUARIO;      -- Debe retornar 10
+    SELECT COUNT(*) FROM BLOQUE_HORARIO; -- Debe retornar 32
+    SELECT fn_calcular_edad('1990-03-15');  -- Debe retornar 36 (aprox)
+    SELECT fn_verificar_slot_libre(1);     -- Debe retornar 1 (TRUE)
+
+============================================================
+  PASO 2: Ejecutar las Pruebas de Procedimientos
+============================================================
+
+  1. Abrir el archivo: 01_Base_de_Datos_MySQL/pruebas_procedimientos_mysql.txt
+  2. Copiar y pegar cada ESCENARIO en una pestaña de MySQL Workbench
+  3. Comparar el resultado con el "RESULTADO ESPERADO" indicado en el archivo
+
+  ESCENARIOS INCLUIDOS:
+  ─────────────────────
+    Escenario 0: Verificación de instalación (conteos y funciones)
+    Escenario 1: Generación de agenda + Reserva exitosa de cita
+    Escenario 2: Intento de reservar slot ocupado (DEBE FALLAR)
+    Escenario 3: Cancelación reactiva + liberación de slot
+    Escenario 4: Límite de reprogramaciones + bloqueo de cuenta
+    Escenario 5: Check-in físico + generación de ticket de turno
+    Escenario 6: Vista consolidada del sistema (reporte final)
+
+============================================================
+  PASO 3: Ver la Demo Web Navegable
+============================================================
+
+  OPCIÓN A (recomendada para la presentación):
+  ─────────────────────────────────────────────
+    1. Abrir una terminal en la carpeta 04_Mockups_e_Interfaz/demo_navegable/
+    2. Ejecutar:
+         python3 -m http.server 8080
+    3. Abrir en el navegador:
+         http://localhost:8080
+    4. La demo muestra las 16 pantallas organizadas por módulo.
+       Hacer clic en cualquier card para ver el mockup completo.
+
+  OPCIÓN B (más rápida):
+  ─────────────────────────────────────────────
+    1. Doble clic en: 04_Mockups_e_Interfaz/demo_navegable/index.html
+    2. Se abrirá en el navegador predeterminado.
+    NOTA: Algunos navegadores bloquean iframes locales.
+          Si las pantallas no cargan, usar la Opción A con servidor.
+
+============================================================
+  RESUMEN DE RÚBRICA CUBIERTA
+============================================================
+
+  A. Modelo Relacional (9 pts)
+     ✅ DER completo: 16 entidades, PK, FK, tipos de datos, cardinalidades
+     ✅ Diccionario de datos: 16 tablas con descripción de cada campo
+     ✅ Script DDL MySQL con ENGINE=InnoDB, ENUMs nativos, índices
+
+  B. Stored Procedures y Funciones MySQL (6 pts)
+     ✅ sp_registrar_cita_medica    (START TRANSACTION + FOR UPDATE)
+     ✅ sp_cancelar_cita_reactiva   (bloqueo optimista + lista espera)
+     ✅ sp_crear_bloques_horarios   (generador masivo con WHILE loop)
+     ✅ sp_registrar_asistencia_ticket (check-in + código de turno)
+     ✅ sp_reprogramar_cita         (anti-abuso + bloqueo de cuenta)
+     ✅ fn_calcular_edad            (TIMESTAMPDIFF)
+     ✅ fn_verificar_slot_libre     (validación de disponibilidad)
+     ✅ pruebas_procedimientos_mysql.txt (6 escenarios con resultados esperados)
+
+  C. Casos de Uso + Secuencias + Mockups (5 pts)
+     ✅ 8 diagramas de casos de uso PlantUML (módulos 1-8) + renders PNG
+     ✅ 3 diagramas de secuencia (agendamiento, reactiva, reprogramación) + PNG
+     ✅ CU-01 a CU-05 con flujo básico, flujos alternativos y postcondición
+     ✅ 16 mockups HTML/CSS + 17 capturas PNG
+     ⭐ Demo web navegable con las 16 pantallas organizadas
+
+============================================================
+  DATOS DE PRUEBA PRECARGADOS
+============================================================
+
+  Sedes:        2 (Lima Central, Comas Norte)
+  Consultorios: 4 (101-A, 102-B, 201-A, 202-B)
+  Especialidades: 5 (Medicina General, Pediatría, Cardiología,
+                      Neurología, Traumatología)
+  Aseguradoras: 3 (EsSalud, SIS, Particular)
+  Tipos consulta: 3 (Primera Vez 30min, Control 15min, Procedimiento 45min)
+  Usuarios:     10 (1 Admin, 3 Médicos, 1 Cajero, 5 Pacientes)
+  Bloques horarios: 32 (agenda de 3 días para 3 médicos)
+  Solicitudes triaje: 4 (con scores 8, 9, 7, 5)
+  Lista espera: 2 registros
+
+============================================================
+  ARQUITECTURA TÉCNICA (para preguntas del docente)
+============================================================
+
+  Motor BD:      MySQL 8.x con ENGINE=InnoDB (soporte ACID + FK)
+  Integridad:    Transacciones ACID en sp_registrar_cita_medica
+  Concurrencia:  SELECT ... FOR UPDATE (bloqueo pesimista)
+                 Previene doble-booking en slots simultáneos
+  Anti-abuso:    Contador en HISTORIAL_REPROGRAMACION (máx 3)
+                 Auto-bloqueo de USUARIO al exceder el límite
+  Normalización: 3FN — tablas pivote (MEDICO_ESPECIALIDAD),
+                 separación usuario/paciente/médico
+  Frontend:      HTML5 + CSS3 (16 pantallas, design system propio)
+
+============================================================
