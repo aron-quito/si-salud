@@ -3,15 +3,28 @@ erDiagram
         int id PK
         string email
         string password
-        string rol "Paciente, Medico, Cajero, Admin"
-        string estado "Activo, Bloqueado"
+        string rol "Paciente, Medico, Admision, Admin"
+        string estado "Activo, Inactivo"
     }
     PACIENTE {
         int id PK
-        int usuario_id FK
+        int usuario_id FK "Null si es dependiente sin email"
         string dni
+        string nombres
+        string apellidos
         date fecha_nacimiento
         string telefono
+        boolean es_titular
+        int contador_faltas "Inasistencias acumuladas"
+        boolean permite_agendar "Penalizacion por abuso"
+        datetime penalizado_hasta
+    }
+    CARGA_FAMILIAR {
+        int id PK
+        int usuario_titular_id FK
+        int paciente_id FK
+        string parentesco "Hijo/a, Conyuge, Padre/Madre, Tutorado"
+        datetime fecha_vinculacion
     }
     MEDICO {
         int id PK
@@ -51,7 +64,7 @@ erDiagram
     }
     ASEGURADORA {
         int id PK
-        string nombre
+        string nombre "SIS, EsSalud, Particular"
         string tipo
         boolean activa
     }
@@ -62,17 +75,23 @@ erDiagram
         date fecha
         time hora_inicio
         time hora_fin
-        string estado "Libre, Ocupado, Bloqueado"
+        string estado "Libre, Hold_Temporal, Ocupado, Bloqueado"
+        datetime hold_expira_at
+        int hold_paciente_id
     }
     SOLICITUD_TRIAJE {
         int id PK
         int paciente_id FK
         int especialidad_id FK
         text sintomas
-        string preferencia_horario
+        string especialidad_sugerida
+        string preferencia_horario "Manana, Tarde"
         int score_urgencia
         string modalidad "Presencial, Meet, Llamada"
-        string estado "Pendiente, Agendado, Cancelado"
+        boolean es_reprogramacion
+        boolean derivado_urgencia
+        boolean requiere_interconsulta
+        string estado "Pendiente, Agendado, Derivado_Urgencias, Cancelado"
     }
     LISTA_ESPERA {
         int id PK
@@ -80,7 +99,7 @@ erDiagram
         int especialidad_id FK
         datetime fecha_ingreso
         int prioridad
-        string estado "En Espera, Atendido"
+        string estado "En Espera, Ofrecido_Hold, Atendido, Expirado"
     }
     CITA {
         int id PK
@@ -90,7 +109,9 @@ erDiagram
         int tipo_consulta_id FK
         int solicitud_id FK
         int aseguradora_id FK
-        string estado "Programada, Pagada, Atendida, Cancelada, Reprogramada"
+        string origen_cita "Web_Paciente, Interconsulta_Clinica, Asignacion_Admin"
+        string motivo_cancelacion "Cancelado_Paciente, Imprevisto_Medico, Administrativo"
+        string estado "Programada, Confirmada, En_Sala_Espera, En_Sala_Virtual, En_Atencion, Rezagado, Atendida, Cancelada, Reprogramada, No_Show"
     }
     HISTORIAL_REPROGRAMACION {
         int id PK
@@ -103,20 +124,26 @@ erDiagram
         int id PK
         int cita_id FK
         datetime fecha_generacion
-        string codigo_turno
-        string estado "Impreso, Llamado, Finalizado"
+        datetime hora_llegada
+        int conteo_llamados "Max 2 antes de rezagado"
+        string codigo_turno "Ej. T-042"
+        string estado "Emitido, Primer_Llamado, Segundo_Llamado, Rezagado, Atendido, No_Show"
     }
-    PAGO_VOUCHER {
+    INTERCONSULTA {
         int id PK
-        int cita_id FK
-        string url_imagen
-        decimal monto
-        string estado_auditoria "Pendiente, Aprobado, Rechazado"
+        int paciente_id FK
+        int medico_emisor_id FK
+        int especialidad_destino_id FK
+        text motivo_clinico
+        date fecha_emision
+        string estado "Aprobada, Utilizada, Vencida"
     }
 
     %% Relaciones
     USUARIO ||--o| PACIENTE : "es un"
     USUARIO ||--o| MEDICO : "es un"
+    USUARIO ||--o{ CARGA_FAMILIAR : "administra"
+    PACIENTE ||--o| CARGA_FAMILIAR : "es registrado como"
     SEDE ||--|{ CONSULTORIO : "alberga"
     MEDICO ||--|{ MEDICO_ESPECIALIDAD : "tiene"
     ESPECIALIDAD ||--|{ MEDICO_ESPECIALIDAD : "asignada a"
@@ -131,7 +158,9 @@ erDiagram
     TIPO_CONSULTA ||--|{ CITA : "clasifica"
     ASEGURADORA ||--o{ CITA : "cubre"
     CITA ||--|{ HISTORIAL_REPROGRAMACION : "registra cambios"
-    CITA ||--o| TICKET_ASISTENCIA : "genera en recepción"
-    CITA ||--o| PAGO_VOUCHER : "tiene comprobante"
+    CITA ||--o| TICKET_ASISTENCIA : "genera en recepcion"
     PACIENTE ||--|{ LISTA_ESPERA : "ingresa a"
     ESPECIALIDAD ||--|{ LISTA_ESPERA : "escola por"
+    PACIENTE ||--|{ INTERCONSULTA : "recibe"
+    MEDICO ||--|{ INTERCONSULTA : "emite"
+    ESPECIALIDAD ||--|{ INTERCONSULTA : "destinada a"

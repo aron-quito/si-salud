@@ -1,29 +1,38 @@
 sequenceDiagram
     autonumber
-    actor P as Paciente (Cancela)
-    participant F as Frontend
+    actor P1 as Paciente 1 (Cancela)
+    participant F as Frontend / App
     participant S as Motor Agendamiento
     participant DB as Base de Datos
-    participant LE as Lista de Espera (Pacientes)
-    participant N as Notificaciones
+    actor P2 as Paciente 2 (Prioridad #1)
+    participant N as Servicio Notificaciones
 
-    P->>F: Solicita Cancelación con Justificación
+    P1->>F: Cancela cita con justificación
     F->>S: POST /citas/cancelar
-    S->>DB: Update CITA (Estado: Cancelado)
+    S->>DB: Update CITA (Estado: Cancelada)
     S->>DB: Update BLOQUE_HORARIO (Estado: Libre)
     
-    Note over S,LE: Smart Slotting Reactivo
-    S->>DB: Query: ¿Hay pacientes en lista de espera para esta especialidad?
-    DB-->>S: Retorna pacientes de Alta Urgencia
-    S->>N: Trigger de liberación de horario
-    N-->>LE: Correo: "Horario disponible, tómalo rápido"
+    Note over S,DB: Validación de Ventana Prudencial (Lead Time)
+    S->>S: Calcula: Tiempo_Hasta_Cita >= (20 min Hold + 60 min Traslado) ?
     
-    LE->>F: Paciente en espera reclama el slot
-    F->>S: POST /citas/reclamar
-    S->>DB: Bloqueo Optimista (Intenta tomar slot)
-    alt Slot disponible
-        S->>DB: Update BLOQUE_HORARIO (Estado: Ocupado)
-        S-->>LE: Cita Confirmada Exitosamente
-    else Slot ya fue tomado por otro
-        S-->>LE: Error: Slot ya ocupado
+    alt Tiempo_Hasta_Cita >= 80 min
+        S->>DB: Query: Siguiente paciente en LISTA_ESPERA (Mayor Urgencia)
+        DB-->>S: Retorna Paciente 2
+        S->>DB: Update BLOQUE_HORARIO (Estado: Hold_Temporal, Expira: T+20min, Paciente: P2)
+        S->>N: Enviar oferta exclusiva a P2
+        N-->>P2: Notificación: "Cupo reservado en exclusiva por 20 min. Tienes 1h para llegar si confirmas"
+        
+        alt P2 Acepta dentro de los 20 min
+            P2->>F: Acepta cupo reservado
+            F->>S: POST /citas/confirmar-hold
+            S->>DB: Update BLOQUE_HORARIO (Estado: Ocupado)
+            S->>DB: Insert CITA (Estado: Confirmada, Paciente: P2)
+            S-->>P2: Cita confirmada (Mínimo 1h para llegar)
+        else P2 Rechaza o Expira (20 min)
+            S->>DB: Update BLOQUE_HORARIO (Estado: Libre)
+            Note over S,DB: Evalúa si resta >= 80 min para el Paciente 3 (Escalonado)
+        end
+    else Menos de 80 min para la cita
+        S->>DB: Mantiene Bloque como Libre para Atención Espontánea en Sede
+        Note over S: No se oferta a lista de espera para no comprometer el traslado del paciente
     end

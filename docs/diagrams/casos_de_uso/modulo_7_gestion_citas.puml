@@ -29,25 +29,27 @@ actor "Recepción" as Rec
 actor "Sistema" as Sis
 
 package "MÓDULO 7: Gestión de citas" {
-  usecase "Realizar formulario" as UC1
-  usecase "Generar ticket temporal" as UC2
-  usecase "Confirmar cita" as UC3
+  usecase "Realizar formulario de triaje" as UC1
+  usecase "Aceptar o rechazar horario propuesto (12h)" as UC8
+  usecase "Generar ticket de turno" as UC2
+  usecase "Confirmar asistencia (48h antes)" as UC3
   usecase "Cancelar la cita" as UC4
   usecase "Reprogramar la cita" as UC5
-  usecase "Bloquear por límite de cambio" as UC6
-  usecase "Registrar asistencia" as UC7
+  usecase "Penalizar por límite de reprogramaciones" as UC6
+  usecase "Registrar asistencia presencial (Admisión)" as UC7
+  usecase "Check-in virtual en sala de espera (Meet/Llamada)" as UC9
 }
 
-UC1 .> UC2 : <<include>>
-UC2 .> UC3 : <<include>>
-UC5 .> UC6 : <<include>>
-UC7 .> UC2 : <<include>>
+UC5 <.. UC6 : <<extend>>
+UC7 ..> UC2 : <<include>>
 
 Pac -[#27AE60]-> UC1
+Pac -[#27AE60]-> UC8
+Pac -[#27AE60]-> UC3
 Pac -[#27AE60]-> UC4
 Pac -[#27AE60]-> UC5
+Pac -[#27AE60]-> UC9
 
-Sis -[#E74C3C]-> UC3
 Sis -[#E74C3C]-> UC6
 
 Rec -[#F1C40F]-> UC7

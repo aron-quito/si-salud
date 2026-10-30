@@ -1,23 +1,40 @@
 sequenceDiagram
+    autonumber
     actor P as Paciente
-    participant F as Frontend
+    participant F as Frontend / Web
     participant T as Servicio Triaje
-    participant IA as Algoritmo IA
-    participant B as Bolsa (Bag)
-    participant S as Motor Agendamiento
-    participant N as Servicio Notificaciones
+    participant IA as Motor IA (NLP)
+    participant B as Bolsa de Solicitudes
+    participant S as Motor Agendamiento (Cron 00:00)
+    participant DB as Base de Datos (Slots)
+    participant N as Notificaciones
 
-    P->>F: Llena formulario de síntomas
-    F->>T: POST /solicitud
-    T->>IA: Analiza texto (Síntomas)
-    IA-->>T: Devuelve [Score Urgencia, Resumen]
-    T->>B: Guarda Solicitud en Bolsa
-    T-->>F: Confirmación de recepción
+    P->>F: Llena síntomas y preferencia horaria (Mañana/Tarde)
+    F->>T: POST /triaje/solicitud
+    T->>IA: Analiza texto de síntomas
+    IA-->>T: Retorna: [Score Urgencia, Especialidad Asignada, Bloques Elásticos]
+    Note over T,B: Si es complejo sin interconsulta previa -> Deriva a Medicina General
+    T->>B: Guarda en Bolsa (SOLICITUD_TRIAJE, Estado: Pendiente)
+    T-->>F: Comprobante: "Solicitud recibida para procesamiento nocturno"
+
+    Note over B,S: 00:00 AM (Medianoche - Cron Batch)
+    S->>B: Obtiene solicitudes pendientes ordenadas por Urgencia
+    S->>DB: Busca bloques libres contiguos (priorizando preferencia horaria y contigüidad)
+    S->>DB: Asigna Cita Definitiva (Garantizada de 1 a 30 días)
     
-    Note over B,S: 12:00 AM (Medianoche)
-    S->>B: Obtiene solicitudes pendientes
-    S->>S: Ordena por Score Urgencia
-    S->>S: Aplica Smart Slotting / Bloques Elásticos
-    S->>B: Cambia estado a 'Agendado'
-    S->>N: Trigger de citas asignadas
-    N-->>P: Correo: "Cita Asignada"
+    alt Score Urgencia Alto (65-84) y Cita Lejana (> 7 días)
+        S->>DB: Inscribe automáticamente en LISTA_ESPERA (Acelerador de turnos)
+    end
+
+    S->>N: Dispara notificación de horario propuesto
+    N-->>P: Notificación: "Cita programada. Tienes 12h para aceptar o rechazar el horario sin penalización"
+    
+    alt Paciente Rechaza Horario dentro de las 12h
+        P->>F: Clic en "No puedo en este horario"
+        F->>S: POST /citas/rechazar-horario-cortesia
+        S->>DB: Update BLOQUE_HORARIO (Estado: Libre)
+        S->>B: Reingresa solicitud a la Bolsa nocturna (Sin consumir reprogramación)
+        Note over S,DB: Dispara inmediatamente Smart Slotting Reactivo hacia LISTA_ESPERA (Hold de 20 min)
+    else P Acepta o expiran las 12h
+        S->>DB: Cita queda Ratificada (Estado: Programada)
+    end

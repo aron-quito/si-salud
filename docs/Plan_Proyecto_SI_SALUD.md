@@ -8,26 +8,26 @@
 
 A continuación, los requerimientos distribuidos por módulos principales, integrando las nuevas características de SI-SALUD.
 
-### Módulo 1 y 2: Autenticación y Pacientes (PAC)
-* **RF-01 (Registro y 2FA):** El sistema debe permitir el registro de pacientes, inicio de sesión con doble factor de autenticación (2FA) y recuperación de cuenta.
-* **RF-02 (Dashboard y Perfil):** El paciente podrá gestionar su perfil, ver historial de citas y descargar documentos.
+### Módulo 1 y 2: Autenticación, Pacientes y Cargas Familiares (PAC)
+* **RF-01 (Registro, 2FA y Cargas Familiares):** El sistema debe permitir el registro de pacientes, inicio de sesión con 2FA y la vinculación de dependientes/cargas familiares (hijos menores de edad, adultos mayores bajo tutela) bajo una misma cuenta titular.
+* **RF-02 (Dashboard y Perfil Familiar):** El paciente titular podrá gestionar su perfil y el de sus dependientes, alternando perfiles para consultar recetas e historiales de citas.
 
-### Módulo 3 y 4: Directorio Médico y Catálogos (ADM)
-* **RF-03 (Directorio y Búsqueda):** Visualización del staff médico con filtros (especialidad, nombre). El médico puede ver su agenda diaria y emitir recetas.
-* **RF-04 (Gestión de Sedes y Excepciones):** El administrador debe realizar CRUD de sedes y consultorios, además de forzar consultas emergentes o aprobar excepciones.
+### Módulo 3 y 4: Directorio Médico, Catálogos y Contingencia (ADM)
+* **RF-03 (Directorio y Búsqueda):** Visualización del staff médico con filtros (especialidad, nombre). El médico puede ver su agenda diaria y emitir recetas e interconsultas.
+* **RF-04 (Gestión de Sedes, Excepciones y Contingencia Médica):** El administrador gestiona sedes y consultorios. En caso de ausencia imprevista del médico, el sistema ejecuta una contingencia en 3 escalones (reasignación a colega disponible, acelerador de lista de espera diurna, o reingreso con máxima prioridad a la bolsa de medianoche).
 
 ### Módulo 5: Motor de Lógica de Negocio (TRI)
-* **RF-05 (Triaje IA y Validaciones):** Detección de formularios de urgencia, validación de edad y compatibilidad de especialidad mediante algoritmos.
-* **RF-06 (Bolsa de Solicitudes):** Las solicitudes validadas deben almacenarse en una "bolsa" (bag) en estado de espera para su procesamiento.
+* **RF-05 (Triaje IA y Clasificación de Especialidad):** Detección de banderas rojas (emergencia vital), asignación automática de especialidad para primer nivel o derivación a Medicina General para interconsulta.
+* **RF-06 (Bolsa de Solicitudes y Control Anti-Acaparamiento):** Las solicitudes validadas se encolan en estado de espera ("Bolsa"). Se restringe a un **máximo de 1 solicitud activa por especialidad médica generada por el paciente**.
 
 ### Módulo 6: Horarios y Disponibilidad (MIA)
-* **RF-07 (Time-Slotting y Prevención de Solapamiento):** Creación de slots de tiempo en bloques fijos para prevenir cruces de horarios. Modificación de disponibilidad por el admin.
-* **RF-08 (Asignación Batch y Bloques Elásticos):** Proceso cron de medianoche para asignar bloques de tiempo flexibles dependiendo de la complejidad deducida.
+* **RF-07 (Time-Slotting y Prevención de Solapamiento):** Creación de slots de tiempo en bloques fijos para prevenir cruces de horarios.
+* **RF-08 (Asignación Batch y Ventana de Cortesía 12h):** Cron nocturno (00:00) para asignar bloques elásticos contiguos (1 a 30 días) con preferencia horaria, otorgando al paciente hasta las 12:00 PM para declinar sin penalización (liberando el bloque inmediatamente para lista de espera).
 
-### Módulo 7 y 8: Gestión de Citas y Lista de Espera (CIT)
-* **RF-09 (Asistencia y Ticket Temporal):** El área de recepción podrá registrar la asistencia física del paciente y generar un ticket de atención.
-* **RF-10 (Límites de Reprogramación):** El sistema debe permitir cancelar o reprogramar citas, aplicando un bloqueo por límite de cambios si se abusa del sistema.
-* **RF-11 (Lista de Espera Reactiva):** Ordenar la cola de pacientes por prioridad y asignar turnos liberados de forma reactiva a quienes estén esperando.
+### Módulo 7 y 8: Gestión de Citas, Lista de Espera y Cierre de Jornada (CIT)
+* **RF-09 (Asistencia, Check-in Virtual y Liquidación de No-Shows):** Registro físico en tótem o check-in virtual en telemedicina. Al concluir el turno del consultorio, un worker liquida las citas no atendidas marcando `No_Show` y sumando inasistencia.
+* **RF-10 (Límites de Reprogramación):** Límite de 3 reprogramaciones hacia la bolsa nocturna; al superarlo se suspende temporalmente la reserva de nuevas citas sin bloquear el acceso al historial médico.
+* **RF-11 (Acelerador de Lista de Espera con Hold 20 min):** Enrolamiento automático para pacientes urgentes con citas lejanas; asignación reactiva con ventana de decisión de 20 min y margen mínimo obligatorio de 1 hora de traslado.
 
 ### Requerimientos No Funcionales (RNF)
 * **RNF-01 (Usabilidad):** Diseño completamente responsive, cumpliendo heurísticas de usabilidad.
@@ -89,94 +89,92 @@ Puedes encontrarlos estructurados y listos para su edición en la carpeta dedica
 
 *(Formato: Como [tipo de usuario], quiero [acción] para [beneficio])*
 
-### HU-01: Formulario de Triaje y Captura de Preferencias
-**Como** paciente,
-**Quiero** completar un formulario describiendo mis síntomas y seleccionando mis preferencias de horario/modalidad,
-**Para que** el sistema evalúe mi solicitud y me asigne el mejor turno.
+### HU-01: Formulario de Triaje, Cargas Familiares y Control Anti-Acaparamiento
+**Como** paciente titular,
+**Quiero** completar un formulario para mí o para uno de mis dependientes (cargas familiares), describiendo síntomas y preferencias,
+**Para que** el sistema clasifique la especialidad y gestione el turno sin permitir duplicidades abusivas.
 *   **Criterios de Aceptación:**
-    *   Campos requeridos: Síntomas, Modalidad preferida (Presencial/Meet/Teléfono), Preferencia de Horario.
-    *   La solicitud debe guardarse en la BD en estado "Pendiente".
-    *   El sistema debe llamar a la IA para guardar el "Score de urgencia".
+    *   **Selector de Beneficiario (Cargas Familiares):** El usuario titular puede solicitar la cita para sí mismo o para un dependiente vinculado a su cuenta (menor de edad o adulto mayor tutelado sin email propio).
+    *   **Control Anti-Acaparamiento:** Se valida que el paciente seleccionado tenga como **máximo 1 solicitud activa generada por la web por especialidad médica**. Si ya tiene una solicitud pendiente, el sistema bloquea el reenvío hasta que la anterior concluya o se cancele.
+    *   **Clasificación Automática de Especialidad por IA:** La IA determina si corresponde a atención primaria básica (ej. Odontología, Medicina General) o si requiere interconsulta médica presencial.
+    *   Almacenamiento en la Bolsa (`SOLICITUD_TRIAJE`) en estado "Pendiente".
 
-### HU-02: Procesamiento Batch a Medianoche
+### HU-02: Procesamiento Batch a Medianoche y Ventana de Cortesía (12h)
 **Como** administrador del sistema,
-**Quiero** que un cron job procese la bolsa de solicitudes a las 12:00 AM,
-**Para que** se asigne de forma automática los horarios óptimos a los pacientes.
+**Quiero** que el cron job procese la bolsa a las 12:00 AM asignando citas garantizadas y otorgando una ventana de confirmación,
+**Para que** los pacientes reciban un turno justo respetando sus preferencias sin imposiciones arbitrarias.
 *   **Criterios de Aceptación:**
-    *   El proceso solo procesa solicitudes en estado "Pendiente".
-    *   Prioriza primero por `score_urgencia`.
-    *   Busca disponibilidad aplicando *Smart Slotting*.
-    *   Asigna la cita a la cuenta del paciente.
+    *   Asignación garantizada: El algoritmo busca bloques libres de 1 a 30 días, priorizando la urgencia y la preferencia horaria del paciente.
+    *   **Ventana de Cortesía de 12h:** Al publicarse los horarios asignados a medianoche, el paciente tiene hasta las 12:00 PM del día siguiente para revisar la cita. Si el horario le resulta incompatible, puede pulsar "Rechazar Horario" sin penalización (no consume intentos de reprogramación), retornando su solicitud a la Bolsa y **liberando el bloque inmediatamente** para la lista de espera reactiva.
 
-### HU-03: Check-in de Confirmación (2 días antes)
+### HU-03: Check-in de Confirmación (48 horas antes)
 **Como** clínica,
 **Quiero** enviar un recordatorio al paciente 48 horas antes de su cita para que confirme asistencia,
 **Para que** reduzcamos el ausentismo (No-Shows).
 *   **Criterios de Aceptación:**
-    *   Envío automático de SMS/Correo con enlace seguro.
-    *   Si cancela, el slot se libera.
+    *   Envío automático de SMS/Correo con enlace seguro de check-in express.
+    *   Si cancela con justificación, el slot se libera inmediatamente para el motor reactivo.
 
-### HU-04: Cancelación Justificada y Lista de Espera
-**Como** paciente,
-**Quiero** poder cancelar mi cita justificando el motivo,
-**Para que** el horario quede libre y notifique a otros pacientes urgentes.
+### HU-04: Contingencia Médica Institucional y Acelerador de Lista de Espera (Hold 20 min)
+**Como** paciente afectado por la cancelación de un médico o con cita lejana,
+**Quiero** ser reubicado con la máxima prioridad institucional,
+**Para que** mi salud no se vea perjudicada por imprevistos de la clínica.
 *   **Criterios de Aceptación:**
-    *   Modal obligatorio para escribir justificación de mínimo 10 caracteres.
-    *   Al confirmar cancelación, buscar en la bolsa a pacientes compatibles y notificarles (Lista de espera inteligente).
+    *   **Contingencia por Ausencia Médica (3 Escalones):**
+        1. *Escalón 1 (Mismo Turno):* Si el médico declara ausencia imprevista, el sistema notifica de inmediato al paciente y busca reasignarlo automáticamente a otro colega disponible de la misma especialidad en esa misma franja.
+        2. *Escalón 2 (Acelerador Diurno):* Si no hay colega disponible, el paciente ingresa a la `LISTA_ESPERA` con prioridad máxima para capturar cualquier cupo liberado en el día (Hold de 20 min).
+        3. *Escalón 3 (Bolsa Top Priority):* Si concluye la jornada diurna sin cupo reactivo, la solicitud reingresa a la Bolsa nocturna con bandera de máxima urgencia para asignación prioritaria garantizada a las 00:00 AM.
+    *   **Acelerador de Turnos Regular:** Pacientes con urgencia alta (65-84) y cita asignada a más de 7 días quedan en `LISTA_ESPERA`. Si se libera un cupo anticipado y restan $\ge 80$ min para la cita, se ofrece en exclusiva por 20 min (asegurando 1h de margen de traslado).
 
-### HU-05: Panel del Médico e Historia Clínica
+### HU-05: Panel del Médico, Protocolo de Llamado y Rezagados
 **Como** médico,
-**Quiero** visualizar mi agenda del día, el resumen de triaje de cada paciente y poder redactar indicaciones,
-**Para que** pueda llevar el control de mis consultas y prescribir recetas.
+**Quiero** gestionar mis llamados en consultorio con tiempos exactos y emitir diagnósticos e interconsultas,
+**Para que** la consulta fluya sin retrasar al resto de pacientes de la jornada.
 *   **Criterios de Aceptación:**
-    *   La vista debe cargar las citas agendadas filtradas por `medico_id` y fecha.
-    *   Debe existir un formulario para ingresar diagnóstico (CIE-10) y observaciones médicas.
-    *   Opción para generar una receta/indicación descargable en PDF.
+    *   **Protocolo de Llamado:** Primer llamado al paciente (notificación push al móvil y timbre en pantalla de TV). Si no ingresa en 3 minutos, se emite un segundo llamado.
+    *   **Manejo de Rezagados:** Si tras el segundo llamado el paciente no entra, el médico pasa al siguiente turno y el paciente ausente queda en estado `Rezagado`. Si llega más tarde, solo podrá ser atendido consumiendo los minutos restantes de su bloque original (sin desfasar a otros pacientes). Si su bloque expiró, debe retirarse y se computa `No_Show`.
+    *   Emisión de receta médica en PDF y órdenes de `INTERCONSULTA` a especialistas.
 
-### HU-06: Facturación y Validación de Pagos
-**Como** cajero,
-**Quiero** visualizar las órdenes de pago pendientes y confirmar recepciones de transferencia/efectivo,
-**Para que** la cita pase a estado "Pagada" de forma oficial.
+### HU-06: Admisión, Registro de Asistencia y Liquidación de No-Shows (Worker Cierre de Jornada)
+**Como** personal de admisión y sistema de auditoría hospitalaria,
+**Quiero** registrar la llegada física o virtual de pacientes y liquidar inasistencias automáticamente al cerrar el turno del consultorio,
+**Para que** no se marquen faltas prematuras a pacientes rezagados y se penalice el ausentismo real.
 *   **Criterios de Aceptación:**
-    *   Si el paciente seleccionó "Transferencia", el cajero debe poder ver el voucher adjunto (foto).
-    *   Botón para "Aprobar Pago" que cambie el estado de la cita y genere un comprobante (Boleta/Factura).
-    *   Trazabilidad (log) de qué usuario aprobó el pago.
+    *   **Cita Presencial:** Escaneo de DNI en tótem/recepción y emisión de `TICKET_ASISTENCIA` (Turno T-042).
+    *   **Cita Virtual (Meet/Llamada):** Botón "Entrar a Sala de Espera Virtual" disponible 15 min antes, pasando el estado a `En_Sala_Virtual`.
+    *   **Liquidación al Cierre de Turno de Consultorio:** Al finalizar el horario de atención del consultorio (ej. 14:00 o 20:00), un worker background audita las citas del bloque. Toda cita que quedó en `Programada`, `Confirmada` o `Rezagado` sin haber pasado a `Atendida` se liquida como `No_Show` y suma `+1` a `PACIENTE.contador_faltas`. Al acumular 2 faltas injustificadas, se activa la suspensión temporal de reserva.
 
 ### HU-07: Directorio Médico Público
 **Como** usuario público,
 **Quiero** buscar y visualizar el staff médico filtrando por especialidad,
 **Para que** pueda conocer el perfil de los doctores antes de iniciar el triaje.
 *   **Criterios de Aceptación:**
-    *   Página de acceso público (sin login).
-    *   Barra de búsqueda en tiempo real (respuesta en < 3s).
-    *   Vista de perfil con foto, CMP (colegiatura) y especialidades.
+    *   Página de acceso público (sin login) renderizada en servidor (SSR).
+    *   Barra de búsqueda en tiempo real con foto, CMP y especialidades.
 
-### HU-08: Gestión de Sedes, Aseguradoras y Bloques de Horario
+### HU-08: Gestión de Sedes, Aseguradoras y Asignación Manual Pre-Batch
 **Como** administrador,
-**Quiero** gestionar el catálogo de sedes físicas, consultorios, aseguradoras y los bloques de horarios fijos,
-**Para que** el algoritmo pueda asignar los turnos y espacios físicos sin conflictos.
+**Quiero** gestionar el catálogo y poder realizar asignaciones manuales prioritarias desde la Bolsa,
+**Para que** casos sociales o excepciones autorizadas puedan resolverse antes del cron nocturno.
 *   **Criterios de Aceptación:**
-    *   CRUD completo para Sedes, Consultorios, Aseguradoras y Tipos de Consulta.
-    *   Generador de bloques de horario fijos (slots) por médico y consultorio.
-    *   Relación de médicos con múltiples especialidades (N:M).
+    *   CRUD de Sedes, Consultorios, Aseguradoras y Bloques de Horario.
+    *   **Asignación Manual Pre-Batch:** El administrador puede inspeccionar la Bolsa (`SOLICITUD_TRIAJE` en Pendiente) y asignar directamente una solicitud a un `BLOQUE_HORARIO` libre antes de las 00:00 respetando la integridad ACID.
 
-### HU-09: Recepción y Registro de Asistencia
-**Como** personal de recepción,
-**Quiero** registrar la llegada física del paciente a la sede,
-**Para que** el sistema genere un ticket temporal de atención y notifique al médico que el paciente lo espera.
+### HU-09: Turnero Digital en Sala de Espera y Notificación Móvil
+**Como** paciente en sala de espera,
+**Quiero** ver mi turno en pantalla y recibir avisos en mi celular,
+**Para que** no pierda mi llamado médico.
 *   **Criterios de Aceptación:**
-    *   Buscador rápido de pacientes por DNI o código de cita.
-    *   Botón de "Registrar Asistencia" que actualiza el estado de la cita a "En Espera en Consultorio".
-    *   Generación (mock) de Ticket de turno impreso/digital.
+    *   Pantalla de televisión en sala de espera que muestra el turno llamado y consultorio (Turnero digital).
+    *   Notificación push al móvil del paciente cuando su turno es llamado.
 
-### HU-10: Reglas de Reprogramación y Bloqueos
+### HU-10: Reglas de Reprogramación y Penalización por Abuso
 **Como** sistema,
-**Quiero** limitar la cantidad de veces que un paciente reprograma o cancela citas tardíamente,
-**Para que** pueda bloquear temporalmente la reserva de citas si se detecta abuso.
+**Quiero** limitar las reprogramaciones sin bloquear el acceso del paciente a sus antecedentes de salud,
+**Para que** no se perjudique la disponibilidad de cupos de la clínica pública.
 *   **Criterios de Aceptación:**
-    *   Lógica para contar repeticiones de cancelaciones en el `Historial_Reprogramacion`.
-    *   Bloqueo automático de agendamiento si supera el límite definido (ej. 3 veces).
-    *   Opción para que el Administrador apruebe excepciones y levante el castigo.
+    *   **Reingreso a la Bolsa Nocturna:** Toda reprogramación válida libera inmediatamente el slot anterior y reingresa a la Bolsa con `es_reprogramacion = True` (prioridad alta).
+    *   **Límite de 3 Reprogramaciones:** Al superar 3 reprogramaciones, el sistema bloquea nuevas reservas (`PACIENTE.permite_agendar = False` por 30 días), preservando el inicio de sesión y la consulta de recetas históricas.
 
 ---
 
@@ -193,19 +191,27 @@ Todo ha sido estructurado en "Tickets" listos para ser importados a tableros com
 
 ## 5. Lógica Core: El Motor Inteligente de Agendamiento (Slotting)
 
-El sistema basa su capacidad de orquestación en tres pilares lógicos interconectados, garantizando la optimización de los espacios médicos sin solapamientos:
+El sistema basa su capacidad de orquestación en cuatro pilares lógicos interconectados, garantizando la optimización de los espacios médicos sin solapamientos:
 
 ### 5.1 Time-Slotting Estricto (Bloques Fijos)
 En lugar de calcular tiempos libres sobre la marcha, la tabla `BLOQUE_HORARIO` se pre-puebla de manera estática con celdas de tiempo fijas (ej. 15 minutos).
 *   **Por qué:** Asegura una transaccionalidad ACID perfecta. Asignar un turno consiste simplemente en cambiar el estado de un bloque físico de `"Libre"` a `"Ocupado"`, evitando por completo el solapamiento de horarios bajo concurrencia extrema.
 
-### 5.2 Bloques Elásticos (Triaje Dinámico)
-La IA del triaje evalúa no solo la urgencia de la solicitud, sino también su **complejidad**.
-*   **Cómo:** Si una solicitud es rutinaria, se le asigna 1 bloque (15 min). Si la IA deduce síntomas complejos o primera visita, exige 2 o 3 bloques de reserva. El sistema "estira" la cita para ajustarse al paciente real sin retrasar al médico.
+### 5.2 Bloques Elásticos y Detección de Emergencias Vitales
+La IA del triaje evalúa no solo la urgencia de la solicitud, sino también su **complejidad**:
+*   **Urgencias Vitales (Banderas Rojas):** Si la IA deduce un Score Crítico (ej. dolor torácico, asfixia, sangrado activo), **se bloquea el agendamiento ambulatorio**. El sistema emite una alerta roja inmediata derivando al paciente al Servicio de Urgencias presencial más cercano. No se le hace esperar a procesos batch.
+*   **Bloques Elásticos Contiguos:** Si la solicitud es de primer nivel, se le asigna 1 bloque (15 min). Si deduce síntomas complejos o primera consulta, exige 2 o 3 bloques contiguos. El sistema garantiza que los bloques asignados sean siempre contiguos para no fragmentar la agenda médica.
 
-### 5.3 Smart Slotting & Lista de Espera (Bolsa Batch)
-*   **A medianoche:** El cron job lee la "Bolsa" (solicitudes en `Pendiente`), las ordena por prioridad, e intenta hacer "Tetris" buscando bloques `"Libres"` **consecutivos** que calcen con los Bloques Elásticos requeridos.
-*   **Lista de Espera Inmediata:** Si un paciente cancela durante el día, sus bloques pasan de `"Ocupado"` a `"Libre"`. El *Smart Slotting* se dispara reactivamente buscando en la tabla `LISTA_ESPERA` quién necesita exactamente esos bloques y les notifica instantáneamente.
+### 5.3 Smart Slotting & Lista de Espera Reactiva con Hold Temporal
+*   **A medianoche (Batch 00:00):** El cron job lee la "Bolsa" (solicitudes en `Pendiente`), priorizando por urgencia y solicitudes de reprogramación. Aplica el algoritmo de empaquetamiento garantizando que las asignaciones sean contiguas a las citas ya existentes y dentro de una ventana de 1 a 30 días.
+*   **Ventana de Cortesía (12h):** El paciente puede declinar el horario propuesto hasta las 12:00 PM sin penalización. Al hacerlo, el bloque pasa **inmediatamente a `Libre`**, activando de inmediato el motor reactivo de la lista de espera.
+*   **Acelerador de Turnos (Hold de 20 min):** Pacientes con urgencia alta y cita lejana quedan en `LISTA_ESPERA`. Si se libera un cupo durante el día y restan $\ge 80$ min para la cita, se ofrece en exclusiva por 20 minutos con margen de traslado garantizado de 1 hora.
+
+### 5.4 Protocolo de Contingencia Institucional (Ausencia Médica en 3 Escalones)
+Ante una ausencia de fuerza mayor de un médico, el sistema protege al paciente mediante una cascada automática:
+1. **Escalón 1 (Reasignación Inmediata):** Búsqueda sincrónica de médicos de la misma especialidad con bloques libres en esa misma jornada.
+2. **Escalón 2 (Acelerador Reactivo):** Si no hay sustituto inmediato, los pacientes pasan a `LISTA_ESPERA` con prioridad máxima para capturar cancelaciones diurnas mediante Hold de 20 min.
+3. **Escalón 3 (Top Priority Nocturno):** Si no consiguen cupo diurno, sus solicitudes ingresan a la Bolsa de medianoche como prioridad número 1, garantizando su cita al día siguiente.
 
 ---
 

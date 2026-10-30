@@ -4,21 +4,23 @@ sequenceDiagram
     participant F as Frontend
     participant S as Motor Citas
     participant DB as Base de Datos
+    participant B as Bolsa de Solicitudes (Batch)
     
-    P->>F: Solicita Reprogramar Cita
+    P->>F: Solicita Reprogramar Cita (con motivo)
     F->>S: POST /citas/reprogramar
     
     S->>DB: Query: COUNT(*) en Historial_Reprogramacion
-    DB-->>S: Retorna cantidad de cambios previos
+    DB-->>S: Retorna cantidad de reprogramaciones previas
     
-    alt Límite Excedido (ej. >= 3)
-        S->>DB: Update USUARIO (Estado: Bloqueado)
-        S-->>F: Error 403: Límite de cambios excedido.
-        F-->>P: Alerta: Cuenta bloqueada temporalmente.
-    else Límite Permitido
+    alt Límite Excedido (>= 3 reprogramaciones)
+        S->>DB: Update PACIENTE (permite_agendar: False, penalizado_hasta: T+30días)
+        S-->>F: Error 403: Límite de reprogramaciones alcanzado
+        F-->>P: Alerta: Penalización temporal de reservas. Contacta a Admisión/Trabajo Social para excepciones. (Tu historial médico sigue accesible).
+    else Límite Permitido (< 3)
         S->>DB: Update BLOQUE_HORARIO_VIEJO (Estado: Libre)
         S->>DB: Insert HISTORIAL_REPROGRAMACION
-        S->>DB: Update CITA (Nuevo Bloque, Estado: Reprogramada)
-        S-->>F: 200 OK: Cita Reprogramada
-        F-->>P: Muestra confirmación de nueva fecha
+        S->>DB: Update CITA (Estado: Reprogramada_Pendiente)
+        S->>B: Insert/Update SOLICITUD_TRIAJE (Estado: Pendiente, es_reprogramacion: True, prioridad_alta: True)
+        S-->>F: 200 OK: Solicitud de reprogramación aceptada
+        F-->>P: Confirmación: Tu cita anterior fue liberada y tu reprogramación se reingresó a la Bolsa de Medianoche con alta prioridad.
     end
