@@ -5,6 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SI-SALUD · Administración</title>
   <link rel="stylesheet" href="/css/main.css" />
+  <style>
+    .badge-score {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 50%;
+      font-weight: 700; font-size: .9rem;
+      background: var(--primary); color: #fff;
+    }
+    .badge-score.high { background: #16a34a; }
+    .badge-score.mid  { background: #d97706; }
+    .badge-score.low  { background: #6b7280; }
+    .candidato-card {
+      border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+      margin-bottom: 10px; background: var(--surface);
+      display: flex; align-items: center; gap: 14px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .candidato-card:hover { border-color: var(--primary); box-shadow: 0 0 0 2px #6366f140; }
+    .candidato-card .info { flex: 1; }
+    .candidato-card .info .row1 { font-weight: 600; margin-bottom: 2px; }
+    .candidato-card .info .row2 { font-size: .8rem; color: var(--text-muted); }
+    .candidato-card .info .tags { margin-top: 5px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: .73rem; font-weight: 600; background: #6366f122; color: var(--primary); }
+    .tag.green { background: #dcfce7; color: #15803d; }
+    .tag.amber { background: #fef9c3; color: #92400e; }
+    .tag.red   { background: #fee2e2; color: #b91c1c; }
+    .tag.gray  { background: #f3f4f6; color: #4b5563; }
+    .triaje-card .actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px); z-index: 1000;
+      display: flex; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-box {
+      background: #0f172a !important; border: 1px solid #223254; border-radius: 14px; width: 100%; max-width: 700px;
+      max-height: 90vh; overflow-y: auto; padding: 28px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.9);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+    .modal-title { font-size: 1.2rem; font-weight: 700; }
+    .modal-close { background: none; border: none; cursor: pointer; font-size: 1.5rem; color: var(--text-muted); padding: 0; }
+    .modal-close:hover { color: var(--text); }
+    .ficha-section { margin-bottom: 18px; }
+    .ficha-section-title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-bottom: 8px; }
+    .ficha-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+    .ficha-item label { font-size: .72rem; color: var(--text-muted); display: block; }
+    .ficha-item span  { font-weight: 600; }
+    .algo-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .algo-split { grid-template-columns: 1fr; } }
+    .citas-patient { font-weight: 600; }
+    .citas-patient small { display: block; font-weight: 400; font-size: .78rem; color: var(--text-muted); }
+    .result-card { border-radius: 10px; padding: 16px; margin-top: 12px; border-left: 4px solid var(--primary); background: var(--surface); }
+    .result-card.success { border-color: #16a34a; }
+    .result-card.error   { border-color: #dc2626; }
+  </style>
 </head>
 <body>
 <div class="app-shell">
@@ -23,22 +76,25 @@
   <nav class="sidebar">
     <div class="nav-section">
       <div class="nav-section-label">Operación</div>
-      <button class="nav-item active" onclick="showPage('inicio')"><span class="icon">🏠</span>Dashboard</button>
-      <button class="nav-item" onclick="showPage('checkin')"><span class="icon">🎫</span>Check-in / Ticket</button>
-      <button class="nav-item" onclick="showPage('citas')"><span class="icon">📋</span>Citas</button>
-      <button class="nav-item" onclick="showPage('triaje')"><span class="icon">🩺</span>Bolsa de triaje</button>
-      <button class="nav-item" onclick="showPage('espera')"><span class="icon">⏳</span>Lista de espera</button>
+      <button class="nav-item active" id="btnNav-inicio" onclick="showPage('inicio')"><span class="icon">🏠</span>Dashboard</button>
+      <button class="nav-item" id="btnNav-checkin" onclick="showPage('checkin')"><span class="icon">🎫</span>Check-in / Ticket</button>
+      <button class="nav-item" id="btnNav-citas" onclick="showPage('citas')"><span class="icon">📋</span>Citas</button>
+      <button class="nav-item admin-only" id="btnNav-triaje" onclick="showPage('triaje')"><span class="icon">🩺</span>Bolsa de triaje</button>
+      <button class="nav-item admin-only" id="btnNav-asignacion" onclick="showPage('asignacion')"><span class="icon">🤖</span>Asignación algorítmica</button>
+      <button class="nav-item admin-only" id="btnNav-espera" onclick="showPage('espera')"><span class="icon">⏳</span>Lista de espera</button>
     </div>
     <div class="nav-section" id="navAdminOnly">
       <div class="nav-section-label">U1 / Admin</div>
-      <button class="nav-item" onclick="showPage('agenda')"><span class="icon">🗓️</span>Generar agenda</button>
-      <button class="nav-item" onclick="showPage('lab')"><span class="icon">🧪</span>Laboratorio pruebas</button>
-      <button class="nav-item" onclick="showPage('usuarios')"><span class="icon">👤</span>Usuarios</button>
+      <button class="nav-item" id="btnNav-agenda" onclick="showPage('agenda')"><span class="icon">🗓️</span>Generar agenda</button>
+      <button class="nav-item" id="btnNav-lab" onclick="showPage('lab')"><span class="icon">🧪</span>Laboratorio pruebas</button>
+      <button class="nav-item" id="btnNav-usuarios" onclick="showPage('usuarios')"><span class="icon">👤</span>Usuarios</button>
       <a href="/pages/mockups.html" class="nav-item" style="text-decoration:none;"><span class="icon">🖼️</span>Galería Mockups</a>
     </div>
   </nav>
 
   <main class="main-content">
+
+    <!-- DASHBOARD -->
     <section class="page active" id="page-inicio">
       <div class="page-header">
         <h2 class="page-title">Dashboard</h2>
@@ -47,6 +103,7 @@
       <div class="stats-grid" id="statsGrid"></div>
     </section>
 
+    <!-- CHECK-IN -->
     <section class="page" id="page-checkin">
       <div class="page-header">
         <h2 class="page-title">Check-in físico (CU-05)</h2>
@@ -69,6 +126,7 @@
       <div id="checkinResult"></div>
     </section>
 
+    <!-- CITAS -->
     <section class="page" id="page-citas">
       <div class="page-header flex-between">
         <div>
@@ -79,33 +137,78 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>Fecha</th><th>Hora</th><th>Paciente</th><th>Médico</th><th>Estado</th><th>Ticket</th></tr></thead>
+          <thead><tr><th>#</th><th>Fecha</th><th>Hora</th><th>Paciente</th><th>Médico</th><th>Estado</th><th>Ticket</th><th></th></tr></thead>
           <tbody id="tbodyCitas"></tbody>
         </table>
       </div>
     </section>
 
+    <!-- TRIAJE -->
     <section class="page" id="page-triaje">
-      <div class="page-header">
-        <h2 class="page-title">Bolsa de triaje (CU-02)</h2>
-        <p class="page-subtitle">Ordenada por <code>score_urgencia</code></p>
+      <div class="page-header flex-between">
+        <div>
+          <h2 class="page-title">Bolsa de triaje (CU-02)</h2>
+          <p class="page-subtitle">Ordenada por <code>score_urgencia</code></p>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="loadTriaje()">↺</button>
       </div>
       <div id="triajeBox"></div>
     </section>
 
+    <!-- ASIGNACION ALGORITMICA -->
+    <section class="page" id="page-asignacion">
+      <div class="page-header">
+        <h2 class="page-title">Asignación algorítmica (HU-03)</h2>
+        <p class="page-subtitle">El administrador actúa como motor de asignación: evalúa candidatos y confirma o delega al auto-asignador</p>
+      </div>
+      <div class="algo-split">
+        <div>
+          <div class="card mb-3">
+            <div class="card-title mb-2">Solicitudes pendientes <span id="pendientesBadge" style="font-weight:400;color:var(--text-muted)"></span></div>
+            <div id="pendientesList"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card mb-3" id="candidatosPanel" style="display:none">
+            <div class="card-title mb-1" id="candidatosTitulo">Candidatos</div>
+            <p class="text-sm text-muted mb-2" id="candidatosSubtitulo"></p>
+            <div id="candidatosList"></div>
+            <div id="candidatosEmpty" class="empty-state" style="display:none">Sin slots libres para esta especialidad</div>
+          </div>
+          <div class="card" style="border-top: 3px solid var(--primary);">
+            <div class="card-title mb-1">🤖 Auto-asignar (prioridad máxima)</div>
+            <p class="text-sm text-muted mb-3">
+              Toma el triaje con mayor <code>score_urgencia</code> pendiente, elige el mejor slot según especialidad, preferencia horaria y urgencia, y llama a <code>sp_registrar_cita_medica</code>.
+            </p>
+            <button class="btn btn-primary" id="btnAutoAsignar" onclick="doAutoAsignar()">▶ Ejecutar auto-asignación</button>
+            <div id="autoAsignarResult"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESPERA -->
     <section class="page" id="page-espera">
       <div class="page-header">
-        <h2 class="page-title">Lista de espera (CU-03)</h2>
-        <p class="page-subtitle">Candidatos que recibe <code>sp_cancelar_cita_reactiva</code></p>
+        <h2 class="page-title">Lista de espera reactiva (CU-03)</h2>
+        <p class="page-subtitle">Cola de pacientes sin cupo que el procedimiento <code>sp_cancelar_cita_reactiva</code> asigna automáticamente cuando se cancela una cita</p>
+      </div>
+      <div class="card mb-3" style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.25);padding:1rem;">
+        <div style="font-weight:600;color:var(--primary);margin-bottom:0.25rem;">ℹ️ Diferencia clave en la arquitectura SI-SALUD:</div>
+        <div class="text-sm" style="color:var(--text-secondary);line-height:1.5;">
+          • <strong>Bolsa de Triaje / Asignación Algorítmica:</strong> Pacientes con solicitudes nuevas pendientes de cupo regular en la agenda médica.<br>
+          • <strong>Lista de Espera:</strong> Pacientes que no alcanzaron slot libre y esperan en cola de sobrecupo reactivo. Si alguien cancela, el SP <code>sp_cancelar_cita_reactiva</code> toma al paciente con mayor prioridad y le asigna el cupo inmediatamente.
+        </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>DNI</th><th>Especialidad</th><th>Prioridad</th><th>Estado</th></tr></thead>
+          <thead><tr><th>#</th><th>Paciente</th><th>DNI</th><th>Especialidad</th><th>Prioridad</th><th>Estado</th><th>Ficha</th></tr></thead>
           <tbody id="tbodyEspera"></tbody>
         </table>
       </div>
     </section>
 
+    <!-- AGENDA -->
     <section class="page" id="page-agenda">
       <div class="page-header">
         <h2 class="page-title">Generar bloques (HU-08)</h2>
@@ -148,6 +251,7 @@
       </div>
     </section>
 
+    <!-- LABORATORIO -->
     <section class="page" id="page-lab">
       <div class="page-header flex-between">
         <div>
@@ -172,6 +276,7 @@
       </div>
     </section>
 
+    <!-- USUARIOS -->
     <section class="page" id="page-usuarios">
       <div class="page-header">
         <h2 class="page-title">Usuarios</h2>
@@ -186,10 +291,23 @@
     </section>
   </main>
 </div>
+
+<!-- FICHA MODAL -->
+<div class="modal-backdrop" id="fichaModal" style="display:none" onclick="closeFicha(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="fichaTitulo">Ficha del Paciente</div>
+      <button class="modal-close" onclick="closeFichaModal()">×</button>
+    </div>
+    <div id="fichaContent"><div class="empty-state">Cargando…</div></div>
+  </div>
+</div>
+
 <div id="toast-container"></div>
 <script src="/js/api.js"></script>
 <script>
 let currentUser = null;
+let selectedSolicitudId = null;
 const isAdmin = () => currentUser && currentUser.rol === 'Admin';
 
 (async () => {
@@ -197,30 +315,41 @@ const isAdmin = () => currentUser && currentUser.rol === 'Admin';
   if (!currentUser) return;
   document.getElementById('topbarName').textContent = currentUser.nombre;
   document.getElementById('avatarInitial').textContent = (currentUser.nombre || 'A')[0];
-  if (!isAdmin()) document.getElementById('navAdminOnly').classList.add('hidden');
-  loadInicio();
+  
+  if (!isAdmin()) {
+    // Es Cajero / Recepción: ocultar opciones de gestión médica y laboratorio
+    document.getElementById('navAdminOnly').classList.add('hidden');
+    document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+    // En ventanilla, abrir directamente el módulo de Check-in físico (CU-05)
+    showPage('checkin');
+  } else {
+    showPage('inicio');
+  }
 })();
 
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  const map = { inicio:0, checkin:1, citas:2, triaje:3, espera:4, agenda:5, lab:6, usuarios:7 };
-  const btns = document.querySelectorAll('.nav-item');
-  if (btns[map[id]]) btns[map[id]].classList.add('active');
-  if (id === 'inicio') loadInicio();
-  if (id === 'citas') loadCitas();
-  if (id === 'triaje') loadTriaje();
-  if (id === 'espera') loadEspera();
-  if (id === 'agenda') loadFormAgenda();
-  if (id === 'lab') loadLab();
-  if (id === 'usuarios') loadUsers();
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  const btn = document.getElementById('btnNav-' + id);
+  if (btn) btn.classList.add('active');
+
+  if (id === 'inicio')     loadInicio();
+  if (id === 'checkin')    { const inp = document.getElementById('inpDni'); if (inp) inp.focus(); }
+  if (id === 'citas')      loadCitas();
+  if (id === 'triaje')     loadTriaje();
+  if (id === 'asignacion') loadAsignacion();
+  if (id === 'espera')     loadEspera();
+  if (id === 'agenda')     loadFormAgenda();
+  if (id === 'lab')        loadLab();
+  if (id === 'usuarios')   loadUsers();
 }
 
 async function loadInicio() {
   const s = await API.stats();
   const items = [
-    ['Citas', s.citas_total, '📅'],
+    ['Citas totales', s.citas_total, '📅'],
     ['Slots libres', s.bloques_libres, '🟩'],
     ['Slots ocupados', s.bloques_ocupados, '🟦'],
     ['Triaje pendiente', s.triaje_pendiente, '🩺'],
@@ -233,26 +362,26 @@ async function loadInicio() {
 }
 
 async function buscarCheckin() {
-  const dni = document.getElementById('inpDni').value.trim();
+  const dni     = document.getElementById('inpDni').value.trim();
   const cita_id = document.getElementById('inpCitaId').value.trim();
   const q = [];
-  if (dni) q.push('dni=' + encodeURIComponent(dni));
+  if (dni)     q.push('dni=' + encodeURIComponent(dni));
   if (cita_id) q.push('cita_id=' + encodeURIComponent(cita_id));
   const rows = await API.allCitas(q.length ? '?' + q.join('&') : '');
-  const box = document.getElementById('checkinResult');
-  if (!rows.length) {
-    box.innerHTML = '<div class="empty-state">Sin citas para esos datos</div>';
-    return;
-  }
+  const box  = document.getElementById('checkinResult');
+  if (!rows.length) { box.innerHTML = '<div class="empty-state">Sin citas para esos datos</div>'; return; }
   box.innerHTML = rows.map(c => `
     <div class="card mb-2">
       <div class="flex-between">
         <div>
-          <div class="fw-600">Cita #${c.id} · DNI ${c.paciente_dni}</div>
+          <div class="fw-600">Cita #${c.id} · ${c.paciente_nombre || c.paciente_dni}</div>
           <div class="text-sm text-muted">${fmtDate(c.fecha)} ${fmtTime(c.hora_inicio)}–${fmtTime(c.hora_fin)} · Dr/a. ${c.medico_nombres} ${c.medico_apellidos} · ${c.sede}</div>
           <div class="mt-1">${badgeEstado(c.estado)} ${c.codigo_turno ? badgeEstado(c.codigo_turno) : ''}</div>
         </div>
-        ${['Programada','Pagada'].includes(c.estado) ? `<button class="btn btn-primary" onclick="doCheckin(${c.id})">Registrar llegada</button>` : ''}
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-secondary btn-sm" onclick="verFicha(${c.paciente_id})">👤 Ficha</button>
+          ${['Programada','Pagada'].includes(c.estado) ? `<button class="btn btn-primary" onclick="doCheckin(${c.id})">Registrar llegada</button>` : ''}
+        </div>
       </div>
       <div id="ticket-${c.id}" class="mt-2"></div>
     </div>`).join('');
@@ -271,33 +400,162 @@ async function loadCitas() {
   const rows = await API.allCitas();
   document.getElementById('tbodyCitas').innerHTML = rows.length ? rows.map(c => `
     <tr>
-      <td>#${c.id}</td><td>${fmtDate(c.fecha)}</td>
+      <td>#${c.id}</td>
+      <td>${fmtDate(c.fecha)}</td>
       <td>${fmtTime(c.hora_inicio)}–${fmtTime(c.hora_fin)}</td>
-      <td>${c.paciente_dni}</td>
+      <td class="citas-patient">${c.paciente_nombre || '—'}<small>DNI ${c.paciente_dni}</small></td>
       <td>${c.medico_nombres} ${c.medico_apellidos}</td>
       <td>${badgeEstado(c.estado)}</td>
       <td>${c.codigo_turno || '—'}</td>
-    </tr>`).join('') : '<tr><td colspan="7" class="text-center text-muted">Sin citas</td></tr>';
+      <td><button class="btn btn-secondary btn-sm" onclick="verFicha(${c.paciente_id})">👤</button></td>
+    </tr>`).join('') : '<tr><td colspan="8" class="text-center text-muted">Sin citas</td></tr>';
 }
 
 async function loadTriaje() {
   const rows = await API.allTriaje();
   document.getElementById('triajeBox').innerHTML = rows.map(t => `
-    <div class="card mb-2">
+    <div class="card mb-2 triaje-card">
       <div class="flex-between mb-1">
-        <span class="fw-600">${t.especialidad} · DNI ${t.paciente_dni} · ${t.paciente_edad} años</span>
+        <span class="fw-600">${t.especialidad} · ${t.paciente_nombre || 'DNI ' + t.paciente_dni} · ${t.paciente_edad} años</span>
         ${badgeEstado(t.estado)}
       </div>
       <p class="text-sm">${t.sintomas}</p>
       <div class="text-sm text-muted mt-1">Urgencia ${t.score_urgencia}/10 · ${t.modalidad} · ${t.preferencia_horario}</div>
-    </div>`).join('') || '<div class="empty-state">Sin solicitudes</div>';
+      ${t.estado === 'Pendiente' ? `
+      <div class="actions">
+        <button class="btn btn-primary btn-sm" onclick="irAAsignacion(${t.id})">🤖 Ver candidatos / Asignar</button>
+        <button class="btn btn-secondary btn-sm" onclick="verFicha(${t.paciente_id})">👤 Ficha paciente</button>
+      </div>` : ''}
+    </div>`).join('') || '<div class="empty-state">Sin solicitudes pendientes</div>';
+}
+
+async function loadAsignacion() {
+  const rows = await API.allTriaje();
+  const pendientes = rows.filter(t => t.estado === 'Pendiente');
+  document.getElementById('pendientesBadge').textContent = `(${pendientes.length} pendiente${pendientes.length !== 1 ? 's' : ''})`;
+  document.getElementById('pendientesList').innerHTML = pendientes.length
+    ? pendientes.map(t => `
+        <div class="candidato-card" onclick="seleccionarTriaje(${t.id})" style="cursor:pointer" id="triaje-row-${t.id}">
+          <div class="badge-score ${t.score_urgencia >= 7 ? 'high' : t.score_urgencia >= 4 ? 'mid' : 'low'}">${t.score_urgencia}</div>
+          <div class="info">
+            <div class="row1">${t.paciente_nombre || 'DNI ' + t.paciente_dni} &mdash; ${t.especialidad}</div>
+            <div class="row2">Solicitud #${t.id} · ${t.modalidad} · ${t.preferencia_horario}</div>
+            <div class="tags">
+              <span class="tag ${t.score_urgencia >= 7 ? 'red' : t.score_urgencia >= 4 ? 'amber' : 'gray'}">Urgencia ${t.score_urgencia}/10</span>
+              <span class="tag">Solicitud #${t.id}</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();seleccionarTriaje(${t.id})">Ver candidatos →</button>
+        </div>`).join('')
+    : '<div class="empty-state">No hay triajes pendientes de asignación</div>';
+
+  if (selectedSolicitudId) seleccionarTriaje(selectedSolicitudId);
+}
+
+async function seleccionarTriaje(solicitudId) {
+  selectedSolicitudId = solicitudId;
+  document.querySelectorAll('[id^="triaje-row-"]').forEach(el => el.style.borderColor = '');
+  const sel = document.getElementById('triaje-row-' + solicitudId);
+  if (sel) sel.style.borderColor = 'var(--primary)';
+
+  const panel = document.getElementById('candidatosPanel');
+  panel.style.display = 'block';
+  document.getElementById('candidatosList').innerHTML = '<div class="text-muted text-sm">Calculando candidatos…</div>';
+  document.getElementById('candidatosEmpty').style.display = 'none';
+
+  try {
+    const data = await API.candidatosAlgoritmo(solicitudId);
+    document.getElementById('candidatosTitulo').textContent = `Candidatos para solicitud #${solicitudId}`;
+    document.getElementById('candidatosSubtitulo').textContent =
+      `Especialidad: ${data.especialidad} · Preferencia: ${data.preferencia_horario} · Urgencia: ${data.score_urgencia}/10`;
+
+    if (!data.candidatos || !data.candidatos.length) {
+      document.getElementById('candidatosList').innerHTML = '';
+      document.getElementById('candidatosEmpty').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('candidatosList').innerHTML = data.candidatos.map((c, idx) => {
+      const medNombre = (c.medico_nombre || '').replace(/'/g, "\\'");
+      const fecha     = c.fecha || '';
+      const hi        = c.hora_inicio ? c.hora_inicio.slice(0,5) : '';
+      return `
+      <div class="candidato-card">
+        <div class="badge-score ${idx === 0 ? 'high' : idx === 1 ? 'mid' : 'low'}" title="Score algoritmo">${c.score_total ?? '—'}</div>
+        <div class="info">
+          <div class="row1">Dr/a. ${c.medico_nombre}</div>
+          <div class="row2">${fmtDateStr(c.fecha)} · ${c.hora_inicio ? c.hora_inicio.slice(0,5) : ''} – ${c.hora_fin ? c.hora_fin.slice(0,5) : ''} · ${c.consultorio} (${c.sede})</div>
+          <div class="tags">
+            ${idx === 0 ? '<span class="tag green">★ Mejor opción</span>' : ''}
+            <span class="tag gray">Bloque #${c.bloque_id}</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="asignarManual(${solicitudId}, ${c.bloque_id}, '${medNombre}', '${fecha}', '${hi}')">Asignar</button>
+      </div>`;
+    }).join('');
+  } catch (err) {
+    document.getElementById('candidatosList').innerHTML = `<p class="text-danger">${err.message}</p>`;
+  }
+}
+
+async function asignarManual(solicitudId, bloqueId, medico, fecha, hora) {
+  try {
+    const res = await API.post('/api/admin/algoritmo/asignar-manual', { solicitud_id: solicitudId, bloque_id: bloqueId });
+    toast(`Cita #${res.cita_id} asignada a Dr/a. ${medico}`, 'success');
+    document.getElementById('autoAsignarResult').innerHTML = `
+      <div class="result-card success mt-2">
+        <div class="fw-600">✅ Asignación manual confirmada</div>
+        <div class="text-sm mt-1">${res.mensaje || 'Cita #' + res.cita_id + ' para ' + fecha + ' ' + hora + ' con Dr/a. ' + medico}</div>
+      </div>`;
+    selectedSolicitudId = null;
+    loadAsignacion();
+  } catch (err) {
+    toast(err.message, 'error');
+    document.getElementById('autoAsignarResult').innerHTML = `<div class="result-card error mt-2"><div class="fw-600">❌ ${err.message}</div></div>`;
+  }
+}
+
+async function doAutoAsignar() {
+  const btn = document.getElementById('btnAutoAsignar');
+  btn.disabled = true; btn.textContent = 'Ejecutando…';
+  try {
+    const res = await API.autoAsignar();
+    toast(res.mensaje || 'Asignación completada', 'success');
+    document.getElementById('autoAsignarResult').innerHTML = `
+      <div class="result-card success">
+        <div class="fw-600">✅ ${res.mensaje}</div>
+        <div class="text-sm mt-1">Paciente: ${res.paciente} (DNI ${res.dni}) · Urgencia ${res.score_urgencia}/10</div>
+        <div class="text-sm">Dr/a. ${res.medico} · ${fmtDateStr(res.fecha)} · ${res.hora}</div>
+        <div class="text-sm">Consultorio: ${res.consultorio}</div>
+      </div>`;
+    loadAsignacion();
+    loadInicio();
+  } catch (err) {
+    toast(err.message, 'error');
+    document.getElementById('autoAsignarResult').innerHTML = `<div class="result-card error"><div class="fw-600">❌ ${err.message}</div></div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = '▶ Ejecutar auto-asignación';
+  }
+}
+
+function irAAsignacion(solicitudId) {
+  selectedSolicitudId = solicitudId;
+  showPage('asignacion');
 }
 
 async function loadEspera() {
   const rows = await API.listaEspera();
-  document.getElementById('tbodyEspera').innerHTML = rows.map(r => `
-    <tr><td>#${r.id}</td><td>${r.dni}</td><td>${r.especialidad}</td><td>${r.prioridad}</td><td>${badgeEstado(r.estado)}</td></tr>
-  `).join('');
+  document.getElementById('tbodyEspera').innerHTML = rows.length ? rows.map(r =>
+    `<tr>
+      <td>#${r.id}</td>
+      <td class="fw-600">${r.paciente_nombre || '—'}</td>
+      <td>${r.dni}</td>
+      <td>${r.especialidad}</td>
+      <td><span class="badge ${r.prioridad >= 8 ? 'badge-danger' : r.prioridad >= 5 ? 'badge-warning' : 'badge-neutral'}">Prioridad ${r.prioridad}/10</span></td>
+      <td>${badgeEstado(r.estado)}</td>
+      <td><button class="btn btn-secondary btn-sm" onclick="verFicha(${r.paciente_id})">👤 Ficha</button></td>
+    </tr>`
+  ).join('') : '<tr><td colspan="7" class="text-center text-muted">No hay pacientes en cola de espera reactiva</td></tr>';
 }
 
 async function loadFormAgenda() {
@@ -306,7 +564,7 @@ async function loadFormAgenda() {
     `<option value="${m.id}">${m.nombres} ${m.apellidos}</option>`).join('');
   document.getElementById('blConsultorio').innerHTML = cons.map(c =>
     `<option value="${c.id}">${c.numero_nombre} · ${c.sede}</option>`).join('');
-  document.getElementById('blMedico').value = '2';
+  document.getElementById('blMedico').value      = '2';
   document.getElementById('blConsultorio').value = '2';
 }
 
@@ -314,12 +572,12 @@ document.getElementById('formBloques').addEventListener('submit', async (e) => {
   e.preventDefault();
   try {
     const res = await API.crearBloques({
-      medico_id: document.getElementById('blMedico').value,
+      medico_id:      document.getElementById('blMedico').value,
       consultorio_id: document.getElementById('blConsultorio').value,
-      fecha: document.getElementById('blFecha').value,
-      hora_inicio: document.getElementById('blIni').value,
-      hora_fin: document.getElementById('blFin').value,
-      intervalo: Number(document.getElementById('blInt').value),
+      fecha:          document.getElementById('blFecha').value,
+      hora_inicio:    document.getElementById('blIni').value,
+      hora_fin:       document.getElementById('blFin').value,
+      intervalo:      Number(document.getElementById('blInt').value),
     });
     toast(`Bloques creados: ${res.bloques_creados}`, 'success');
   } catch (err) { toast(err.message, 'error'); }
@@ -334,7 +592,6 @@ async function loadLab() {
     ['Citas', c.citas], ['Edad Juan', estado.funciones.edad_juan],
     ['Slot 1 libre', estado.funciones.slot_1_libre],
   ].map(([l,v]) => `<div class="stat-card"><div class="stat-value">${v}</div><div class="stat-label">${l}</div></div>`).join('');
-
   const pasos = await API.labPasos();
   document.getElementById('labPasos').innerHTML = pasos.map(p => `
     <div class="lab-step" id="lab-${p.id}">
@@ -351,12 +608,9 @@ async function loadLab() {
 }
 
 function renderChecks(target, data) {
-  const el = document.getElementById(target);
+  const el   = document.getElementById(target);
   const step = document.getElementById(target.replace('lab-out-', 'lab-'));
-  if (step) {
-    step.classList.remove('pass', 'fail');
-    step.classList.add(data.ok ? 'pass' : 'fail');
-  }
+  if (step) { step.classList.remove('pass', 'fail'); step.classList.add(data.ok ? 'pass' : 'fail'); }
   el.innerHTML = (data.checks || []).map(c =>
     `<div class="lab-check">${c.ok ? '✅' : '❌'} ${c.nombre}<br><span class="text-muted">actual: ${c.actual} · esperado: ${c.esperado}</span></div>`
   ).join('') + (data.error ? `<p class="text-danger">${data.error}</p>` : '');
@@ -376,10 +630,7 @@ async function runSecuencia() {
   try {
     toast('Ejecutando escenarios 0 a 6…', 'info');
     const data = await API.labSecuencia();
-    (data.resultados || []).forEach(r => {
-      const box = document.getElementById('lab-out-' + r.id);
-      if (box) renderChecks('lab-out-' + r.id, r);
-    });
+    (data.resultados || []).forEach(r => { const box = document.getElementById('lab-out-' + r.id); if (box) renderChecks('lab-out-' + r.id, r); });
     toast(data.ok ? 'Secuencia completa: todos coinciden' : 'Secuencia con diferencias (¿seed limpio?)', data.ok ? 'success' : 'error');
     const estado = await API.labEstado();
     document.getElementById('labConsola').textContent = JSON.stringify({ secuencia: data, citas: estado.citas }, null, 2);
@@ -392,9 +643,7 @@ async function resetSeed() {
     const res = await API.labResetSeed();
     toast(res.mensaje || 'Base de datos restaurada', 'success');
     await loadLab();
-  } catch (err) {
-    toast(err.message, 'error');
-  }
+  } catch (err) { toast(err.message, 'error'); }
 }
 
 async function loadUsers() {
@@ -410,6 +659,97 @@ async function unlock(id) {
   await API.desbloquear(id);
   toast('Usuario reactivado', 'success');
   loadUsers();
+}
+
+async function verFicha(pacienteId) {
+  document.getElementById('fichaModal').style.display = 'flex';
+  document.getElementById('fichaContent').innerHTML = '<div class="empty-state">Cargando ficha clínica…</div>';
+  document.getElementById('fichaTitulo').textContent = 'Ficha del Paciente';
+  try {
+    const f = await API.fichaPaciente(pacienteId);
+    const nombreCompleto = f.paciente.nombre || `${f.paciente.nombres || ''} ${f.paciente.apellidos || ''}`.trim() || 'Paciente';
+    document.getElementById('fichaTitulo').textContent = `Ficha · ${nombreCompleto}`;
+    document.getElementById('fichaContent').innerHTML = buildFicha(f);
+  } catch (err) {
+    document.getElementById('fichaContent').innerHTML = `<p class="text-danger">Error: ${err.message}</p>`;
+  }
+}
+
+function buildFicha(f) {
+  const p = f.paciente;
+  const nombreCompleto = p.nombre || `${p.nombres || ''} ${p.apellidos || ''}`.trim() || 'Paciente';
+  const metricas = f.metricas || {};
+  const triajes  = f.triajes  || [];
+  const citas    = f.citas    || [];
+  return `
+    <div class="ficha-section">
+      <div class="ficha-section-title">Datos personales</div>
+      <div class="ficha-grid">
+        <div class="ficha-item"><label>Nombre completo</label><span>${nombreCompleto}</span></div>
+        <div class="ficha-item"><label>DNI</label><span>${p.dni}</span></div>
+        <div class="ficha-item"><label>Fecha de nacimiento</label><span>${fmtDateStr(p.fecha_nacimiento)} (${p.edad} años)</span></div>
+        <div class="ficha-item"><label>Estado de cuenta</label><span>${badgeEstado(p.estado || 'Activo')}</span></div>
+        <div class="ficha-item"><label>Teléfono</label><span>${p.telefono || '—'}</span></div>
+        <div class="ficha-item"><label>Email</label><span>${p.email || '—'}</span></div>
+      </div>
+    </div>
+    <div class="ficha-section">
+      <div class="ficha-section-title">Métricas de actividad</div>
+      <div class="ficha-grid">
+        <div class="ficha-item"><label>Total citas</label><span>${metricas.total_citas ?? 0}</span></div>
+        <div class="ficha-item"><label>Citas asistidas</label><span>${metricas.citas_asistidas ?? 0}</span></div>
+        <div class="ficha-item"><label>Cancelaciones</label><span>${metricas.cancelaciones ?? 0}</span></div>
+        <div class="ficha-item"><label>Triajes solicitados</label><span>${metricas.triajes_totales ?? triajes.length}</span></div>
+      </div>
+    </div>
+    ${triajes.length ? `
+    <div class="ficha-section">
+      <div class="ficha-section-title">Historial de triajes</div>
+      ${triajes.slice(0,5).map(t => `
+        <div class="candidato-card" style="margin-bottom:8px">
+          <div class="badge-score ${t.score_urgencia >= 7 ? 'high' : t.score_urgencia >= 4 ? 'mid' : 'low'}">${t.score_urgencia}</div>
+          <div class="info">
+            <div class="row1">${t.especialidad} ${badgeEstado(t.estado)}</div>
+            <div class="row2">Solicitud #${t.id} · ${t.modalidad || 'Presencial'} · ${t.sintomas ? t.sintomas.slice(0,60) + (t.sintomas.length > 60 ? '…' : '') : ''}</div>
+          </div>
+        </div>`).join('')}
+    </div>` : ''}
+    ${citas.length ? `
+    <div class="ficha-section">
+      <div class="ficha-section-title">Historial de citas</div>
+      <div class="table-wrap" style="margin:0">
+        <table>
+          <thead><tr><th>#</th><th>Fecha</th><th>Médico</th><th>Estado</th></tr></thead>
+          <tbody>
+            ${citas.slice(0,8).map(c => `
+              <tr>
+                <td>#${c.id}</td>
+                <td>${fmtDateStr(c.fecha)} ${c.hora_inicio ? c.hora_inicio.slice(0,5) : ''}</td>
+                <td>${c.medico_nombres || ''} ${c.medico_apellidos || ''}</td>
+                <td>${badgeEstado(c.estado)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function closeFicha(event) {
+  if (event.target === document.getElementById('fichaModal')) closeFichaModal();
+}
+function closeFichaModal() {
+  document.getElementById('fichaModal').style.display = 'none';
+}
+
+function fmtDate(str) {
+  if (!str) return '—';
+  return new Date(str).toLocaleDateString('es-PE', { day:'2-digit', month:'short', year:'numeric', timeZone:'UTC' });
+}
+function fmtDateStr(str) { return fmtDate(str); }
+function fmtTime(str) {
+  if (!str) return '—';
+  return str.slice ? str.slice(0, 5) : str;
 }
 </script>
 </body>

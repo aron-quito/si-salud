@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const db     = require('../db');
-const { requireAuth, requireRol } = require('../lib/auth');
+const { requireAuth, requireRol, nombreDe } = require('../lib/auth');
 
 router.get('/', requireAuth, async (req, res) => {
   try {
@@ -39,8 +39,10 @@ router.get('/me/agenda', requireRol('Medico'), async (req, res) => {
     const [rows] = await db.query(`
       SELECT bh.id, bh.fecha, bh.hora_inicio, bh.hora_fin, bh.estado,
              c.numero_nombre AS consultorio, s.nombre AS sede,
-             p.dni, u.email AS paciente_email,
-             ci.id AS cita_id, ci.estado AS cita_estado,
+             p.id AS paciente_id, p.dni, p.telefono AS paciente_telefono,
+             u.email AS paciente_email,
+             fn_calcular_edad(p.fecha_nacimiento) AS paciente_edad,
+             ci.id AS cita_id, ci.estado AS cita_estado, ci.solicitud_id,
              tc.nombre AS tipo_consulta,
              a.nombre  AS aseguradora,
              tk.codigo_turno
@@ -58,7 +60,12 @@ router.get('/me/agenda', requireRol('Medico'), async (req, res) => {
          AND bh.fecha = ?
        ORDER BY bh.hora_inicio
     `, [medicoId, fecha || '2026-10-28']);
-    res.json(rows);
+
+    const mapped = rows.map(r => ({
+      ...r,
+      paciente_nombre: r.paciente_email ? nombreDe({ email: r.paciente_email }) : null,
+    }));
+    res.json(mapped);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

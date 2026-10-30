@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const db     = require('../db');
-const { requireRol } = require('../lib/auth');
+const { requireRol, requireAuth, nombreDe } = require('../lib/auth');
 
 const requirePaciente = requireRol('Paciente');
 
@@ -142,6 +142,86 @@ router.get('/triaje', requirePaciente, async (req, res) => {
     `, [paciente_id]);
     res.json(rows);
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/:id/ficha', requireAuth, async (req, res) => {
+  const targetId = parseInt(req.params.id, 10);
+  const user = req.session.user;
+
+  if (user.rol === 'Paciente' && user.paciente_id !== targetId) {
+    return res.status(403).json({ error: 'No tienes permiso para ver esta ficha médica' });
+  }
+
+  try {
+    const [[p]] = await db.query(`
+      SELECT p.id, p.dni, p.telefono, p.fecha_nacimiento,
+             u.email, u.estado,
+             fn_calcular_edad(p.fecha_nacimiento) AS edad
+        FROM PACIENTE p
+        JOIN USUARIO u ON u.id = p.usuario_id
+       WHERE p.id = ?
+    `, [targetId]);
+
+    if (!p) return res.status(404).json({ error: 'Paciente no encontrado' });
+
+    p.nombre = nombreDe(p);
+    const parts = (p.nombre || '').split(' ');
+    p.nombres = parts[0] || p.nombre;
+    p.apellidos = parts.slice(1).join(' ') || '';
+
+    const [triajes] = await db.query(`
+      SELECT st.id, st.sintomas, st.preferencia_horario, st.score_urgencia,
+             st.modalidad, st.estado,
+             e.nombre AS especialidad
+        FROM SOLICITUD_TRIAJE st
+        JOIN ESPECIALIDAD e ON e.id = st.especialidad_id
+       WHERE st.paciente_id = ?
+       ORDER BY st.id DESC
+    `, [targetId]);
+
+    const [citas] = await db.query(`
+      SELECT c.id, c.estado, bh.fecha, bh.hora_inicio, bh.hora_fin,
+             m.nombres AS medico_nombres, m.apellidos AS medico_apellidos,
+             tc.nombre AS tipo_consulta, a.nombre AS aseguradora,
+             s.nombre AS sede, co.numero_nombre AS consultorio,
+             tk.codigo_turno
+        FROM CITA c
+        JOIN BLOQUE_HORARIO bh ON bh.id = c.bloque_horario_id
+        JOIN MEDICO m          ON m.id  = c.medico_id
+        JOIN TIPO_CONSULTA tc  ON tc.id = c.tipo_consulta_id
+        LEFT JOIN ASEGURADORA a ON a.id = c.aseguradora_id
+        JOIN CONSULTORIO co    ON co.id = bh.consultorio_id
+        JOIN SEDE s            ON s.id  = co.sede_id
+        LEFT JOIN TICKET_ASISTENCIA tk ON tk.cita_id = c.id
+       WHERE c.paciente_id = ?
+       ORDER BY bh.fecha DESC, bh.hora_inicio DESC
+    `, [targetId]);
+
+    const [reprogramaciones] = await db.query(`
+      SELECT hr.id, hr.cita_id, hr.motivo_cambio, hr.fecha_transaccion, hr.estado
+        FROM HISTORIAL_REPROGRAMACION hr
+        JOIN CITA c ON c.id = hr.cita_id
+       WHERE c.paciente_id = ?
+       ORDER BY hr.fecha_transaccion DESC
+    `, [targetId]);
+
+    res.json({
+      paciente: p,
+      triajes,
+      citas,
+      reprogramaciones,
+      metricas: {
+        total_citas: citas.length,
+        atendidas: citas.filter(c => c.estado === 'Atendida').length,
+        programadas: citas.filter(c => ['Programada', 'Reprogramada', 'Pagada'].includes(c.estado)).length,
+        canceladas: citas.filter(c => c.estado === 'Cancelada').length,
+        reprogramaciones: reprogramaciones.length,
+      }
+    });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });

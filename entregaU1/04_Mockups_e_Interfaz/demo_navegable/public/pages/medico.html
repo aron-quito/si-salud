@@ -62,6 +62,22 @@
     </section>
   </main>
 </div>
+<!-- Modal Ficha Paciente -->
+<div class="modal-overlay hidden" id="modalFichaPaciente">
+  <div class="modal-box" style="max-width:680px;max-height:90vh;overflow-y:auto;background:#0f172a !important;border:1px solid #223254;box-shadow:0 25px 70px rgba(0,0,0,0.9);">
+    <div class="modal-header">
+      <span class="modal-title" id="fichaTitulo">👤 Ficha Clínica del Paciente</span>
+      <button class="modal-close" onclick="closeModal('modalFichaPaciente')">✕</button>
+    </div>
+    <div id="fichaContenido">
+      <div class="empty-state"><span class="spinner"></span> Cargando expediente...</div>
+    </div>
+    <div class="modal-footer" style="margin-top:1rem;">
+      <button class="btn btn-secondary" onclick="closeModal('modalFichaPaciente')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast-container"></div>
 <script src="/js/api.js"></script>
 <script>
@@ -89,6 +105,79 @@ function showPage(id) {
   if (id === 'resumen') loadAgenda();
 }
 
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('hidden');
+}
+
+async function verFichaPaciente(pacienteId) {
+  const modal = document.getElementById('modalFichaPaciente');
+  const box = document.getElementById('fichaContenido');
+  modal.classList.remove('hidden');
+  box.innerHTML = '<div class="empty-state"><span class="spinner"></span> Cargando expediente del paciente...</div>';
+
+  try {
+    const data = await API.fichaPaciente(pacienteId);
+    const p = data.paciente;
+    const m = data.metricas;
+    const ultTriaje = data.triajes && data.triajes[0];
+
+    box.innerHTML = `
+      <div class="card mb-3" style="background:rgba(255,255,255,0.03);border:1px solid var(--border);">
+        <div class="flex-between">
+          <div>
+            <h3 style="font-size:1.15rem;margin:0 0 0.25rem;">${p.nombre}</h3>
+            <p class="text-muted text-sm" style="margin:0;">DNI: <strong>${p.dni}</strong> · Edad: <strong>${p.edad ?? '—'} años</strong> (Nac: ${fmtDate(p.fecha_nacimiento)})</p>
+            <p class="text-muted text-sm" style="margin:0.25rem 0 0;">📞 Tel: <strong>${p.telefono || 'No registrado'}</strong> · ✉️ Correo: ${p.email}</p>
+          </div>
+          <div>${badgeEstado(p.estado)}</div>
+        </div>
+      </div>
+
+      <div class="stats-grid mb-3" style="grid-template-columns:repeat(4,1fr);">
+        <div class="stat-card" style="padding:0.75rem;"><div class="stat-value" style="font-size:1.25rem;">${m.total_citas}</div><div class="stat-label">Citas totales</div></div>
+        <div class="stat-card" style="padding:0.75rem;"><div class="stat-value" style="font-size:1.25rem;">${m.atendidas}</div><div class="stat-label">Atendidas</div></div>
+        <div class="stat-card" style="padding:0.75rem;"><div class="stat-value" style="font-size:1.25rem;">${m.programadas}</div><div class="stat-label">Pendientes</div></div>
+        <div class="stat-card" style="padding:0.75rem;"><div class="stat-value" style="font-size:1.25rem;color:var(--danger);">${m.canceladas}</div><div class="stat-label">Canceladas</div></div>
+      </div>
+
+      ${ultTriaje ? `
+        <div class="card mb-3" style="border-left:4px solid var(--primary);">
+          <div class="card-title flex-between">
+            <span>🩺 Solicitud de Triaje Asociada</span>
+            <span class="badge badge-warning">Urgencia: ${ultTriaje.score_urgencia}/10</span>
+          </div>
+          <p class="text-sm" style="margin:0.5rem 0;"><strong>Síntomas reportados:</strong> ${ultTriaje.sintomas}</p>
+          <div class="text-sm text-muted">Especialidad: ${ultTriaje.especialidad} · Modalidad: ${ultTriaje.modalidad} · Horario preferido: ${ultTriaje.preferencia_horario}</div>
+        </div>
+      ` : ''}
+
+      <div class="card">
+        <div class="card-title">Historial de Citas del Paciente</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>Hora</th><th>Médico</th><th>Tipo</th><th>Estado</th><th>Turno</th></tr></thead>
+            <tbody>
+              ${(data.citas || []).map(c => `
+                <tr>
+                  <td>${fmtDate(c.fecha)}</td>
+                  <td>${fmtTime(c.hora_inicio)}</td>
+                  <td>${c.medico_nombres} ${c.medico_apellidos}</td>
+                  <td>${c.tipo_consulta || '—'}</td>
+                  <td>${badgeEstado(c.estado)}</td>
+                  <td>${c.codigo_turno ? badgeEstado(c.codigo_turno) : '—'}</td>
+                </tr>
+              `).join('') || '<tr><td colspan="6" class="text-center text-muted">Sin citas previas</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    box.innerHTML = `<p class="text-danger">Error al cargar ficha: ${err.message}</p>`;
+  }
+}
+
 async function loadAgenda() {
   const fecha = document.getElementById('selFecha').value;
   const box = document.getElementById('agendaTimeline');
@@ -109,9 +198,14 @@ async function loadAgenda() {
     box.innerHTML = rows.map(r => {
       const cls = r.estado === 'Libre' ? 'libre' : r.cita_estado === 'Cancelada' ? 'cancelada' : 'ocupado';
       const detail = r.cita_id
-        ? `<div class="fw-600">Cita #${r.cita_id} · DNI ${r.dni || '—'}</div>
-           <div class="text-sm text-muted">${r.tipo_consulta || ''} · ${r.aseguradora || ''} · ${r.sede} · ${r.consultorio}</div>
-           <div class="mt-1">${badgeEstado(r.cita_estado)}${r.codigo_turno ? ' ' + badgeEstado(r.codigo_turno) : ''}</div>`
+        ? `<div class="flex-between">
+             <div>
+               <div class="fw-600">Cita #${r.cita_id} · ${r.paciente_nombre || 'Paciente'} (DNI ${r.dni || '—'})</div>
+               <div class="text-sm text-muted">${r.tipo_consulta || ''} · ${r.aseguradora || ''} · ${r.sede} · ${r.consultorio}</div>
+               <div class="mt-1">${badgeEstado(r.cita_estado)}${r.codigo_turno ? ' ' + badgeEstado(r.codigo_turno) : ''}</div>
+             </div>
+             ${r.paciente_id ? `<button class="btn btn-secondary btn-sm" onclick="verFichaPaciente(${r.paciente_id})">👤 Ficha Paciente</button>` : ''}
+           </div>`
         : `<div class="fw-600">Slot ${r.estado}</div>
            <div class="text-sm text-muted">${r.sede} · ${r.consultorio}</div>
            <div class="mt-1">${badgeEstado(r.estado)}</div>`;

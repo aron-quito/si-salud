@@ -51,6 +51,10 @@ const API = {
   usuarios:          () => API.get('/api/admin/usuarios'),
   desbloquear:       (id) => API.post(`/api/admin/usuarios/${id}/desbloquear`),
 
+  fichaPaciente:       (pacienteId) => API.get(`/api/paciente/${pacienteId}/ficha`),
+  candidatosAlgoritmo: (solicitudId) => API.get(`/api/admin/algoritmo/candidatos/${solicitudId}`),
+  autoAsignar:         () => API.post('/api/admin/algoritmo/auto-asignar'),
+
   labEstado:    () => API.get('/api/laboratorio/estado'),
   labPasos:     () => API.get('/api/laboratorio/pasos'),
   labEjecutar:  (paso) => API.post(`/api/laboratorio/ejecutar/${paso}`),

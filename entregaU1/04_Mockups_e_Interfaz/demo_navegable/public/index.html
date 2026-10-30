@@ -17,15 +17,92 @@
       </div>
 
       <div class="demo-hint">
-        <strong>Demo:</strong> contraseña → <code>demo123</code> para todos los usuarios.
-        <div class="demo-accounts" id="demoAccounts">
-          <button class="demo-account-btn" onclick="fillLogin('juan.perez@gmail.com')">👤 Juan Pérez · paciente 1</button>
-          <button class="demo-account-btn" onclick="fillLogin('maria.lopez@gmail.com')">👤 María López · paciente 2</button>
-          <button class="demo-account-btn" onclick="fillLogin('carlos.mendoza@gmail.com')">👤 Carlos Mendoza · paciente 3</button>
-          <button class="demo-account-btn" onclick="fillLogin('dr.torres@sisalud.pe')">🩺 Dr. Torres</button>
-          <button class="demo-account-btn" onclick="fillLogin('dra.quispe@sisalud.pe')">🩺 Dra. Quispe</button>
-          <button class="demo-account-btn" onclick="fillLogin('admin@sisalud.pe')">⚙️ Admin · laboratorio U1</button>
-          <button class="demo-account-btn" onclick="fillLogin('caja.central@sisalud.pe')">💳 Cajero · check-in</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+          <div><strong>Demo:</strong> clave <code>demo123</code></div>
+          <span style="font-size:0.75rem;color:var(--text-muted);">10 usuarios BD</span>
+        </div>
+        <div class="demo-filter-tabs" style="display:flex;gap:4px;margin-bottom:8px;">
+          <button type="button" class="tab-chip active" onclick="filterDemo('all', this)">Todos (10)</button>
+          <button type="button" class="tab-chip" onclick="filterDemo('paciente', this)">Pacientes (5)</button>
+          <button type="button" class="tab-chip" onclick="filterDemo('medico', this)">Médicos (3)</button>
+          <button type="button" class="tab-chip" onclick="filterDemo('staff', this)">Staff (2)</button>
+        </div>
+        <div class="demo-accounts" id="demoAccounts" style="max-height:190px;overflow-y:auto;padding-right:4px;">
+          <!-- Pacientes -->
+          <button type="button" class="demo-account-btn" data-role="paciente" onclick="fillLogin('juan.perez@gmail.com', this)">
+            <span>👤</span>
+            <div style="flex:1">
+              <div><strong>Juan Pérez</strong> · Paciente 1</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">DNI 45231987 · Medicina General</small>
+            </div>
+          </button>
+          <button type="button" class="demo-account-btn" data-role="paciente" onclick="fillLogin('maria.lopez@gmail.com', this)">
+            <span>👤</span>
+            <div style="flex:1">
+              <div><strong>María López</strong> · Paciente 2</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">DNI 52108743 · Pediatría</small>
+            </div>
+          </button>
+          <button type="button" class="demo-account-btn" data-role="paciente" onclick="fillLogin('carlos.mendoza@gmail.com', this)">
+            <span>👤</span>
+            <div style="flex:1">
+              <div><strong>Carlos Mendoza</strong> · Paciente 3</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">DNI 67342198 · Triaje Urgencia</small>
+            </div>
+          </button>
+          <button type="button" class="demo-account-btn" data-role="paciente" onclick="fillLogin('ana.flores@gmail.com', this)">
+            <span>👤</span>
+            <div style="flex:1">
+              <div><strong>Ana Flores</strong> · Paciente 4</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">DNI 43218976 · Adulto</small>
+            </div>
+          </button>
+          <button type="button" class="demo-account-btn" data-role="paciente" onclick="fillLogin('luis.garcia@gmail.com', this)">
+            <span>👤</span>
+            <div style="flex:1">
+              <div><strong>Luis García</strong> · Paciente 5</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">DNI 71234098 · Adulto</small>
+            </div>
+          </button>
+
+          <!-- Médicos -->
+          <button type="button" class="demo-account-btn" data-role="medico" onclick="fillLogin('dr.torres@sisalud.pe', this)">
+            <span>🩺</span>
+            <div style="flex:1">
+              <div><strong>Dr. Roberto Torres</strong> · Médico</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">Medicina General · Cardiología</small>
+            </div>
+          </button>
+          <button type="button" class="demo-account-btn" data-role="medico" onclick="fillLogin('dra.quispe@sisalud.pe', this)">
+            <span>🩺</span>
+            <div style="flex:1">
+              <div><strong>Dra. Patricia Quispe</strong> · Médica Jefe</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">Pediatría · Medicina General</small>
+            </div>
+          </button>
+          <button type="button" class="demo-account-btn" data-role="medico" onclick="fillLogin('dr.vargas@sisalud.pe', this)">
+            <span>🩺</span>
+            <div style="flex:1">
+              <div><strong>Dr. Alejandro Vargas</strong> · Médico Residente</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">Neurología · Traumatología</small>
+            </div>
+          </button>
+
+          <!-- Staff -->
+          <button type="button" class="demo-account-btn" data-role="staff" onclick="fillLogin('admin@sisalud.pe', this)">
+            <span>⚙️</span>
+            <div style="flex:1">
+              <div><strong>Admin SI-SALUD</strong> · Administrador</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">Control total · Asignación · Lab U1</small>
+            </div>
+          </button>
+          <button type="button" class="demo-account-btn" data-role="staff" onclick="fillLogin('caja.central@sisalud.pe', this)">
+            <span>💳</span>
+            <div style="flex:1">
+              <div><strong>Cajero Central</strong> · Admisión</div>
+              <small style="color:var(--text-muted);font-size:0.72rem;">Check-in físico · Emisión de Tickets</small>
+            </div>
+          </button>
         </div>
       </div>
 
@@ -52,15 +129,40 @@
     </div>
   </div>
 
-  <div id="toast-container"></div>
+  <style>
+    .tab-chip {
+      padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 500;
+      border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted);
+      cursor: pointer; transition: all .15s;
+    }
+    .tab-chip.active, .tab-chip:hover {
+      background: var(--primary-glow); border-color: var(--primary); color: var(--primary);
+    }
+    .demo-account-btn { cursor: pointer; border: 1px solid var(--border); transition: border-color .2s; }
+  </style>
   <script src="/js/api.js"></script>
   <script>
     // Si ya tiene sesión, redirigir
     API.me().then(user => redirectByRole(user)).catch(() => {});
 
-    function fillLogin(email) {
+    function filterDemo(role, btn) {
+      document.querySelectorAll('.tab-chip').forEach(c => c.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const items = document.querySelectorAll('.demo-account-btn');
+      items.forEach(el => {
+        if (role === 'all' || el.dataset.role === role) {
+          el.style.display = 'flex';
+        } else {
+          el.style.display = 'none';
+        }
+      });
+    }
+
+    function fillLogin(email, btn) {
       document.getElementById('email').value = email;
       document.getElementById('password').value = 'demo123';
+      document.querySelectorAll('.demo-account-btn').forEach(b => b.style.borderColor = '');
+      if (btn) btn.style.borderColor = 'var(--primary)';
     }
 
     function redirectByRole(user) {

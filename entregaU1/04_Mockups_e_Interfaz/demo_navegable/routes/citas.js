@@ -4,12 +4,28 @@ const { requireAuth } = require('../lib/auth');
 const { callWithOut } = require('../lib/sp');
 
 // POST /api/citas  →  sp_registrar_cita_medica
+// SOLO Admin y Cajero pueden registrar citas directamente.
+// Los pacientes deben pasar por el flujo de triaje (POST /api/paciente/triaje)
+// y el administrador es quien asigna el horario algorítmicamente.
 router.post('/', requireAuth, async (req, res) => {
+  const rol = req.session.user.rol;
+
+  // RBAC: el paciente no puede auto-agendar (ver Plan_Proyecto_SI_SALUD.md §HU-01/HU-02)
+  if (rol === 'Paciente') {
+    return res.status(403).json({
+      error: 'Los pacientes no pueden agendar citas directamente. ' +
+             'Solicita un triaje y el sistema te asignará el horario óptimo.',
+    });
+  }
+
   const { bloque_id, tipo_consulta_id, aseguradora_id, solicitud_id } = req.body;
-  const paciente_id = req.session.user.paciente_id;
+  let paciente_id = null;
+  if (['Admin', 'Cajero'].includes(rol) && req.body.paciente_id) {
+    paciente_id = parseInt(req.body.paciente_id, 10);
+  }
 
   if (!paciente_id) {
-    return res.status(403).json({ error: 'Solo pacientes pueden agendar citas' });
+    return res.status(400).json({ error: 'paciente_id es requerido (Admin/Cajero)' });
   }
   if (!bloque_id || !tipo_consulta_id || !aseguradora_id) {
     return res.status(400).json({ error: 'bloque_id, tipo_consulta_id y aseguradora_id son requeridos' });

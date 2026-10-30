@@ -8,6 +8,7 @@
 :root {
   --bg-base:       #080d1a;
   --bg-surface:    #0f1729;
+  --surface:       #0f172a;
   --bg-card:       #141e35;
   --bg-card-hover: #1a2640;
   --bg-input:      #1c2640;
@@ -263,9 +264,9 @@ tbody td { padding: 0.75rem 1rem; color: var(--text-primary); vertical-align: mi
 }
 .modal-overlay.hidden { display: none; }
 .modal-box {
-  background: var(--bg-card); border: 1px solid var(--border-light);
+  background: #0f172a; border: 1px solid #223254;
   border-radius: var(--radius-lg); padding: 2rem; width: min(540px, 95vw);
-  box-shadow: var(--shadow); animation: slideUp 0.2s ease;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85); animation: slideUp 0.2s ease;
 }
 .modal-header {
   display: flex; justify-content: space-between; align-items: center;
